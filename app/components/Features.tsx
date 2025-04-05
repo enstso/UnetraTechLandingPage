@@ -1,46 +1,74 @@
 "use client";
 import { motion } from "framer-motion";
+import { 
+  VideoCameraIcon, 
+  LockClosedIcon ,
+  WifiIcon,
+  WrenchScrewdriverIcon
+} from '@heroicons/react/24/outline';
 
-const services = [
+const featureVariants = {
+  hidden: { opacity: 0, y: 50 },
+  visible: { 
+    opacity: 1, 
+    y: 0,
+    transition: { 
+      duration: 0.6,
+      ease: "easeOut" 
+    }
+  }
+};
+
+const features = [
   {
     title: "Wi-Fi Professionnel",
     description: "Déploiement de réseaux sans fil performants, sécurisés, multi-SSID.",
-    icon: "📶",
+    icon: WifiIcon,
   },
   {
     title: "Cybersécurité",
     description: "Pare-feu, VLAN, VPN, segmentation réseau, surveillance proactive.",
-    icon: "🔐",
+    icon: LockClosedIcon,
   },
   {
     title: "Vidéosurveillance",
     description: "Installation & configuration UniFi Protect pour une sécurité visuelle.",
-    icon: "📹",
+    icon: VideoCameraIcon,
   },
   {
     title: "Support & Maintenance",
     description: "Assistance à distance, mise à jour, supervision & dépannage.",
-    icon: "🛠️",
+    icon: WrenchScrewdriverIcon,
   },
 ];
 
 export default function Features() {
   return (
-    <section id="services" className="py-20 bg-slate-800 text-white">
-      <div className="max-w-6xl mx-auto px-6">
-        <h2 className="text-4xl font-bold text-center mb-12">Nos Services</h2>
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-          {services.map((service, i) => (
+    <section className="py-20 bg-white px-6 lg:px-24" id="features">
+      <div className="max-w-6xl mx-auto">
+        <h2 className="text-3xl md:text-4xl font-bold text-center mb-16 text-gray-900">
+          Nos Fonctionnalités Clés
+        </h2>
+        
+        <div className="grid md:grid-cols-3 gap-8">
+          {features.map((feature, index) => (
             <motion.div
-              key={i}
-              initial={{ opacity: 0, y: 50 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: i * 0.2 }}
-              className="bg-slate-700 p-6 rounded-xl shadow-md text-center hover:scale-105 transition-transform"
+              key={index}
+              variants={featureVariants}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true }}
+              className="bg-gray-50 p-8 rounded-xl text-center 
+              hover:shadow-lg transition-all duration-300"
             >
-              <div className="text-4xl mb-4">{service.icon}</div>
-              <h3 className="text-xl font-semibold mb-2">{service.title}</h3>
-              <p className="text-sm text-slate-300">{service.description}</p>
+              <feature.icon className="w-16 h-16 mx-auto mb-6 text-primary" 
+              />
+              <h3 className="text-xl font-semibold mb-4 text-gray-800">
+                {feature.title}
+              </h3>
+              <p className="text-gray-600">
+                {feature.description}
+              </p>
             </motion.div>
           ))}
         </div>
