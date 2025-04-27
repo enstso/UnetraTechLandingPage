@@ -2,7 +2,7 @@
 import { motion } from "framer-motion";
 import { 
   VideoCameraIcon, 
-  LockClosedIcon ,
+  LockClosedIcon,
   WifiIcon,
   WrenchScrewdriverIcon
 } from '@heroicons/react/24/outline';
@@ -50,10 +50,10 @@ export default function Features() {
           Nos Fonctionnalités Clés
         </h2>
         
-        <div className="grid md:grid-cols-3 gap-8">
+        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
           {features.map((feature, index) => (
             <motion.div
-              key={index}
+              key={index} 
               variants={featureVariants}
               initial="hidden"
               whileInView="visible"
@@ -61,8 +61,7 @@ export default function Features() {
               className="bg-gray-50 p-8 rounded-xl text-center 
               hover:shadow-lg transition-all duration-300"
             >
-              <feature.icon className="w-16 h-16 mx-auto mb-6 text-primary" 
-              />
+              <feature.icon className="w-16 h-16 mx-auto mb-6 text-primary" />
               <h3 className="text-xl font-semibold mb-4 text-gray-800">
                 {feature.title}
               </h3>

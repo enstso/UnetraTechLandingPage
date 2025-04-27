@@ -8,10 +8,21 @@ export default function Contact() {
     email: '',
     message: ''
   });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [formStatus, setFormStatus] = useState('');
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Logique d'envoi du formulaire
+    
+    // Validation simple
+    if (!formData.name || !formData.email || !formData.message) {
+      setFormStatus('Tous les champs doivent être remplis.');
+      return;
+    }
+
+    setIsSubmitting(true);
+    setFormStatus('');
+
     try {
       const response = await fetch('/api/contact', {
         method: 'POST',
@@ -20,11 +31,16 @@ export default function Contact() {
       });
 
       if (response.ok) {
-        // Gérer le succès
-        alert('Message envoyé avec succès !');
+        setFormStatus('Message envoyé avec succès !');
+        setFormData({ name: '', email: '', message: '' }); // Reset form fields
+      } else {
+        setFormStatus('Erreur lors de l\'envoi du message. Réessayez plus tard.');
       }
     } catch (error) {
       console.error('Erreur d\'envoi', error);
+      setFormStatus('Erreur de connexion, veuillez réessayer.');
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -78,10 +94,22 @@ export default function Contact() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 1 }}
+            disabled={isSubmitting} // Disable while submitting
           >
-            Envoyer
+            {isSubmitting ? 'Envoi en cours...' : 'Envoyer'}
           </motion.button>
         </form>
+        {/* Feedback Message */}
+        {formStatus && (
+          <motion.div
+            className={`mt-6 text-lg ${formStatus.includes('succès') ? 'text-green-400' : 'text-red-400'}`}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.5 }}
+          >
+            {formStatus}
+          </motion.div>
+        )}
       </div>
     </section>
   );

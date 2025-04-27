@@ -1,8 +1,7 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Geist, Geist_Mono, Inter } from "next/font/google";
+import { GoogleAnalytics } from "@next/third-parties/google";
 import "./globals.css";
-import { Inter } from 'next/font/google';
-import { GoogleAnalytics } from '@next/third-parties/google'
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -14,28 +13,30 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-const inter = Inter({ 
-  subsets: ['latin'],
-  display: 'swap', // Améliore le chargement initial
-  preload: true
+const inter = Inter({
+  subsets: ["latin"],
+  display: "swap",
 });
+
+const GA_ID = "G-XXXXXXXXXX"; // Remplacer par votre vrai ID
 
 export const metadata: Metadata = {
   title: {
-    default: 'Votre Solution Innovative - Transformation Digitale',
-    template: '%s | Unetra Tech',
+    default: "Votre Solution Innovante - Transformation Digitale",
+    template: "%s | Unetra Tech",
   },
-  description: 'Solution innovante qui révolutionne votre productivité et votre stratégie digitale.',
+  description:
+    "Solution innovante qui révolutionne votre productivité et votre stratégie digitale.",
   openGraph: {
-    title: 'Votre Solution Innovative',
-    description: 'Transformation digitale pour les entreprises modernes',
-    images: ['/public/images/logo.png']
+    title: "Votre Solution Innovante",
+    description: "Transformation digitale pour les entreprises modernes",
+    images: ["/images/logo.png"],
   },
   twitter: {
-    card: 'summary_large_image',
-    title: 'Votre Solution Innovative',
-    description: 'Transformation digitale pour les entreprises modernes',
-    images: ['/public/images/linkedin.png']
+    card: "summary_large_image",
+    title: "Votre Solution Innovante",
+    description: "Transformation digitale pour les entreprises modernes",
+    images: ["/images/linkedin.png"],
   },
   robots: {
     index: true,
@@ -43,26 +44,25 @@ export const metadata: Metadata = {
     googleBot: {
       index: true,
       follow: true,
-    }
+    },
   },
   verification: {
-    google: 'votre-code-verification-google'
-  }
+    google: "votre-code-verification-google",
+  },
 };
 
 export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
   return (
-    <html lang="en">
+    <html lang="fr" suppressHydrationWarning>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} ${inter.className} antialiased`}
       >
         {children}
-        <GoogleAnalytics gaId="G-XXXXXXXXXX" />
-
+        <GoogleAnalytics gaId={GA_ID} />
       </body>
     </html>
   );
