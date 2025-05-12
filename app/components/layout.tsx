@@ -3,7 +3,7 @@ import ClientWrapper from './ClientWrapper';
 
 export const metadata = {
   title: 'Unetra Tech',
-  description: 'Site de prestations réseau & sécurité',
+  description: 'Solutions IT globales : réseaux, sécurité, cloud et développement sur mesure',
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
