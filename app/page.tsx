@@ -38,7 +38,6 @@ export default function Home() {
       </section>
 
       <Footer />
-      <ScrollToTop />
     </main>
   );
 }

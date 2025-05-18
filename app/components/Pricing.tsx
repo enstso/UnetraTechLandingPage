@@ -14,19 +14,25 @@ const item = {
 };
 
 const plans = [
-  { name: "Pack Start",        features: ["Installation Wi-Fi", "Configuration de base", "Support 7j/7"] },
-  { name: "Pack Pro",          features: ["Réseau complet", "VLAN, Firewall", "Monitoring + Support"], recommended: true },
-  { name: "Surveillance",      features: ["Installation UniFi Protect", "Accès distant", "Stockage local ou cloud"] },
-  { name: "Pack Développement",features: ["Application Web/Mobile", "API & back-office", "Déploiement & maintenance"] },
+  { name: "Pack Start", features: ["Installation Wi-Fi", "Configuration de base", "Support 7j/7"] },
+  { name: "Pack Pro", features: ["Réseau complet", "VLAN, Firewall", "Monitoring + Support"], recommended: true },
+  { name: "Surveillance", features: ["Installation UniFi Protect", "Accès distant", "Stockage local ou cloud"] },
+  { name: "Pack Développement", features: ["Application Web/Mobile", "API & back-office", "Déploiement & maintenance"] },
   { name: "Audit & Optimisation", features: ["Audit complet infra / code / sécu", "Schémas & documentation", "Plan d’actions concret"] },
-  { name: "Pack Sur Mesure",   features: ["Solutions personnalisées", "Infra · dev · cloud · audit", "Accompagnement dédié"] },
+  { name: "Pack Sur Mesure", features: ["Solutions personnalisées", "Infra · dev · cloud · audit", "Accompagnement dédié"] },
 ];
 
 export default function Pricing() {
+  // Fonction pour sauvegarder dans localStorage
+  function handleClick(planName: string) {
+    console.log("Selected plan:", planName);
+    localStorage.setItem("selectedPack", planName);
+  }
+
   return (
     <motion.section
       id="pricing"
-      className="relative py-32 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-white px-6 lg:px-24 overflow-hidden"
+      className="relative py-32 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-white px-6 lg:px-24"
       initial="hidden"
       whileInView="show"
       viewport={{ once: true }}
@@ -53,7 +59,8 @@ export default function Pricing() {
             variants={item}
             className={`card-pricing bg-slate-800/40 backdrop-blur-md border border-slate-700 rounded-2xl p-8 text-center
                         hover:-translate-y-1 hover:shadow-xl hover:shadow-indigo-500/20 transition-all duration-300
-                        flex flex-col justify-between`}
+                        flex flex-col justify-between
+                        relative z-10`}
           >
             <div>
               {plan.recommended && (
@@ -75,7 +82,13 @@ export default function Pricing() {
               </ul>
             </div>
 
-            <a href="#contact" className="btn-gradient">Demander un devis</a>
+            <a
+              href="#contact"
+              className="btn-gradient relative z-20"
+              onClick={() => handleClick(plan.name)}
+            >
+              Demander un devis
+            </a>
           </motion.div>
         ))}
       </motion.div>

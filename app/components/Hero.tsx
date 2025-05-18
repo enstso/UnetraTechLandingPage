@@ -1,7 +1,7 @@
-'use client';
+"use client";
 
 import { motion } from "framer-motion";
-import { ChevronRightIcon } from '@heroicons/react/24/solid';
+import { ChevronRightIcon } from "@heroicons/react/24/solid";
 
 export default function Hero() {
   return (
@@ -20,15 +20,15 @@ export default function Hero() {
 
       {/* Hero content */}
       <div className="max-w-4xl text-center space-y-8 z-10">
-        <motion.h1 
+        <motion.h1
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 1 }}
           className="text-4xl md:text-6xl font-extrabold leading-tight text-white"
         >
-          Transformez votre entreprise<br />
-          avec une solution{" "}
-          <span className="shimmer-text">innovante</span>
+          Transformez votre entreprise
+          <br />
+          avec une solution <span className="shimmer-text">innovante</span>
         </motion.h1>
 
         <motion.p
@@ -37,11 +37,13 @@ export default function Hero() {
           transition={{ delay: 0.3, duration: 0.6 }}
           className="text-lg md:text-xl text-slate-300"
         >
-          Une plateforme puissante pour simplifier vos workflows<br className="hidden md:block" />
+          Une plateforme puissante pour simplifier vos workflows
+          <br className="hidden md:block" />
           et booster durablement votre productivité.
         </motion.p>
 
-        <motion.button
+        <motion.a
+          href="#features"
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
           transition={{ type: "spring", stiffness: 300 }}
@@ -49,7 +51,7 @@ export default function Hero() {
         >
           <span>Commencer Maintenant</span>
           <ChevronRightIcon className="w-5 h-5 ml-2" />
-        </motion.button>
+        </motion.a>
       </div>
     </motion.section>
   );
