@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 
 const plans = [
@@ -22,6 +22,25 @@ export default function Contact() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [formStatus, setFormStatus] = useState("");
 
+  useEffect(() => {
+    // 1) au montage, lire localStorage
+    const stored = localStorage.getItem("selectedPack");
+    if (stored && plans.includes(stored)) {
+      setFormData((f) => ({ ...f, selectedPack: stored }));
+    }
+
+    // 2) écouter la sélection d'un pack
+    const onPlan = (e: Event) => {
+      const pack = (e as CustomEvent).detail as string;
+      if (plans.includes(pack)) {
+        setFormData((f) => ({ ...f, selectedPack: pack }));
+      }
+    };
+    window.addEventListener("planSelected", onPlan);
+
+    return () => window.removeEventListener("planSelected", onPlan);
+  }, []);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!formData.name || !formData.email || !formData.message) {
@@ -36,13 +55,13 @@ export default function Contact() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
       });
-      setFormStatus(
-        r.ok
-          ? "Message envoyé avec succès !"
-          : "Erreur lors de l’envoi. Réessayez."
-      );
-      if (r.ok)
+      if (r.ok) {
+        setFormStatus("Message envoyé avec succès !");
         setFormData({ name: "", email: "", message: "", selectedPack: "" });
+        localStorage.removeItem("selectedPack");
+      } else {
+        setFormStatus("Erreur lors de l’envoi. Réessayez.");
+      }
     } catch {
       setFormStatus("Erreur de connexion, veuillez réessayer.");
     } finally {
@@ -55,13 +74,13 @@ export default function Contact() {
       id="contact"
       className="relative py-32 bg-slate-900 text-white overflow-hidden"
     >
-      {/* halos */}
+      {/* halos décoratifs */}
       <div className="absolute -top-24 -left-32 w-80 h-80 bg-indigo-500/30 blur-3xl rounded-full -z-10 animate-pulse" />
       <div className="absolute bottom-0 right-0 w-[480px] h-[480px] bg-purple-600/25 blur-3xl rounded-full -z-10 animate-pulse delay-500" />
 
-      <div className="relative z-10 max-w-xl mx-auto px-6 text-center">
+      <div className="relative z-10 max-w-xl mx-auto px-6">
         <motion.h2
-          className="gradient-text text-3xl md:text-4xl font-bold mb-14"
+          className="gradient-text text-3xl md:text-4xl font-bold text-center mb-14"
           initial={{ opacity: 0, y: -30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
@@ -71,15 +90,13 @@ export default function Contact() {
         </motion.h2>
 
         <form onSubmit={handleSubmit} className="space-y-8">
+          {/* Nom */}
           <motion.div
-            variants={{
-              hidden: { opacity: 0, y: 20 },
-              show: { opacity: 1, y: 0, transition: { delay: 0 } },
-            }}
-            initial="hidden"
-            whileInView="show"
-            viewport={{ once: true }}
             className="input-neon"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0 }}
           >
             <input
               type="text"
@@ -91,15 +108,13 @@ export default function Contact() {
             />
           </motion.div>
 
+          {/* Email */}
           <motion.div
-            variants={{
-              hidden: { opacity: 0, y: 20 },
-              show: { opacity: 1, y: 0, transition: { delay: 0.1 } },
-            }}
-            initial="hidden"
-            whileInView="show"
-            viewport={{ once: true }}
             className="input-neon"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.1 }}
           >
             <input
               type="email"
@@ -111,18 +126,14 @@ export default function Contact() {
             />
           </motion.div>
 
+          {/* Message */}
           <motion.div
-            variants={{
-              hidden: { opacity: 0, y: 20 },
-              show: { opacity: 1, y: 0, transition: { delay: 0.2 } },
-            }}
-            initial="hidden"
-            whileInView="show"
-            viewport={{ once: true }}
             className="input-neon"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.2 }}
           >
-
-            
             <textarea
               rows={5}
               placeholder="Votre message"
@@ -133,6 +144,33 @@ export default function Contact() {
             />
           </motion.div>
 
+          {/* Sélecteur de pack */}
+          <motion.div
+            className="input-neon"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.3 }}
+          >
+            <select
+              className="w-full bg-slate-800 p-3 rounded-md border border-transparent focus:outline-none focus:ring-2 focus:ring-indigo-500 transition"
+              value={formData.selectedPack}
+              onChange={(e) =>
+                setFormData({ ...formData, selectedPack: e.target.value })
+              }
+            >
+              <option value="" disabled>
+                Sélectionnez un pack (optionnel)
+              </option>
+              {plans.map((p) => (
+                <option key={p} value={p}>
+                  {p}
+                </option>
+              ))}
+            </select>
+          </motion.div>
+
+          {/* Bouton */}
           <motion.button
             type="submit"
             disabled={isSubmitting}
@@ -140,14 +178,14 @@ export default function Contact() {
             whileHover={{ scale: 1.03 }}
             whileTap={{ scale: 0.97 }}
             initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true }}
+            animate={{ opacity: 1 }}
             transition={{ delay: 0.4, duration: 0.8 }}
           >
             {isSubmitting ? "Envoi en cours…" : "Envoyer"}
           </motion.button>
         </form>
 
+        {/* Feedback */}
         {formStatus && (
           <motion.p
             className={`mt-8 text-base font-medium ${
