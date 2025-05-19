@@ -50,7 +50,7 @@ export default function Contact() {
     setIsSubmitting(true);
     setFormStatus("");
     try {
-      const r = await fetch("/api/contact", {
+      const r = await fetch("/api/sendMessage", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
@@ -125,25 +125,6 @@ export default function Contact() {
               }
             />
           </motion.div>
-
-          {/* Message */}
-          <motion.div
-            className="input-neon"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.2 }}
-          >
-            <textarea
-              rows={5}
-              placeholder="Votre message"
-              value={formData.message}
-              onChange={(e) =>
-                setFormData({ ...formData, message: e.target.value })
-              }
-            />
-          </motion.div>
-
           {/* Sélecteur de pack */}
           <motion.div
             className="input-neon"
@@ -168,6 +149,23 @@ export default function Contact() {
                 </option>
               ))}
             </select>
+          </motion.div>
+          {/* Message */}
+          <motion.div
+            className="input-neon"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.2 }}
+          >
+            <textarea
+              rows={5}
+              placeholder="Votre message"
+              value={formData.message}
+              onChange={(e) =>
+                setFormData({ ...formData, message: e.target.value })
+              }
+            />
           </motion.div>
 
           {/* Bouton */}
