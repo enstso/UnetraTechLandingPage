@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: unetra-app
+  labels:
+    app: unetra
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: unetra
+  template:
+    metadata:
+      labels:
+        app: unetra
+    spec:
+      containers:
+        - name: unetra
+          image: enstso/unetra-app:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 3002
+          envFrom:
+            - configMapRef:
+                name: unetra-configmap
+ 
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: unetra-service
+spec:
+  selector:
+    app: unetra
+  ports:
+    - protocol: TCP
+      port: 3002
+      targetPort: 3000
+  type: ClusterIP
