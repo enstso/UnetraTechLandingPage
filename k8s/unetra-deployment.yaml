@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: unetra
-          image: enstso/unetra-app:latest
+          image: enstso/unetra:latest
           imagePullPolicy: Always
           ports:
             - containerPort: 3002
