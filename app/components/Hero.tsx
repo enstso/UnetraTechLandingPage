@@ -37,9 +37,9 @@ export default function Hero() {
           transition={{ delay: 0.3, duration: 0.6 }}
           className="text-lg md:text-xl text-slate-300"
         >
-          Une plateforme puissante pour simplifier vos workflows
+          Une plateforme puissante pour simplifier vos workflows{' '}
           <br className="hidden md:block" />
-          et booster durablement votre productivité.
+           et booster durablement votre productivité.
         </motion.p>
 
         <motion.a
