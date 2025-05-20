@@ -16,6 +16,7 @@ export default function Contact() {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
+    phone: "",
     message: "",
     selectedPack: "",
   });
@@ -43,7 +44,7 @@ export default function Contact() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!formData.name || !formData.email || !formData.message) {
+    if (!formData.name || !formData.email || !formData.message || !formData.phone) {
       setFormStatus("Tous les champs doivent être remplis.");
       return;
     }
@@ -57,7 +58,7 @@ export default function Contact() {
       });
       if (r.ok) {
         setFormStatus("Message envoyé avec succès !");
-        setFormData({ name: "", email: "", message: "", selectedPack: "" });
+        setFormData({ name: "", email: "", phone:"",message: "", selectedPack: "" });
         localStorage.removeItem("selectedPack");
       } else {
         setFormStatus("Erreur lors de l’envoi. Réessayez.");
@@ -122,6 +123,23 @@ export default function Contact() {
               value={formData.email}
               onChange={(e) =>
                 setFormData({ ...formData, email: e.target.value })
+              }
+            />
+          </motion.div>
+          {/* Téléphone */}
+          <motion.div
+            className="input-neon"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.15 }}
+          >
+            <input
+              type="tel"
+              placeholder="Téléphone"
+              value={formData.phone}
+              onChange={(e) =>
+                setFormData({ ...formData, phone: e.target.value })
               }
             />
           </motion.div>
