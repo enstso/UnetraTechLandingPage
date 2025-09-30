@@ -1,20 +1,24 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono, Inter } from "next/font/google";
+import { Inter, Poppins, JetBrains_Mono } from "next/font/google";
 import { GoogleAnalytics } from "@next/third-parties/google";
 import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
-
 const inter = Inter({
   subsets: ["latin"],
+  variable: "--font-inter",
+  display: "swap",
+});
+
+const poppins = Poppins({
+  subsets: ["latin"],
+  variable: "--font-poppins",
+  weight: ["300", "400", "500", "600", "700"],
+  display: "swap",
+});
+
+const jetbrainsMono = JetBrains_Mono({
+  subsets: ["latin"],
+  variable: "--font-mono",
   display: "swap",
 });
 
@@ -22,21 +26,38 @@ const GA_ID = "G-XXXXXXXXXX"; // Remplacer par votre vrai ID
 
 export const metadata: Metadata = {
   title: {
-    default: "Votre Solution Innovante - Transformation Digitale",
+    default: "Unetra Tech - Solutions Informatiques Innovantes",
     template: "%s | Unetra Tech",
   },
   description:
-    "Solution innovante qui révolutionne votre productivité et votre stratégie digitale.",
+      "Spécialiste en transformation digitale et solutions informatiques sur mesure. Développement web, cloud, sécurité et conseils pour entreprises modernes.",
+  keywords: [
+    "services informatiques",
+    "transformation digitale",
+    "développement web",
+    "solutions cloud",
+    "sécurité informatique",
+    "conseil IT"
+  ],
   openGraph: {
-    title: "Votre Solution Innovante",
-    description: "Transformation digitale pour les entreprises modernes",
-    images: ["/images/logo.png"],
+    title: "Unetra Tech - Solutions Informatiques",
+    description: "Transformation digitale et services informatiques pour entreprises",
+    type: "website",
+    locale: "fr_FR",
+    images: [
+      {
+        url: "/images/og-image.png",
+        width: 1200,
+        height: 630,
+        alt: "Unetra Tech - Solutions Informatiques"
+      }
+    ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Votre Solution Innovante",
-    description: "Transformation digitale pour les entreprises modernes",
-    images: ["/images/linkedin.png"],
+    title: "Unetra Tech - Solutions Informatiques",
+    description: "Spécialiste en transformation digitale et solutions IT",
+    images: ["/images/twitter-card.png"],
   },
   robots: {
     index: true,
@@ -44,26 +65,38 @@ export const metadata: Metadata = {
     googleBot: {
       index: true,
       follow: true,
+      "max-video-preview": -1,
+      "max-image-preview": "large",
+      "max-snippet": -1,
     },
   },
   verification: {
     google: "votre-code-verification-google",
   },
+  alternates: {
+    canonical: "https://votre-domaine.com",
+  },
 };
 
 export default function RootLayout({
-  children,
-}: {
+                                     children,
+                                   }: {
   children: React.ReactNode;
 }) {
   return (
-    <html lang="fr" suppressHydrationWarning>
+      <html lang="fr" suppressHydrationWarning className="scroll-smooth">
+      <head>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+      </head>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} ${inter.className} antialiased`}
+          className={`${inter.variable} ${poppins.variable} ${jetbrainsMono.variable} font-inter antialiased`}
       >
+      <div className="relative min-h-screen">
         {children}
-        <GoogleAnalytics gaId={GA_ID} />
+      </div>
+      <GoogleAnalytics gaId={GA_ID} />
       </body>
-    </html>
+      </html>
   );
 }
