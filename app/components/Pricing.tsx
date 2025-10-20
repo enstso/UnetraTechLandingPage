@@ -15,115 +15,140 @@ const item = {
 };
 
 const pricingPlans = [
+  // Infrastructure
   {
     name: "Pack Start",
     category: "Infrastructure",
-    description: "Idéal pour débuter avec une infrastructure réseau solide",
+    description: "Idéal pour démarrer avec une base réseau solide.",
     price: "À partir de 2 500€",
     duration: "Installation complète",
     features: [
-      "Installation Wi-Fi professionnel",
-      "Configuration réseau sécurisé",
-      "Formation utilisateurs",
-      "Support technique 30 jours",
-      "Documentation complète"
+      "Installation Wi-Fi pro",
+      "Réseau sécurisé",
+      "Formation équipes",
+      "Support 30 jours"
     ],
-    icon: "🚀",
-    color: "blue",
-    ctaText: "Commencer"
+    icon: "🚀", color: "blue", ctaText: "Commencer"
   },
   {
     name: "Pack Pro",
     category: "Infrastructure",
-    description: "Solution complète pour entreprises exigeantes",
+    description: "Réseau, firewall, supervision et évolutivité pour PME.",
     price: "À partir de 5 500€",
     duration: "Projet sur mesure",
     features: [
-      "Réseau entreprise complet",
-      "VLAN et segmentation",
+      "Réseau segmenté VLAN",
       "Firewall avancé + monitoring",
       "Support prioritaire 24/7",
-      "Maintenance préventive",
-      "Évolutivité garantie"
+      "Maintenance préventive"
     ],
-    icon: "🏢",
-    color: "indigo",
-    recommended: true,
-    ctaText: "Choisir Pro"
+    icon: "🏢", color: "indigo", recommended: true, ctaText: "Choisir Pro"
   },
   {
-    name: "Pack Surveillance",
-    category: "Sécurité",
-    description: "Système de vidéosurveillance professionnel",
+    name: "Pack Cloud",
+    category: "Infrastructure",
+    description: "Déploiement Cloud et migration sécurisée.",
     price: "À partir de 3 500€",
-    duration: "Installation + config",
+    duration: "Déploiement & formation",
     features: [
-      "Caméras UniFi Protect",
-      "Enregistrement haute qualité",
-      "Accès distant sécurisé",
-      "Stockage local et cloud",
-      "Alerts intelligentes"
+      "Migration AWS/Azure/OVH",
+      "Automatisation sauvegardes",
+      "Sécurité & accès moderne"
     ],
-    icon: "📹",
-    color: "purple",
-    ctaText: "Sécuriser"
+    icon: "☁️", color: "cyan", ctaText: "Passer au Cloud"
   },
+
+  // Support & Heures
+  {
+    name: "Heures Essentiel",
+    category: "Support & Heures",
+    description: "Crédit de 10h support - SLA J+1 - 90€/h dégressif.",
+    price: "900€",
+    duration: "10h support • 12 mois",
+    features: [
+      "Support garanti (ticket mail)",
+      "Interventions réseau & bureautique",
+      "Décompte 1/4h"
+    ],
+    icon: "⌛", color: "emerald", ctaText: "Acheter 10h"
+  },
+  {
+    name: "Heures Business",
+    category: "Support & Heures",
+    description: "25h support - SLA 8h ouvrées - 81€/h.",
+    price: "2 025€",
+    duration: "25h support • 12 mois",
+    features: [
+      "SLA prioritaire",
+      "Firewall, sécurité, supervision",
+      "Portail client inclus"
+    ],
+    icon: "🔧", color: "sky", recommended: true, ctaText: "Acheter 25h"
+  },
+  {
+    name: "Heures Premium",
+    category: "Support & Heures",
+    description: "50h support L1/L2 - SLA 4h - audit inclus.",
+    price: "3 825€",
+    duration: "50h support • 12 mois",
+    features: [
+      "Audit sécurité offert",
+      "Maintenance préventive incluse",
+      "Suivi stratégique trimestriel"
+    ],
+    icon: "💎", color: "violet", ctaText: "Acheter 50h"
+  },
+
+  // Développement & Conseil
   {
     name: "Pack Développement",
     category: "Développement",
-    description: "Applications sur mesure pour votre métier",
+    description: "Apps web, mobile et desktop sur-mesure.",
     price: "À partir de 8 500€",
     duration: "Projet personnalisé",
     features: [
-      "Application Web ou Mobile",
-      "API et back-office",
-      "Interface utilisateur moderne",
-      "Tests et déploiement",
-      "Formation et documentation",
-      "Maintenance évolutive"
+      "Design UX/UI moderne",
+      "Déploiement, CI/CD",
+      "Formation & docs",
+      "Maintenance offerte 3 mois"
     ],
-    icon: "💻",
-    color: "green",
-    ctaText: "Développer"
+    icon: "💻", color: "green", ctaText: "Développer"
   },
   {
     name: "Audit & Conseil",
-    category: "Conseil",
-    description: "Analyse approfondie et recommandations",
+    category: "Développement",
+    description: "Analyse/sécurité IT, recommandations, schémas détaillés.",
     price: "À partir de 2 500€",
-    duration: "Mission de 5-15 jours",
+    duration: "Mission 5-15 jours",
     features: [
-      "Audit infrastructure complète",
-      "Analyse sécurité et code",
-      "Schémas et documentation",
-      "Plan d'actions prioritaires",
-      "Présentation des résultats"
+      "Audit infra/code/cloud",
+      "Feuille de route détaillée",
+      "Livrables actionnables"
     ],
-    icon: "📊",
-    color: "orange",
-    ctaText: "Auditer"
+    icon: "🔍", color: "orange", ctaText: "Demander audit"
   },
   {
     name: "Mission Sur Mesure",
-    category: "Conseil",
-    description: "Accompagnement personnalisé selon vos besoins",
+    category: "Développement",
+    description: "Solution 100% personnalisée multi-domaines.",
     price: "Sur devis",
-    duration: "Durée adaptable",
+    duration: "Durée flexible",
     features: [
-      "Analyse de vos besoins",
-      "Solution 100% personnalisée",
-      "Expertise multi-domaines",
+      "Analyse approfondie",
       "Accompagnement dédié",
-      "Livrables sur mesure",
-      "Support long terme"
+      "Livrable & support unique"
     ],
-    icon: "⭐",
-    color: "cyan",
-    ctaText: "Discuter"
-  },
+    icon: "⭐", color: "pink", ctaText: "Personnaliser"
+  }
 ];
 
-const categories = ["Tous", "Infrastructure", "Développement", "Sécurité", "Conseil"];
+const categories = [
+  "Tous",
+  "Infrastructure",
+  "Support & Heures",
+  "Développement"
+];
+;
 
 export default function Pricing() {
   const [activeCategory, setActiveCategory] = useState("Tous");

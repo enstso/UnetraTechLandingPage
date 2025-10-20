@@ -16,11 +16,15 @@ import {
 const plans = [
   "Pack Start",
   "Pack Pro",
-  "Pack Surveillance",
+  "Pack Cloud",
+  "Heures Essentiel",
+  "Heures Business",
+  "Heures Premium",
   "Pack Développement",
   "Audit & Conseil",
   "Mission Sur Mesure",
 ];
+
 
 const contactMethods = [
   {
