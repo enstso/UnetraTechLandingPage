@@ -80,12 +80,13 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
                                      children,
-                                   }: {
+                                   }: Readonly<{
   children: React.ReactNode;
-}) {
+}>) {
   return (
       <html lang="fr" suppressHydrationWarning className="scroll-smooth">
       <head>
+        <title rel="Unetra Tech - Solutions Informatiques Innovantes" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
       </head>

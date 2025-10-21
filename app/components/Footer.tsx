@@ -99,7 +99,7 @@ export default function Footer() {
                             >
                                 <Link href="/" className="flex items-center gap-3 mb-6">
                                     <Image
-                                        src="/images/logo.png"
+                                        src="/images/logo2.png"
                                         alt="Unetra Tech"
                                         width={40}
                                         height={40}
@@ -279,7 +279,6 @@ export default function Footer() {
                                 </div>
                                 <div className="flex items-center gap-4">
                   <span className="flex items-center gap-2">
-                    <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
                     Service disponible
                   </span>
                                     <span>•</span>
