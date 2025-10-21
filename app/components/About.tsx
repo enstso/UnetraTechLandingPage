@@ -95,10 +95,10 @@ export default function About() {
                 <h3 className="text-xl font-bold text-gray-900 mb-6 text-center">Nos Résultats</h3>
                 <div className="grid grid-cols-2 gap-6">
                   {[
-                    { number: "50+", label: "Projets réalisés" },
-                    { number: "15+", label: "Clients satisfaits" },
-                    { number: "99%", label: "Taux de satisfaction" },
-                    { number: "24/7", label: "Support technique" }
+                    { number: "100%", label: "Sur-mesure, pour chaque mission" },
+                    { number: "0 barrière", label: "Flexible, agile, proche de vous" },
+                    { number: "100%", label: "Réactivité et écoute" },
+                    { number: "100%", label: "Engagement sur votre satisfaction" }
                   ].map((stat, index) => (
                       <motion.div
                           key={stat.label}

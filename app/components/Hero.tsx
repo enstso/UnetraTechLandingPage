@@ -127,7 +127,7 @@ export default function Hero() {
                                              className="w-8 h-8 bg-gradient-to-br from-blue-400 to-indigo-500 rounded-full border-2 border-white"/>
                                     ))}
                                 </div>
-                                <span>50+ clients satisfaits</span>
+                                <span>Des clients déjà conquis par notre réactivité</span>
                             </div>
                             <div className="flex items-center gap-1">
                                 <span className="text-yellow-400">★★★★★</span>

@@ -116,7 +116,7 @@ const pricingPlans = [
   },
   {
     name: "Audit & Conseil",
-    category: "Développement",
+    category: "Conseil",
     description: "Analyse/sécurité IT, recommandations, schémas détaillés.",
     price: "À partir de 2 500€",
     duration: "Mission 5-15 jours",
@@ -129,7 +129,7 @@ const pricingPlans = [
   },
   {
     name: "Mission Sur Mesure",
-    category: "Développement",
+    category: "Conseil",
     description: "Solution 100% personnalisée multi-domaines.",
     price: "Sur devis",
     duration: "Durée flexible",
@@ -146,7 +146,8 @@ const categories = [
   "Tous",
   "Infrastructure",
   "Support & Heures",
-  "Développement"
+  "Développement",
+  "Conseil"
 ];
 ;
 
@@ -304,6 +305,7 @@ export default function Pricing() {
           </motion.div>
 
           {/* FAQ Section */}
+          {/* FAQ Section */}
           <motion.div
               className="mt-20 text-center"
               initial={{ opacity: 0, y: 30 }}
@@ -312,25 +314,32 @@ export default function Pricing() {
               transition={{ delay: 0.4, duration: 0.6 }}
           >
             <div className="bg-white rounded-2xl p-8 shadow-lg border border-gray-100 max-w-4xl mx-auto">
-              <h3 className="text-2xl font-bold text-gray-900 mb-6">Questions Fréquentes</h3>
-
+              <h3 className="text-2xl font-bold text-gray-900 mb-6">Questions fréquentes</h3>
               <div className="grid md:grid-cols-2 gap-6 text-left">
                 {[
                   {
-                    q: "Les tarifs incluent-ils la maintenance ?",
-                    a: "Tous nos packs incluent une période de garantie. La maintenance étendue peut être ajoutée selon vos besoins."
+                    q: "Incluez-vous la maintenance dans vos offres ?",
+                    a: "Oui, chaque projet inclut une période de garantie et un support technique de démarrage. Nous proposons aussi des packs d'heures pour suivre, maintenir et améliorer votre solution dans la durée."
                   },
                   {
-                    q: "Proposez-vous des devis personnalisés ?",
-                    a: "Absolument ! Chaque projet est unique. Nous étudions vos besoins pour vous proposer la solution optimale."
+                    q: "Vos devis sont-ils vraiment gratuits et sans engagement ?",
+                    a: "Oui, vous pouvez demander un diagnostic initial et un chiffrage détaillé, le tout sans aucune obligation de votre part. Notre premier conseil est toujours offert."
                   },
                   {
-                    q: "Quels sont les délais de réalisation ?",
-                    a: "Les délais varient selon la complexité : de 2 semaines pour un Pack Start à 3-6 mois pour le développement."
+                    q: "Quels sont vos délais pour un projet ?",
+                    a: "Nos délais sont adaptés à notre taille et à la complexité de chaque mission : environ 2 à 6 semaines pour une installation, jusqu’à plusieurs mois pour une application sur-mesure. Nous co-construisons le planning avec vous."
                   },
                   {
-                    q: "Le support technique est-il inclus ?",
-                    a: "Oui, tous nos clients bénéficient d'un support technique adapté au pack choisi, de 30 jours à 24/7."
+                    q: "Le support technique est-il réactif ?",
+                    a: "Oui ! Notre équipe est proche de ses clients : vous avez un interlocuteur dédié, et les tickets sont traités en quelques heures ou sous 24h ouvrées selon priorité."
+                  },
+                  {
+                    q: "J’ai un besoin très spécifique, pouvez-vous m’accompagner ?",
+                    a: "Notre force, c’est justement la personnalisation : solution cloud, outil métier, audit sécurité, missions sur-mesure… tout est modulable. Parlez-nous de votre contexte, on s’adapte !"
+                  },
+                  {
+                    q: "Combien de clients accompagnez-vous aujourd'hui ?",
+                    a: "Nous sommes en plein développement et chaque nouveau projet est traité avec une implication maximale. Vous n’êtes ni un numéro, ni un ticket de support : vous êtes notre priorité !"
                   }
                 ].map((faq, idx) => (
                     <div key={idx} className="space-y-2">
@@ -341,6 +350,7 @@ export default function Pricing() {
               </div>
             </div>
           </motion.div>
+
 
           {/* Bottom CTA */}
           <motion.div

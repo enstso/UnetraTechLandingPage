@@ -37,7 +37,7 @@ const testimonials = [
     rating: 5,
     project: "App mobile Désencombreur",
     avatar: "MN",
-    result: "4.8⭐ sur les stores"
+    result: "4.8⭐"
   },
   {
     name: "Foumba Cissé",
@@ -54,11 +54,12 @@ const testimonials = [
 
 
 const stats = [
-  { number: "50+", label: "Projets réalisés" },
-  { number: "98%", label: "Clients satisfaits" },
-  { number: "24h", label: "Temps de réponse moyen" },
-  { number: "4.9/5", label: "Note moyenne" }
+  { number: "100%", label: "À votre écoute, dès le premier contact" },
+  { number: "100%", label: "Transparence et pédagogie" },
+  { number: "1 seul objectif", label: "Votre succès digital" },
+  { number: "0 coût caché", label: "Sérénité garantie" }
 ];
+
 
 export default function Testimonials() {
   const [isMobile, setIsMobile] = useState(false);

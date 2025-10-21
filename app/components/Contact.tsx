@@ -30,8 +30,8 @@ const contactMethods = [
   {
     icon: PhoneIcon,
     label: "Appelez-nous",
-    value: "+33 1 23 45 67 89",
-    link: "tel:+33123456789",
+    value: "+33 6 46 57 46 36",
+    link: "tel:+33646574636",
     description: "Réponse immédiate pour les urgences",
     available: "Lun-Ven 9h-18h"
   },
@@ -218,17 +218,18 @@ export default function Contact() {
                 </div>
                 <div className="space-y-3">
                   {[
-                    "💡 Conseils personnalisés & approche orientée résultats",
-                    "🛡️ Sécurité, conformité et audit intégrés à chaque projet",
-                    "⏱️ Support ultra-réactif et suivi humain dédié",
-                    "🔎 Transparence totale sur la tarification et l’avancement",
-                    "🥇 +50 clients accompagnés, 98% de satisfaction",
-                    "🏆 Partenaires cloud et IT innovants reconnus",
-                    "✨ Livraison rapide, sans compromis sur la qualité"
+                    "💡 Conseils personnalisés et approche entrepreneuriale",
+                    "🛡️ Sécurité et audit intégrés dès le démarrage",
+                    "🤝 Suivi humain, équipe disponible et transparente",
+                    "🔎 Tarifs clairs et juste prix sans engagement caché",
+                    "⚡ Méthodes agiles, réponses rapides",
+                    "🌱 Partenaire engagé pour la croissance de votre activité",
+                    "✨ Qualité premium, même pour les premiers projets"
                   ].map((benefit, idx) => (
                       <p key={idx} className="text-blue-100 text-sm">{benefit}</p>
                   ))}
                 </div>
+
               </motion.div>
             </motion.div>
 
