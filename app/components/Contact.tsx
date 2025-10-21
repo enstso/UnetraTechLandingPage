@@ -218,11 +218,13 @@ export default function Contact() {
                 </div>
                 <div className="space-y-3">
                   {[
-                    "✓ Expertise technique reconnue depuis 2019",
-                    "✓ Réponse garantie sous 24h ouvrées",
-                    "✓ Devis gratuit et sans engagement",
-                    "✓ Support technique inclus",
-                    "✓ +50 projets réalisés avec succès"
+                    "💡 Conseils personnalisés & approche orientée résultats",
+                    "🛡️ Sécurité, conformité et audit intégrés à chaque projet",
+                    "⏱️ Support ultra-réactif et suivi humain dédié",
+                    "🔎 Transparence totale sur la tarification et l’avancement",
+                    "🥇 +50 clients accompagnés, 98% de satisfaction",
+                    "🏆 Partenaires cloud et IT innovants reconnus",
+                    "✨ Livraison rapide, sans compromis sur la qualité"
                   ].map((benefit, idx) => (
                       <p key={idx} className="text-blue-100 text-sm">{benefit}</p>
                   ))}
@@ -433,16 +435,28 @@ export default function Contact() {
                     a: "Nous nous engageons à vous répondre sous 24h ouvrées avec une première analyse et un devis personnalisé."
                   },
                   {
-                    q: "Proposez-vous un devis gratuit ?",
-                    a: "Oui, absolument ! Notre première consultation et notre devis détaillé sont entièrement gratuits et sans engagement."
+                    q: "Quel est votre délai de réponse ?",
+                    a: "Nous garantissons un premier retour sous 24h ouvrées, avec analyse personnalisée et premier échange pour bien comprendre votre besoin."
                   },
                   {
-                    q: "Intervenez-vous sur toute la France ?",
-                    a: "Nous intervenons principalement en Île-de-France. Pour d'autres régions, nous étudions la faisabilité selon le projet."
+                    q: "La consultation et le devis sont-ils vraiment gratuits ?",
+                    a: "Oui, 100 %! Notre audit préalable et notre proposition personnalisée sont sans engagement, quelle que soit la taille de votre projet."
                   },
                   {
-                    q: "Quelles sont vos garanties ?",
-                    a: "Tous nos projets incluent une garantie, un support technique et une documentation complète pour assurer votre sérénité."
+                    q: "Intervenez-vous partout en France ?",
+                    a: "Notre cœur d’intervention est en Île-de-France, mais nous accompagnons aussi des clients partout en France en télémaintenance ou déplacement sur demande spécifique."
+                  },
+                  {
+                    q: "Quels engagements de qualité proposez-vous ?",
+                    a: "Chaque prestation inclut : garantie sur livrable, support technique dédié, documentation complète et accompagnement post-projet pour assurer votre sérénité à long terme."
+                  },
+                  {
+                    q: "Est-il possible de cumuler plusieurs services ?",
+                    a: "Oui, nos solutions sont totalement modulaires : vous pouvez combiner conseil, création d’infrastructure, support à la demande ou développement, selon vos priorités."
+                  },
+                  {
+                    q: "Quels types d'organisations font appel à vous ?",
+                    a: "Nous travaillons avec des indépendants, PME, conciergeries, sociétés de services et groupes multi-sites, dans des secteurs variés (immobilier, services, tech, conseil...)."
                   }
                 ].map((faq, idx) => (
                     <div key={idx} className="space-y-3">

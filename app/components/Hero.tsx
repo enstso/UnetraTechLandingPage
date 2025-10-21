@@ -15,20 +15,15 @@ export default function Hero() {
         >
             {/* Background Elements */}
             <div className="absolute inset-0 overflow-hidden">
-                <div
-                    className="absolute top-1/4 -left-32 w-96 h-96 bg-blue-400/20 rounded-full blur-3xl animate-pulse"/>
-                <div
-                    className="absolute bottom-1/4 -right-32 w-80 h-80 bg-indigo-400/20 rounded-full blur-3xl animate-pulse"
-                    style={{animationDelay: '2s'}}/>
+                <div className="absolute top-1/4 -left-32 w-96 h-96 bg-blue-400/20 rounded-full blur-3xl animate-pulse"/>
+                <div className="absolute bottom-1/4 -right-32 w-80 h-80 bg-indigo-400/20 rounded-full blur-3xl animate-pulse"
+                     style={{animationDelay: '2s'}}/>
             </div>
 
             {/* Grid pattern */}
-            <div
-                className="absolute inset-0 bg-[url('data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg'
-                viewBox='0 0 32 32' width='32' height='32' fill='none'
-                stroke='rgb(148 163 184 / 0.05)'%3E%3Cpath d='m0 .5h32m-32 32v-32m32 0v32m-32-32h32'/%3E%3C/svg%3E')] opacity-30'/>
+            <div className="absolute inset-0 bg-[url('data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32' width='32' height='32' fill='none' stroke='rgb(148 163 184 / 0.05)'%3E%3Cpath d='m0 .5h32m-32 32v-32m32 0v32m-32-32h32'/%3E%3C/svg%3E')] opacity-30"/>
 
-            <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
                 <div className="grid lg:grid-cols-2 gap-12 items-center min-h-screen py-20">
 
                     {/* Contenu Texte */}
@@ -46,38 +41,35 @@ export default function Hero() {
                             className="inline-flex items-center gap-2 bg-white/70 backdrop-blur-sm border border-blue-200 rounded-full px-4 py-2 text-sm font-medium text-blue-700"
                         >
                             <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse"/>
-                            Experts en transformation digitale
+                            Experts cloud, sécurité & digitalisation
                         </motion.div>
 
-                        {/* Titre Principal */
-                        }
+                        {/* Titre Principal */}
                         <motion.h1
                             initial={{opacity: 0, y: 30}}
                             animate={{opacity: 1, y: 0}}
                             transition={{delay: 0.3, duration: 0.8}}
                             className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 leading-tight"
                         >
-                            Propulsez votre entreprise vers le{' '}
+                            Propulsez votre entreprise vers le{" "}
                             <span
                                 className="bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
-                futur digital
-              </span>
+                                futur digital
+                            </span>
                         </motion.h1>
 
-                        {/* Sous-titre */
-                        }
+                        {/* Sous-titre */}
                         <motion.p
                             initial={{opacity: 0, y: 20}}
                             animate={{opacity: 1, y: 0}}
                             transition={{delay: 0.5, duration: 0.6}}
                             className="text-xl text-gray-600 leading-relaxed max-w-xl"
                         >
-                            Solutions informatiques complètes : développement, cloud, réseau, sécurité et conseil.
-                            Nous transformons vos défis technologiques en opportunités de croissance.
+                            Solutions informatiques haut de gamme : cloud, infrastructure, cybersécurité, développement et conseil.
+                            Profitez d’un accompagnement sur mesure : chaque besoin, chaque défi, chaque ambition.
                         </motion.p>
 
-                        {/* Points forts */
-                        }
+                        {/* Points forts */}
                         <motion.div
                             initial={{opacity: 0, y: 20}}
                             animate={{opacity: 1, y: 0}}
@@ -86,9 +78,9 @@ export default function Hero() {
                         >
                             {[
                                 'Développement sur mesure',
-                                'Support 24/7',
-                                'Sécurité renforcée'
-                            ].map((item, index) => (
+                                'Support sur mesure',
+                                'Audit et sécurité incluses'
+                            ].map((item) => (
                                 <div key={item} className="flex items-center gap-2">
                                     <CheckCircleIcon className="w-5 h-5 text-green-500"/>
                                     <span>{item}</span>
@@ -96,8 +88,7 @@ export default function Hero() {
                             ))}
                         </motion.div>
 
-                        {/* Boutons CTA */
-                        }
+                        {/* Boutons CTA */}
                         <motion.div
                             initial={{opacity: 0, y: 20}}
                             animate={{opacity: 1, y: 0}}
@@ -122,8 +113,7 @@ export default function Hero() {
                             </a>
                         </motion.div>
 
-                        {/* Social Proof */
-                        }
+                        {/* Social Proof */}
                         <motion.div
                             initial={{opacity: 0}}
                             animate={{opacity: 1}}
@@ -146,8 +136,7 @@ export default function Hero() {
                         </motion.div>
                     </motion.div>
 
-                    {/* Visuel Droite */
-                    }
+                    {/* Visuel Droite */}
                     <motion.div
                         className="relative"
                         initial={{opacity: 0, x: 50}}
@@ -220,6 +209,6 @@ export default function Hero() {
                 </div>
             </div>
         </section>
-    )
-        ;
+    );
 }
+

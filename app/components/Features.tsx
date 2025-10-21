@@ -6,7 +6,6 @@ import "keen-slider/keen-slider.min.css";
 
 import { motion } from "framer-motion";
 import {
-  VideoCameraIcon,
   LockClosedIcon,
   WifiIcon,
   WrenchScrewdriverIcon,
@@ -42,84 +41,85 @@ const services = [
   },
   {
     title: "Cybersécurité",
-    desc: "Protection complète : firewall, VPN, monitoring et audits sécurité pour protéger vos données.",
+    desc: "Audits, firewall, VPN, monitoring : sécurisez vos infrastructures, débusquez les vulnérabilités et protégez vos données.",
     icon: LockClosedIcon,
     category: "Sécurité",
-    highlight: "Protection 24/7"
-  },
-  {
-    title: "Vidéosurveillance IP",
-    desc: "Solutions de surveillance professionnelles avec accès distant et stockage sécurisé.",
-    icon: VideoCameraIcon,
-    category: "Sécurité",
-    highlight: "UniFi Protect"
+    highlight: "Audit & Protection"
   },
   {
     title: "Développement Web",
-    desc: "Applications web modernes, APIs sur mesure et intégrations métiers personnalisées.",
+    desc: "Applications web modernes, APIs sur mesure, intégrations connectées à tous vos outils métiers.",
     icon: CodeBracketIcon,
     category: "Développement",
     highlight: "React, Node.js"
   },
   {
     title: "Applications Mobile",
-    desc: "Apps natives iOS/Android et solutions cross-platform adaptées à vos besoins métier.",
+    desc: "Apps natives iOS/Android et solutions cross-platform conçues pour votre métier.",
     icon: DevicePhoneMobileIcon,
     category: "Développement",
     highlight: "Native & Cross-platform"
   },
   {
     title: "Logiciels Desktop",
-    desc: "Applications Windows, macOS et Linux pour optimiser vos processus internes.",
+    desc: "Applications Windows, macOS et Linux performantes pour automatiser vos processus.",
     icon: ComputerDesktopIcon,
     category: "Développement",
     highlight: "Multi-plateforme"
   },
   {
     title: "Solutions Cloud",
-    desc: "Migration, déploiement et gestion d'infrastructures cloud AWS, Azure, Google Cloud.",
+    desc: "Migration, déploiement et gestion avancée d'infrastructure cloud : AWS, Azure, Google Cloud.",
     icon: CloudIcon,
     category: "Infrastructure",
     highlight: "Multi-cloud"
   },
   {
     title: "Administration Système",
-    desc: "Gestion complète : serveurs, Active Directory, sauvegardes et monitoring performance.",
+    desc: "Gestion de serveurs, Active Directory, sauvegardes, monitoring et performance.",
     icon: ServerStackIcon,
     category: "Infrastructure",
     highlight: "Linux & Windows"
   },
   {
     title: "DevOps & Automatisation",
-    desc: "CI/CD, conteneurisation Docker/K8s, Infrastructure as Code et monitoring.",
+    desc: "CI/CD, Docker/K8s, Infrastructure as Code, pipelines et monitoring moderne.",
     icon: CpuChipIcon,
     category: "DevOps",
     highlight: "CI/CD Pipeline"
   },
   {
-    title: "Support & Maintenance",
-    desc: "Assistance technique, mises à jour régulières et maintenance préventive 24/7.",
+    title: "Support sur mesure",
+    desc: "Assistance technique réactive : tickets, mises à jour, maintenance préventive, selon vos SLA.",
     icon: WrenchScrewdriverIcon,
     category: "Support",
-    highlight: "Support 24/7"
+    highlight: "SLA personnalisé"
   },
   {
     title: "Audit & Conseil",
-    desc: "Audits techniques complets, recommandations stratégiques et plan de roadmap IT.",
+    desc: "Audits techniques globaux, sécurité, roadmap IT et recommandations précise – votre feuille de route numérique.",
     icon: DocumentMagnifyingGlassIcon,
     category: "Conseil",
     highlight: "Expertise approfondie"
   },
   {
     title: "Missions Sur Mesure",
-    desc: "Accompagnement personnalisé et solutions techniques adaptées à vos défis spécifiques.",
+    desc: "Accompagnement personnalisé : architecture, pilotage projet, solutions adaptées à vos défis spécifiques.",
     icon: SquaresPlusIcon,
     category: "Conseil",
     highlight: "100% personnalisé"
   },
 ];
 
-const categories = ["Tous", "Infrastructure", "Développement", "Sécurité", "DevOps", "Support", "Conseil"];
+const categories = [
+  "Tous",
+  "Infrastructure",
+  "Développement",
+  "Sécurité",
+  "DevOps",
+  "Support",
+  "Conseil"
+];
 
 export default function Features() {
   const [isMobile, setIsMobile] = useState(false);
@@ -171,7 +171,7 @@ export default function Features() {
               Nos <span className="bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">Services IT</span>
             </h2>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              Solutions complètes pour accompagner votre transformation digitale et optimiser vos infrastructures
+              Solutions haut de gamme pour accélérer votre transformation digitale et sécuriser votre SI.
             </p>
             <div className="w-24 h-1 bg-gradient-to-r from-blue-600 to-indigo-600 mx-auto mt-6 rounded-full" />
           </motion.div>
@@ -220,7 +220,7 @@ export default function Features() {
                   initial="hidden"
                   whileInView="show"
                   viewport={{ once: true }}
-                  key={activeCategory} // Force re-animation when category changes
+                  key={activeCategory}
               >
                 {filteredServices.map((service, idx) => (
                     <motion.div key={`${service.title}-${idx}`} variants={item}>
@@ -238,9 +238,9 @@ export default function Features() {
               viewport={{ once: true }}
               transition={{ delay: 0.4, duration: 0.6 }}
           >
-            <h3 className="text-2xl font-bold mb-4">Besoin d'une solution personnalisée ?</h3>
+            <h3 className="text-2xl font-bold mb-4">Besoin d'une solution personnalisée&nbsp;?</h3>
             <p className="text-blue-100 mb-6 text-lg">
-              Notre équipe d'experts analyse vos besoins et vous propose la solution IT parfaitement adaptée
+              Notre équipe analyse vos besoins et conçoit une solution vraiment sur-mesure pour votre SI.
             </p>
             <a
                 href="#contact"
@@ -257,7 +257,7 @@ export default function Features() {
   );
 }
 
-// Composant ServiceCard
+// Service Card
 function ServiceCard({ service }: { service: typeof services[0] }) {
   const { title, desc, icon: Icon, category, highlight } = service;
 
@@ -301,7 +301,7 @@ function ServiceCard({ service }: { service: typeof services[0] }) {
   );
 }
 
-// Composant de navigation du slider
+// Navigation du slider (inchangé)
 function SliderNavigation({ sliderRef }: { sliderRef: any }) {
   const [loaded, setLoaded] = useState(false);
   const [currentSlide, setCurrentSlide] = useState(0);

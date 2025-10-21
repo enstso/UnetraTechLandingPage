@@ -19,49 +19,39 @@ const item = {
 const testimonials = [
   {
     name: "Hamadi Diallo",
-    role: "Concierge & Co-hôte",
-    company: "Airbnb & Booking.com",
+    role: "Fondateur",
+    company: "Hamadi Conciergerie",
     quote:
-        "Grâce à leur solution sur mesure, j'ai trouvé plusieurs nouveaux biens à gérer. Un vrai game-changer qui m'a permis d'élargir mon portefeuille de 40% en seulement 1 mois. L'équipe est réactive et comprend parfaitement les enjeux business.",
+        "Avec leur solution sur mesure, la gestion de nouveaux biens est devenue ultra‑simple. Mon portefeuille a augmenté de 40% en 1 mois, et leur réactivité business a été décisive.",
     rating: 5,
-    project: "Application de gestion locative",
+    project: "Plateforme de gestion conciergerie",
     avatar: "HD",
-    result: "+40% de biens gérés"
+    result: "+40% biens gérés"
   },
   {
     name: "Matei Ngangue",
-    role: "Entrepreneur Tech",
-    company: "Applications Mobiles",
+    role: "Entrepreneur",
+    company: "Le Désencombreur",
     quote:
-        "Ils ont conçu une app mobile qui répond parfaitement aux besoins de mes utilisateurs. L'approche user-centric et la qualité du développement sont exceptionnelles. Support technique au top !",
+        "Unetra Tech a conçu une app mobile parfaitement taillée pour nos clients. L’expérience utilisateur est top, la techno solide, et l’équipe force de proposition.",
     rating: 5,
-    project: "Application mobile native",
+    project: "App mobile Désencombreur",
     avatar: "MN",
     result: "4.8⭐ sur les stores"
   },
   {
-    name: "Bruno Duartes",
-    role: "Administrateur Systèmes",
-    company: "Infrastructure IT",
+    name: "Foumba Cissé",
+    role: "Dirigeant",
+    company: "ACIS Conseil",
     quote:
-        "Un partenaire de confiance sur des projets ambitieux. Leur expertise technique et leur polyvalence IT font vraiment la différence. Ils maîtrisent autant l'infra que le développement.",
+        "Grâce à Unetra Tech, nous avons pu externaliser notre support informatique clients. Résolution rapide des tickets, utilisateurs très satisfaits : un vrai gain de temps, zéro friction et beaucoup de professionnalisme.",
     rating: 5,
-    project: "Migration cloud & modernisation",
-    avatar: "BD",
-    result: "99.9% uptime"
-  },
-  {
-    name: "Sophie Martinez",
-    role: "Directrice IT",
-    company: "PME Innovation",
-    quote:
-        "L'audit sécurité réalisé par Unetra Tech nous a permis d'identifier et corriger des failles critiques. Leur plan d'action était clair et les recommandations très pertinentes.",
-    rating: 5,
-    project: "Audit sécurité & cybersécurité",
-    avatar: "SM",
-    result: "100% conformité RGPD"
+    project: "Support IT externalisé",
+    avatar: "FC",
+    result: "98% tickets résolus dans les délais"
   }
 ];
+
 
 const stats = [
   { number: "50+", label: "Projets réalisés" },
