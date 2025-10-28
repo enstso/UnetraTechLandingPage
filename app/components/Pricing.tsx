@@ -149,7 +149,6 @@ const categories = [
   "Développement",
   "Conseil"
 ];
-;
 
 export default function Pricing() {
   const [activeCategory, setActiveCategory] = useState("Tous");
@@ -256,7 +255,7 @@ export default function Pricing() {
                       </div>
                   )}
 
-                  <div className={`relative h-full p-8 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 border-2 ${
+                  <div className={`relative h-full p-8 flex flex-col rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 border-2 ${
                       plan.recommended
                           ? 'bg-gradient-to-br from-white to-blue-50 border-blue-300 shadow-blue-100'
                           : `bg-gradient-to-br ${getColorClasses(plan.color)} hover:shadow-lg`
@@ -287,24 +286,25 @@ export default function Pricing() {
                       </ul>
                     </div>
 
-                    {/* CTA Button */}
-                    <button
-                        onClick={() => handleClick(plan.name)}
-                        className={`w-full group/btn flex items-center justify-center gap-2 px-6 py-4 rounded-lg font-semibold transition-all duration-300 ${
-                            plan.recommended
-                                ? 'bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white shadow-lg hover:shadow-xl transform hover:-translate-y-1'
-                                : 'bg-white hover:bg-gray-50 text-gray-900 border-2 border-gray-200 hover:border-blue-300 hover:text-blue-600'
-                        }`}
-                    >
-                      <span>{plan.ctaText}</span>
-                      <ArrowRightIcon className="w-4 h-4 group-hover/btn:translate-x-1 transition-transform" />
-                    </button>
+                    {/* CTA Button ALIGNÉ BAS */}
+                    <div className="mt-auto">
+                      <button
+                          onClick={() => handleClick(plan.name)}
+                          className={`w-full group/btn flex items-center justify-center gap-2 px-6 py-4 rounded-lg font-semibold transition-all duration-300 ${
+                              plan.recommended
+                                  ? 'bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white shadow-lg hover:shadow-xl transform hover:-translate-y-1'
+                                  : 'bg-white hover:bg-gray-50 text-gray-900 border-2 border-gray-200 hover:border-blue-300 hover:text-blue-600'
+                          }`}
+                      >
+                        <span>{plan.ctaText}</span>
+                        <ArrowRightIcon className="w-4 h-4 group-hover/btn:translate-x-1 transition-transform" />
+                      </button>
+                    </div>
                   </div>
                 </motion.div>
             ))}
           </motion.div>
 
-          {/* FAQ Section */}
           {/* FAQ Section */}
           <motion.div
               className="mt-20 text-center"
@@ -350,7 +350,6 @@ export default function Pricing() {
               </div>
             </div>
           </motion.div>
-
 
           {/* Bottom CTA */}
           <motion.div

@@ -115,25 +115,22 @@ export default function Hero() {
 
                         {/* Social Proof */}
                         <motion.div
-                            initial={{opacity: 0}}
-                            animate={{opacity: 1}}
-                            transition={{delay: 1.1, duration: 0.6}}
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            transition={{ delay: 1.1, duration: 0.6 }}
                             className="flex items-center gap-6 text-sm text-gray-500"
                         >
                             <div className="flex items-center gap-2">
-                                <div className="flex -space-x-2">
-                                    {[1, 2, 3, 4].map((i) => (
-                                        <div key={i}
-                                             className="w-8 h-8 bg-gradient-to-br from-blue-400 to-indigo-500 rounded-full border-2 border-white"/>
-                                    ))}
-                                </div>
+                                {/* Option simple : une seule puce verte ou une icône, ici juste ✅ */}
+                                <span className="text-green-500 text-xl mr-1">●</span>
                                 <span>Des clients déjà conquis par notre réactivité</span>
                             </div>
                             <div className="flex items-center gap-1">
                                 <span className="text-yellow-400">★★★★★</span>
-                                <span>4.9/5 (30 avis)</span>
+                                <span>Recommandé pour la qualité du suivi</span>
                             </div>
                         </motion.div>
+
                     </motion.div>
 
                     {/* Visuel Droite */}
