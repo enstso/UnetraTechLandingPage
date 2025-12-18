@@ -118,17 +118,28 @@ export default function Hero() {
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}
                             transition={{ delay: 1.1, duration: 0.6 }}
-                            className="flex items-center gap-6 text-sm text-gray-500"
+                            className="flex items-center gap-8 text-sm"
                         >
-                            <div className="flex items-center gap-2">
-                                {/* Option simple : une seule puce verte ou une icône, ici juste ✅ */}
-                                <span className="text-green-500 text-xl mr-1">●</span>
-                                <span>Des clients déjà conquis par notre réactivité</span>
+                            <div className="flex items-center gap-2.5">
+                                <div className="flex items-center">
+                                    <div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center shadow-sm">
+                                        <svg className="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                                        </svg>
+                                    </div>
+                                </div>
+                                <span className="text-gray-600">Réponse sous 24h garantie</span>
                             </div>
-                            <div className="flex items-center gap-1">
-                                <span className="text-yellow-400">★★★★★</span>
-                                <span>Recommandé pour la qualité du suivi</span>
+                            <div className="flex items-center gap-2.5">
+                                <div className="flex -space-x-3">
+                                    <div className="w-9 h-9 rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 border-2 border-white shadow-md"></div>
+                                    <div className="w-9 h-9 rounded-full bg-gradient-to-br from-indigo-400 to-blue-500 border-2 border-white shadow-md"></div>
+                                </div>
+                                <span className="text-gray-600">Rejoignez nos clients satisfaits</span>
                             </div>
+
+
+
                         </motion.div>
 
                     </motion.div>
