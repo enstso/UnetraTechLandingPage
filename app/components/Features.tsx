@@ -19,6 +19,8 @@ import {
   SquaresPlusIcon,
   ChevronDownIcon,
   SparklesIcon,
+  ShieldCheckIcon,
+  LightBulbIcon,
 } from "@heroicons/react/24/outline";
 
 const container = {
@@ -34,8 +36,9 @@ const item = {
 };
 
 const services = [
-  // ===== SERVICES PRIORITAIRES (affichés d'abord) =====
+  // ===== 6 SERVICES PRIORITAIRES (affichés d'abord sur "Tous") =====
   {
+    id: "service-developpement",
     title: "Sites Vitrines Premium",
     desc: "Sites web modernes, rapides et optimisés SEO. Design sur-mesure, responsive, performant et pensé pour convertir vos visiteurs en clients.",
     icon: ComputerDesktopIcon,
@@ -45,8 +48,9 @@ const services = [
     priority: true
   },
   {
-    title: "Architecture Cloud",
-    desc: "Conception, migration et optimisation d'infrastructures cloud multi-providers : AWS, Azure, Google Cloud. Scalabilité et haute disponibilité garanties.",
+    id: "service-cloud",
+    title: "Solutions Cloud",
+    desc: "Migration, déploiement et gestion avancée d'infrastructure cloud : AWS, Azure, Google Cloud.",
     icon: CloudIcon,
     category: "Cloud",
     highlight: "Multi-cloud",
@@ -54,6 +58,16 @@ const services = [
     priority: true
   },
   {
+    id: "service-reseaux",
+    title: "Réseaux Wi-Fi Pro",
+    desc: "Conception et déploiement de réseaux sans fil performants, sécurisés et évolutifs pour entreprises.",
+    icon: WifiIcon,
+    category: "Infrastructure",
+    highlight: "UniFi & Cisco",
+    priority: true
+  },
+  {
+    id: "service-securite",
     title: "Audit de Sécurité",
     desc: "Audits techniques approfondis, tests d'intrusion, analyse de vulnérabilités et recommandations actionnables pour durcir votre SI.",
     icon: DocumentMagnifyingGlassIcon,
@@ -63,22 +77,16 @@ const services = [
     priority: true
   },
   {
-    title: "Applications Web",
-    desc: "Développement d'applications web modernes avec React/Next.js, APIs REST/GraphQL et intégrations avancées à vos outils métiers.",
-    icon: CodeBracketIcon,
-    category: "Développement",
-    highlight: "React & Node.js",
+    id: "service-devops",
+    title: "DevOps & Automatisation",
+    desc: "CI/CD, Docker/K8s, Infrastructure as Code, pipelines et monitoring moderne.",
+    icon: CpuChipIcon,
+    category: "DevOps",
+    highlight: "Terraform & K8s",
     priority: true
   },
   {
-    title: "Infrastructure Réseau",
-    desc: "Design et déploiement de réseaux Wi-Fi professionnels UniFi/Cisco, VLANs, segmentation sécurisée et monitoring avancé.",
-    icon: WifiIcon,
-    category: "Infrastructure",
-    highlight: "UniFi & Cisco",
-    priority: true
-  },
-  {
+    id: "service-support",
     title: "Support Technique Premium",
     desc: "Assistance réactive par tickets, hotline dédiée, maintenance préventive et SLA personnalisé adapté à vos besoins métiers.",
     icon: WrenchScrewdriverIcon,
@@ -87,48 +95,54 @@ const services = [
     priority: true
   },
 
-  // ===== SERVICES ADDITIONNELS (révélés au clic) =====
+  // ===== SERVICES ADDITIONNELS =====
   {
-    title: "Protection Avancée",
-    desc: "Déploiement de firewall nouvelle génération, VPN sécurisés, monitoring 24/7 et réponse aux incidents pour protéger vos données critiques.",
-    icon: LockClosedIcon,
-    category: "Sécurité",
-    highlight: "Monitoring 24/7",
+    id: "service-developpement-web",
+    title: "Développement Web",
+    desc: "Applications web modernes, APIs sur mesure, intégrations connectées à tous vos outils métiers.",
+    icon: CodeBracketIcon,
+    category: "Développement",
+    highlight: "React, Node.js",
     priority: false
   },
   {
+    id: "service-developpement-mobile",
     title: "Applications Mobile",
-    desc: "Apps natives iOS/Android ou cross-platform (React Native, Flutter) conçues pour offrir une expérience utilisateur exceptionnelle.",
+    desc: "Apps natives iOS/Android et solutions cross-platform conçues pour votre métier.",
     icon: DevicePhoneMobileIcon,
     category: "Développement",
-    highlight: "Native & Cross",
+    highlight: "Native & Cross-platform",
     priority: false
   },
   {
-    title: "Administration Système",
-    desc: "Gestion complète de serveurs Linux/Windows, Active Directory, automatisation, sauvegardes et monitoring proactif de performance.",
-    icon: ServerStackIcon,
-    category: "Infrastructure",
-    highlight: "Linux & Windows",
-    priority: false
-  },
-  {
-    title: "DevOps & CI/CD",
-    desc: "Pipelines CI/CD automatisés, Docker/Kubernetes, Infrastructure as Code (Terraform), déploiements zero-downtime et monitoring moderne.",
-    icon: CpuChipIcon,
-    category: "DevOps",
-    highlight: "Terraform & K8s",
-    priority: false
-  },
-  {
-    title: "Logiciels sur Mesure",
-    desc: "Applications desktop Windows/macOS/Linux et solutions métier personnalisées pour automatiser vos processus complexes.",
+    id: "service-developpement-desktop",
+    title: "Logiciels Desktop",
+    desc: "Applications Windows, macOS et Linux performantes pour automatiser vos processus.",
     icon: SquaresPlusIcon,
     category: "Développement",
     highlight: "Multi-plateforme",
     priority: false
   },
   {
+    id: "service-infrastructure",
+    title: "Administration Système",
+    desc: "Gestion de serveurs, Active Directory, sauvegardes, monitoring et performance.",
+    icon: ServerStackIcon,
+    category: "Infrastructure",
+    highlight: "Linux & Windows",
+    priority: false
+  },
+  {
+    id: "service-securite-protection",
+    title: "Protection Avancée",
+    desc: "Déploiement de firewall nouvelle génération, VPN sécurisés, monitoring 24/7 et réponse aux incidents pour protéger vos données critiques.",
+    icon: ShieldCheckIcon,
+    category: "Sécurité",
+    highlight: "Monitoring 24/7",
+    priority: false
+  },
+  {
+    id: "service-support-surmesure",
     title: "Support Sur Mesure",
     desc: "Accompagnement IT personnalisé : astreinte weekend, support dédié 24/7, intervention on-site, contrat flexible selon vos contraintes.",
     icon: WrenchScrewdriverIcon,
@@ -137,20 +151,30 @@ const services = [
     priority: false
   },
   {
-    title: "Conseil Stratégique IT",
-    desc: "Accompagnement long-terme : audit global SI, roadmap technologique, architecture d'entreprise et pilotage de transformation digitale.",
+    id: "service-conseil",
+    title: "Audit & Conseil",
+    desc: "Audits techniques globaux, sécurité, roadmap IT et recommandations précises – votre feuille de route numérique.",
     icon: DocumentMagnifyingGlassIcon,
     category: "Conseil",
-    highlight: "Vision 360°",
+    highlight: "100% personnalisé",
+    priority: false
+  },
+  {
+    id: "service-conseil-mission",
+    title: "Missions Sur Mesure",
+    desc: "Accompagnement personnalisé : architecture, pilotage projet, solutions adaptées à vos défis spécifiques.",
+    icon: LightBulbIcon,
+    category: "Conseil",
+    highlight: "Sur-mesure",
     priority: false
   },
 ];
 
 const categories = [
   "Tous",
+  "Développement",
   "Cloud",
   "Infrastructure",
-  "Développement",
   "Sécurité",
   "DevOps",
   "Support",
@@ -180,16 +204,46 @@ export default function Features() {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
+  // ✅ ÉCOUTEUR D'ÉVÉNEMENT POUR LES CLICS DU FOOTER
+  useEffect(() => {
+    const handleCategoryFromFooter = (e: Event) => {
+      const category = (e as CustomEvent).detail as string;
+      setActiveCategory(category);
+      setShowAll(false);
+    };
+
+    window.addEventListener('serviceCategorySelected', handleCategoryFromFooter);
+
+    return () => window.removeEventListener('serviceCategorySelected', handleCategoryFromFooter);
+  }, []);
+
   const filteredServices = activeCategory === "Tous"
       ? services
       : services.filter(service => service.category === activeCategory);
 
-  // Services à afficher (6 premiers si showAll=false, tous sinon)
-  const displayedServices = showAll
-      ? filteredServices
-      : filteredServices.filter(s => s.priority);
+  // ✅ LOGIQUE MODIFIÉE :
+  // - Si "Tous" → afficher 6 prioritaires (ou tous si showAll)
+  // - Si catégorie spécifique → afficher TOUS les services de cette catégorie
+  const displayedServices = activeCategory === "Tous"
+      ? (showAll ? filteredServices : filteredServices.filter(s => s.priority))
+      : filteredServices; // Affiche TOUS les services de la catégorie
 
-  const hasMoreServices = filteredServices.length > displayedServices.length;
+  // Le bouton "Voir plus" n'apparaît que sur "Tous"
+  const hasMoreServices = activeCategory === "Tous" && filteredServices.length > displayedServices.length;
+
+  // FONCTION POUR CHANGER DE CATÉGORIE ET SCROLLER
+  const handleCategoryChange = (category: string) => {
+    setActiveCategory(category);
+    setShowAll(false);
+
+    // Scroll vers la grille de services après un court délai
+    setTimeout(() => {
+      const servicesGrid = document.getElementById('services-grid');
+      if (servicesGrid) {
+        servicesGrid.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }, 100);
+  };
 
   return (
       <section
@@ -232,10 +286,7 @@ export default function Features() {
                 {categories.map((category) => (
                     <button
                         key={category}
-                        onClick={() => {
-                          setActiveCategory(category);
-                          setShowAll(false); // Reset à 6 services quand on change de catégorie
-                        }}
+                        onClick={() => handleCategoryChange(category)}
                         className={`px-6 py-3 rounded-full font-medium transition-all duration-300 ${
                             activeCategory === category
                                 ? 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-lg transform scale-105'
@@ -263,7 +314,8 @@ export default function Features() {
           ) : (
               <>
                 <motion.div
-                    className="grid md:grid-cols-2 lg:grid-cols-3 gap-8"
+                    id="services-grid"
+                    className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 scroll-mt-32"
                     variants={container}
                     initial="hidden"
                     whileInView="show"
@@ -276,6 +328,8 @@ export default function Features() {
                             key={`${service.title}-${idx}`}
                             variants={item}
                             layout
+                            id={service.id}
+                            className="scroll-mt-24"
                         >
                           <ServiceCard service={service} />
                         </motion.div>
@@ -283,7 +337,7 @@ export default function Features() {
                   </AnimatePresence>
                 </motion.div>
 
-                {/* Bouton "Voir plus" */}
+                {/* Bouton "Voir plus" (seulement sur "Tous") */}
                 {hasMoreServices && (
                     <motion.div
                         className="flex justify-center mt-12"
@@ -296,8 +350,8 @@ export default function Features() {
                           className="group relative inline-flex items-center gap-3 bg-white hover:bg-gradient-to-r hover:from-blue-50 hover:to-indigo-50 text-gray-700 hover:text-blue-600 px-8 py-4 rounded-xl font-semibold transition-all duration-300 border-2 border-gray-200 hover:border-blue-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1"
                       >
                         <SparklesIcon className="w-5 h-5 text-blue-500" />
-                        <span>Découvrir tous nos services</span>
-                        <ChevronDownIcon className="w-5 h-5 transform group-hover:translate-y-1 transition-transform" />
+                        <span>{showAll ? 'Voir moins de services' : 'Découvrir tous nos services'}</span>
+                        <ChevronDownIcon className={`w-5 h-5 transform transition-transform ${showAll ? 'rotate-180' : 'group-hover:translate-y-1'}`} />
                       </button>
                     </motion.div>
                 )}
@@ -408,7 +462,7 @@ function ServiceCard({ service }: { service: typeof services[0] }) {
   );
 }
 
-// Slider Navigation Component (inchangé)
+// Slider Navigation Component
 function SliderNavigation({ sliderRef }: { sliderRef: any }) {
   const [loaded, setLoaded] = useState(false);
   const [currentSlide, setCurrentSlide] = useState(0);

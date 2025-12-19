@@ -19,9 +19,7 @@ export default function MentionsLegales() {
                     <div>
                         <span className="font-semibold">Responsable publication :</span> Enstso Janvier et Diallo Amadou
                     </div>
-                    <div>
-                        <span className="font-semibold">Hébergement :</span> Vercel Inc, 440 N Barranca Ave #4133, Covina, CA 91723, USA
-                    </div>
+
                     <div>
                         <span className="font-semibold">Propriété intellectuelle :</span>
                         <br />

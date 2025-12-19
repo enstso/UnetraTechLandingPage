@@ -1,161 +1,369 @@
 "use client";
 
-import { motion } from "framer-motion";
-import { CheckIcon, StarIcon, ArrowRightIcon } from "@heroicons/react/24/solid";
+import { motion, AnimatePresence } from "framer-motion";
+import { CheckIcon, StarIcon, ArrowRightIcon, SparklesIcon, ChevronDownIcon, BoltIcon, FireIcon } from "@heroicons/react/24/solid";
 import { useState } from "react";
 
 const container = {
   hidden: {},
-  show: { transition: { staggerChildren: 0.1, delayChildren: 0.2 } },
+  show: { transition: { staggerChildren: 0.06, delayChildren: 0.15 } },
 };
 
 const item = {
   hidden: { opacity: 0, y: 30 },
-  show: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" } },
+  show: { opacity: 1, y: 0, transition: { duration: 0.5, ease: [0.22, 1, 0.36, 1] } },
 };
 
 const pricingPlans = [
-  // Infrastructure
+  // ===== CLOUD =====
   {
-    name: "Pack Start",
-    category: "Infrastructure",
-    description: "Idéal pour démarrer avec une base réseau solide.",
-    price: "À partir de 2 500€",
-    duration: "Installation complète",
+    name: "Cloud Start",
+    category: "Cloud",
+    description: "Migration cloud pour démarrer en toute sérénité.",
+    price: 2800,
+    displayPrice: "2 800€",
+    priceType: "from",
+    duration: "À partir de",
     features: [
-      "Installation Wi-Fi pro",
-      "Réseau sécurisé",
-      "Formation équipes",
+      "Migration AWS/Azure/GCP",
+      "Configuration initiale sécurisée",
+      "Formation équipe",
       "Support 30 jours"
     ],
-    icon: "🚀", color: "blue", ctaText: "Commencer"
+    icon: "☁️",
+    priority: true
   },
   {
-    name: "Pack Pro",
-    category: "Infrastructure",
-    description: "Réseau, firewall, supervision et évolutivité pour PME.",
-    price: "À partir de 5 500€",
-    duration: "Projet sur mesure",
+    name: "Cloud Pro",
+    category: "Cloud",
+    description: "Infrastructure cloud haute disponibilité + monitoring.",
+    price: 5200,
+    displayPrice: "5 200€",
+    priceType: "from",
+    duration: "À partir de",
     features: [
-      "Réseau segmenté VLAN",
-      "Firewall avancé + monitoring",
-      "Support prioritaire 24/7",
-      "Maintenance préventive"
+      "Architecture multi-zone",
+      "Auto-scaling & Load Balancing",
+      "Monitoring 24/7 avancé",
+      "Backup automatisé quotidien",
+      "Support prioritaire inclus"
     ],
-    icon: "🏢", color: "indigo", recommended: true, ctaText: "Choisir Pro"
+    icon: "🚀",
+    priority: true
   },
   {
-    name: "Pack Cloud",
-    category: "Infrastructure",
-    description: "Déploiement Cloud et migration sécurisée.",
-    price: "À partir de 3 500€",
-    duration: "Déploiement & formation",
+    name: "Cloud Enterprise",
+    category: "Cloud",
+    description: "Solution cloud sur-mesure avec accompagnement dédié.",
+    price: 9500,
+    displayPrice: "9 500€",
+    priceType: "from",
+    duration: "À partir de",
     features: [
-      "Migration AWS/Azure/OVH",
-      "Automatisation sauvegardes",
-      "Sécurité & accès moderne"
+      "Architecture multi-cloud",
+      "Infrastructure as Code (Terraform)",
+      "DevOps CI/CD complet",
+      "Audit sécurité inclus",
+      "SLA & astreinte 24/7"
     ],
-    icon: "☁️", color: "cyan", ctaText: "Passer au Cloud"
+    icon: "💎",
+    priority: false
   },
 
-  // Support & Heures
+  // ===== INFRASTRUCTURE =====
   {
-    name: "Heures Essentiel",
-    category: "Support & Heures",
-    description: "Crédit de 10h support - SLA J+1 - 90€/h dégressif.",
-    price: "900€",
-    duration: "10h support • 12 mois",
+    name: "Réseau Start",
+    category: "Infrastructure",
+    description: "Installation réseau professionnelle pour PME.",
+    price: 1900,
+    displayPrice: "1 900€",
+    priceType: "from",
+    duration: "À partir de",
     features: [
-      "Support garanti (ticket mail)",
-      "Interventions réseau & bureautique",
-      "Décompte 1/4h"
+      "Wi-Fi pro UniFi/Cisco",
+      "Configuration sécurisée",
+      "Formation utilisateurs",
+      "Support 30 jours"
     ],
-    icon: "⌛", color: "emerald", ctaText: "Acheter 10h"
+    icon: "📡",
+    priority: true
   },
   {
-    name: "Heures Business",
-    category: "Support & Heures",
-    description: "25h support - SLA 8h ouvrées - 81€/h.",
-    price: "2 025€",
-    duration: "25h support • 12 mois",
+    name: "Réseau Pro",
+    category: "Infrastructure",
+    description: "Réseau segmenté VLAN + firewall + monitoring.",
+    price: 4200,
+    displayPrice: "4 200€",
+    priceType: "from",
+    duration: "À partir de",
     features: [
-      "SLA prioritaire",
-      "Firewall, sécurité, supervision",
-      "Portail client inclus"
+      "Segmentation VLAN avancée",
+      "Firewall FortiGate/pfSense",
+      "Monitoring réseau 24/7",
+      "VPN sécurisé entreprise",
+      "Maintenance préventive 6 mois"
     ],
-    icon: "🔧", color: "sky", recommended: true, ctaText: "Acheter 25h"
+    icon: "🏢",
+    priority: true
   },
   {
-    name: "Heures Premium",
-    category: "Support & Heures",
-    description: "50h support L1/L2 - SLA 4h - audit inclus.",
-    price: "3 825€",
-    duration: "50h support • 12 mois",
+    name: "Infra Enterprise",
+    category: "Infrastructure",
+    description: "Infrastructure complète sur-mesure multi-sites.",
+    price: 8900,
+    displayPrice: "8 900€",
+    priceType: "from",
+    duration: "À partir de",
     features: [
+      "Multi-sites interconnectés",
+      "Active Directory & serveurs",
+      "Supervision centralisée",
+      "Audit & documentation complète",
+      "Support premium 12 mois"
+    ],
+    icon: "🏗️",
+    priority: false
+  },
+
+  // ===== DÉVELOPPEMENT =====
+  {
+    name: "Site Vitrine",
+    category: "Développement",
+    description: "Site web moderne, responsive et optimisé SEO.",
+    price: 1500,
+    displayPrice: "1 500€",
+    priceType: "from",
+    duration: "À partir de",
+    features: [
+      "Design sur-mesure moderne",
+      "100% responsive mobile",
+      "Optimisation SEO avancée",
+      "Formulaire de contact",
+      "Hébergement 1 an offert"
+    ],
+    icon: "🎨",
+    priority: true,
+    popular: true
+  },
+  {
+    name: "Application Mobile",
+    category: "Développement",
+    description: "App mobile native iOS/Android performante.",
+    price: 8500,
+    displayPrice: "8 500€",
+    priceType: "from",
+    duration: "À partir de",
+    features: [
+      "Développement natif iOS & Android",
+      "Design UX/UI mobile-first",
+      "APIs & synchronisation cloud",
+      "Notifications push intégrées",
+      "Publication stores incluse",
+      "Maintenance 3 mois offerte"
+    ],
+    icon: "📱",
+    priority: true
+  },
+  {
+    name: "Application Web",
+    category: "Développement",
+    description: "App web moderne React/Next.js avec APIs intégrées.",
+    price: 6500,
+    displayPrice: "6 500€",
+    priceType: "from",
+    duration: "À partir de",
+    features: [
+      "Architecture React/Next.js",
+      "APIs REST/GraphQL custom",
+      "Design UX/UI premium",
+      "Authentification sécurisée",
+      "CI/CD & déploiement cloud",
+      "Maintenance 3 mois offerte"
+    ],
+    icon: "💻",
+    priority: false
+  },
+  {
+    name: "Solution Full-Stack",
+    category: "Développement",
+    description: "Application complète web + mobile + backend sur-mesure.",
+    price: 15000,
+    displayPrice: "15 000€",
+    priceType: "from",
+    duration: "À partir de",
+    features: [
+      "Web app + App mobile native",
+      "Backend scalable (Node.js/Python)",
+      "Base de données optimisée",
+      "Panel admin complet",
+      "Intégrations tierces illimitées",
+      "Formation & documentation",
+      "Maintenance 6 mois incluse"
+    ],
+    icon: "🚀",
+    priority: false
+  },
+
+  // ===== SUPPORT =====
+  {
+    name: "Pack 10h",
+    category: "Support",
+    description: "Crédit 10h support - Interventions ponctuelles.",
+    price: 900,
+    displayPrice: "900€",
+    priceType: "fixed",
+    duration: "Prix fixe • 10h",
+    features: [
+      "Support ticket mail (J+1)",
+      "Interventions réseau/système",
+      "Décompte par 1/4h",
+      "90€/h dégressif"
+    ],
+    icon: "⌛",
+    priority: false
+  },
+  {
+    name: "Pack 25h",
+    category: "Support",
+    description: "25h support avec SLA prioritaire 8h.",
+    price: 2025,
+    displayPrice: "2 025€",
+    priceType: "fixed",
+    duration: "Prix fixe • 25h",
+    features: [
+      "SLA prioritaire 8h ouvrées",
+      "Support firewall & sécurité",
+      "Portail client dédié",
+      "81€/h",
+      "Interventions planifiées"
+    ],
+    icon: "🔧",
+    priority: false
+  },
+  {
+    name: "Pack 50h Premium",
+    category: "Support",
+    description: "50h support L1/L2 avec audit sécurité offert.",
+    price: 3825,
+    displayPrice: "3 825€",
+    priceType: "fixed",
+    duration: "Prix fixe • 50h",
+    features: [
+      "SLA 4h - Support L1/L2",
       "Audit sécurité offert",
       "Maintenance préventive incluse",
-      "Suivi stratégique trimestriel"
+      "Suivi stratégique trimestriel",
+      "76,5€/h"
     ],
-    icon: "💎", color: "violet", ctaText: "Acheter 50h"
+    icon: "💎",
+    priority: false
+  },
+  {
+    name: "Support Sur Mesure",
+    category: "Support",
+    description: "Support personnalisé adapté à vos besoins.",
+    price: 999999,
+    displayPrice: "Sur devis",
+    priceType: "custom",
+    duration: "100% personnalisé",
+    features: [
+      "Astreinte weekend 24/7",
+      "Support dédié on-site",
+      "Contrat flexible sur-mesure",
+      "SLA personnalisé",
+      "Accompagnement long-terme"
+    ],
+    icon: "⭐",
+    priority: false
   },
 
-  // Développement & Conseil
+  // ===== CONSEIL =====
   {
-    name: "Pack Développement",
-    category: "Développement",
-    description: "Apps web, mobile et desktop sur-mesure.",
-    price: "À partir de 8 500€",
-    duration: "Projet personnalisé",
+    name: "Audit Express",
+    category: "Conseil",
+    description: "Audit technique rapide avec recommandations.",
+    price: 1500,
+    displayPrice: "1 500€",
+    priceType: "from",
+    duration: "À partir de",
     features: [
-      "Design UX/UI moderne",
-      "Déploiement, CI/CD",
-      "Formation & docs",
-      "Maintenance offerte 3 mois"
+      "Analyse infrastructure/code",
+      "Rapport détaillé + roadmap",
+      "Recommandations actionnables",
+      "Session restitution 2h"
     ],
-    icon: "💻", color: "green", ctaText: "Développer"
+    icon: "🔍",
+    priority: false
   },
   {
-    name: "Audit & Conseil",
+    name: "Audit Complet",
     category: "Conseil",
-    description: "Analyse/sécurité IT, recommandations, schémas détaillés.",
-    price: "À partir de 2 500€",
-    duration: "Mission 5-15 jours",
+    description: "Audit approfondi SI + sécurité + cloud.",
+    price: 3500,
+    displayPrice: "3 500€",
+    priceType: "from",
+    duration: "À partir de",
     features: [
-      "Audit infra/code/cloud",
-      "Feuille de route détaillée",
-      "Livrables actionnables"
+      "Audit infra/sécu/cloud complet",
+      "Pentest & analyse vulnérabilités",
+      "Feuille de route stratégique",
+      "Schémas techniques détaillés",
+      "Suivi post-audit 30 jours"
     ],
-    icon: "🔍", color: "orange", ctaText: "Demander audit"
+    icon: "🎯",
+    priority: false
   },
   {
     name: "Mission Sur Mesure",
     category: "Conseil",
     description: "Solution 100% personnalisée multi-domaines.",
-    price: "Sur devis",
+    price: 999999,
+    displayPrice: "Sur devis",
+    priceType: "custom",
     duration: "Durée flexible",
     features: [
       "Analyse approfondie",
       "Accompagnement dédié",
       "Livrable & support unique"
     ],
-    icon: "⭐", color: "pink", ctaText: "Personnaliser"
+    icon: "⭐",
+    priority: false
   }
 ];
 
 const categories = [
   "Tous",
+  "Cloud",
   "Infrastructure",
-  "Support & Heures",
   "Développement",
+  "Support",
   "Conseil"
 ];
 
 export default function Pricing() {
   const [activeCategory, setActiveCategory] = useState("Tous");
+  const [showAll, setShowAll] = useState(false);
 
   const filteredPlans = activeCategory === "Tous"
       ? pricingPlans
       : pricingPlans.filter(plan => plan.category === activeCategory);
+
+  // LIMITE À 6 PACKS INITIALEMENT
+  const displayedPlans = showAll
+      ? filteredPlans
+      : filteredPlans.slice(0, 6);
+
+  const hasMorePlans = filteredPlans.length > displayedPlans.length;
+
+  // CALCUL AUTOMATIQUE DU PACK RECOMMANDÉ (MILIEU)
+  const getRecommendedPlan = (plans: typeof pricingPlans) => {
+    const validPlans = plans.filter(p => p.priceType !== 'custom');
+    const sorted = [...validPlans].sort((a, b) => a.price - b.price);
+    const middleIndex = Math.floor(sorted.length / 2);
+    return sorted[middleIndex]?.name;
+  };
+
+  const recommendedPlanName = getRecommendedPlan(displayedPlans);
 
   function handleClick(planName: string) {
     localStorage.setItem("selectedPack", planName);
@@ -163,32 +371,21 @@ export default function Pricing() {
     document.querySelector("#contact")?.scrollIntoView({ behavior: "smooth" });
   }
 
-  const getColorClasses = (color: string, recommended: boolean = false) => {
-    const colors = {
-      blue: recommended ? "from-blue-500 to-blue-600" : "from-blue-50 to-blue-100 border-blue-200",
-      indigo: recommended ? "from-indigo-500 to-indigo-600" : "from-indigo-50 to-indigo-100 border-indigo-200",
-      purple: recommended ? "from-purple-500 to-purple-600" : "from-purple-50 to-purple-100 border-purple-200",
-      green: recommended ? "from-green-500 to-green-600" : "from-green-50 to-green-100 border-green-200",
-      orange: recommended ? "from-orange-500 to-orange-600" : "from-orange-50 to-orange-100 border-orange-200",
-      cyan: recommended ? "from-cyan-500 to-cyan-600" : "from-cyan-50 to-cyan-100 border-cyan-200",
-    };
-    return colors[color as keyof typeof colors] || colors.blue;
-  };
-
   return (
       <section
           id="pricing"
-          className="py-20 bg-gradient-to-br from-gray-50 to-blue-50 relative overflow-hidden"
+          className="py-20 bg-white relative overflow-hidden"
       >
-        {/* Background decorative */}
+        {/* Background ultra premium */}
         <div className="absolute inset-0">
-          <div className="absolute top-20 left-10 w-72 h-72 bg-blue-200/20 rounded-full blur-3xl" />
-          <div className="absolute bottom-20 right-10 w-96 h-96 bg-indigo-200/20 rounded-full blur-3xl" />
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-blue-50 via-white to-indigo-50/30" />
+          <div className="absolute top-20 left-10 w-96 h-96 bg-blue-400/10 rounded-full blur-3xl animate-pulse" />
+          <div className="absolute bottom-20 right-10 w-[32rem] h-[32rem] bg-indigo-400/10 rounded-full blur-3xl animate-pulse" style={{animationDelay: '1.5s'}} />
         </div>
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
 
-          {/* Header */}
+          {/* Header ultra premium */}
           <motion.div
               className="text-center mb-16"
               initial={{ opacity: 0, y: 30 }}
@@ -196,179 +393,385 @@ export default function Pricing() {
               viewport={{ once: true }}
               transition={{ duration: 0.6 }}
           >
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">
-              Nos <span className="bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">Packs & Services</span>
+            <motion.div
+                initial={{ opacity: 0, scale: 0.9 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                viewport={{ once: true }}
+                className="inline-flex items-center gap-2 bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200/50 rounded-full px-5 py-2 mb-6 shadow-sm backdrop-blur-sm"
+            >
+              <SparklesIcon className="w-4 h-4 text-blue-600" />
+              <span className="text-sm font-semibold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
+                Tarification Transparente
+              </span>
+            </motion.div>
+
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-6 leading-tight">
+              Nos <span className="bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-700 bg-clip-text text-transparent">Solutions & Tarifs</span>
             </h2>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto mb-8">
-              Solutions complètes et tarification transparente pour tous vos besoins informatiques
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
+              Des forfaits clairs, adaptés à chaque besoin. Investissez dans votre transformation digitale dès aujourd'hui.
             </p>
-            <div className="w-24 h-1 bg-gradient-to-r from-blue-600 to-indigo-600 mx-auto rounded-full" />
+
+            {/* Decorative line */}
+            <div className="relative w-24 h-1 bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-600 mx-auto mt-8 rounded-full overflow-hidden">
+              <div className="absolute inset-0 bg-gradient-to-r from-blue-600 to-indigo-600 blur-sm opacity-50" />
+              <motion.div
+                  className="absolute inset-0 bg-gradient-to-r from-transparent via-white to-transparent"
+                  animate={{ x: ['-200%', '200%'] }}
+                  transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
+              />
+            </div>
           </motion.div>
 
-          {/* Category Filter */}
+          {/* Category Filter premium */}
           <motion.div
-              className="flex flex-wrap justify-center gap-3 mb-12"
+              className="flex flex-wrap justify-center gap-3 mb-14"
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: 0.2, duration: 0.6 }}
           >
             {categories.map((category) => (
-                <button
+                <motion.button
                     key={category}
-                    onClick={() => setActiveCategory(category)}
-                    className={`px-6 py-3 rounded-full font-medium transition-all duration-300 ${
+                    onClick={() => {
+                      setActiveCategory(category);
+                      setShowAll(false);
+                    }}
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    className={`relative px-7 py-3.5 rounded-full font-semibold transition-all duration-300 ${
                         activeCategory === category
-                            ? 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-lg'
+                            ? 'text-white shadow-lg shadow-blue-200'
                             : 'bg-white text-gray-600 hover:text-blue-600 border border-gray-200 hover:border-blue-300 hover:shadow-md'
                     }`}
                 >
-                  {category}
-                </button>
+                  {activeCategory === category && (
+                      <>
+                        <motion.div
+                            layoutId="activeTab"
+                            className="absolute inset-0 bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-600 rounded-full"
+                            transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-full blur opacity-40" />
+                      </>
+                  )}
+                  <span className="relative z-10">{category}</span>
+                </motion.button>
             ))}
           </motion.div>
 
-          {/* Pricing Cards */}
+          {/* Cards ULTRA PREMIUM */}
           <motion.div
-              className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
+              className="grid md:grid-cols-2 lg:grid-cols-3 gap-8"
               variants={container}
               initial="hidden"
               whileInView="show"
               viewport={{ once: true }}
-              key={activeCategory}
+              key={`${activeCategory}-${showAll}`}
           >
-            {filteredPlans.map((plan, i) => (
-                <motion.div
-                    key={`${plan.name}-${i}`}
-                    variants={item}
-                    className={`relative group ${
-                        plan.recommended ? 'lg:scale-105 z-10' : 'hover:scale-105'
-                    } transition-all duration-300`}
-                >
-                  {/* Recommended badge */}
-                  {plan.recommended && (
-                      <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 z-20">
-                        <div className="bg-gradient-to-r from-yellow-400 to-orange-500 text-white px-6 py-2 rounded-full text-sm font-bold flex items-center gap-2 shadow-lg">
-                          <StarIcon className="w-4 h-4" />
-                          Recommandé
+            <AnimatePresence mode="popLayout">
+              {displayedPlans.map((plan, i) => {
+                const isRecommended = plan.name === recommendedPlanName;
+
+                return (
+                    <motion.div
+                        key={`${plan.name}-${i}`}
+                        variants={item}
+                        layout
+                        className="relative group"
+                    >
+                      {/* Glow effect premium */}
+                      <div className={`absolute -inset-1 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-3xl opacity-0 group-hover:opacity-20 blur-2xl transition-all duration-700 ${
+                          isRecommended ? 'opacity-15' : ''
+                      }`} />
+
+                      {/* Card ultra premium */}
+                      <div className="relative bg-white rounded-3xl p-8 shadow-xl border-2 border-gray-100 hover:shadow-2xl hover:border-blue-200 transition-all duration-500 hover:-translate-y-3 h-full flex flex-col overflow-hidden">
+
+                        {/* Gradient background subtil */}
+                        <div className={`absolute inset-0 bg-gradient-to-br transition-all duration-500 rounded-3xl ${
+                            isRecommended
+                                ? 'from-blue-50/70 via-indigo-50/50 to-blue-50/30'
+                                : 'from-blue-50/0 to-indigo-50/0 group-hover:from-blue-50/50 group-hover:to-indigo-50/30'
+                        }`} />
+
+                        {/* Shine effect animé */}
+                        <div className="absolute inset-0 bg-gradient-to-br from-white/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 rounded-3xl" />
+
+                        {/* Badge "Meilleur choix" ultra premium */}
+                        {isRecommended && (
+                            <div className="relative z-10 mb-4">
+                              <motion.div
+                                  initial={{ scale: 0, rotate: -10 }}
+                                  animate={{ scale: 1, rotate: 0 }}
+                                  transition={{ type: "spring", stiffness: 200, damping: 15 }}
+                                  className="inline-flex items-center gap-1.5 text-xs font-bold text-amber-900 bg-gradient-to-r from-amber-100 via-yellow-100 to-orange-100 px-4 py-2 rounded-full border-2 border-amber-300 shadow-lg"
+                              >
+                                <div className="w-2 h-2 bg-amber-500 rounded-full animate-pulse" />
+                                <StarIcon className="w-4 h-4 text-amber-600" />
+                                <span>Meilleur choix</span>
+                                <StarIcon className="w-4 h-4 text-amber-600" />
+                              </motion.div>
+                            </div>
+                        )}
+
+                        {/* Badge "Populaire" */}
+                        {plan.popular && !isRecommended && (
+                            <div className="relative z-10 mb-4">
+                              <motion.div
+                                  initial={{ scale: 0 }}
+                                  animate={{ scale: 1 }}
+                                  transition={{ type: "spring", stiffness: 200, damping: 15 }}
+                                  className="inline-flex items-center gap-1.5 text-xs font-bold text-pink-800 bg-gradient-to-r from-pink-100 to-rose-100 px-4 py-2 rounded-full border-2 border-pink-300 shadow-lg"
+                              >
+                                <FireIcon className="w-4 h-4 text-pink-600 animate-pulse" />
+                                <span>Populaire</span>
+                              </motion.div>
+                            </div>
+                        )}
+
+                        {/* Header compact */}
+                        <div className="relative z-10 flex items-center justify-between mb-6">
+                          <span className="text-xs font-bold text-blue-700 bg-gradient-to-r from-blue-100 to-blue-50 px-3 py-1.5 rounded-full border border-blue-200 shadow-sm">
+                            {plan.category}
+                          </span>
+                          {plan.priceType === 'from' && (
+                              <span className="text-[10px] font-bold text-indigo-600 bg-indigo-50 px-2.5 py-1 rounded-full border border-indigo-200">
+                                À partir de
+                              </span>
+                          )}
+                          {plan.priceType === 'fixed' && (
+                              <span className="text-[10px] font-bold text-emerald-600 bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-200">
+                                Prix fixe
+                              </span>
+                          )}
+                          {plan.priceType === 'custom' && (
+                              <span className="text-[10px] font-bold text-purple-600 bg-purple-50 px-2.5 py-1 rounded-full border border-purple-200">
+                                Sur mesure
+                              </span>
+                          )}
+                        </div>
+
+                        {/* Icon premium avec glow */}
+                        <div className="relative z-10 mb-6">
+                          <div className="relative w-16 h-16">
+                            <motion.div
+                                className={`absolute inset-0 rounded-2xl blur-xl transition-all duration-500 ${
+                                    isRecommended
+                                        ? 'bg-gradient-to-br from-blue-400 to-indigo-500 opacity-70 group-hover:opacity-90'
+                                        : 'bg-gradient-to-br from-blue-400 to-indigo-500 opacity-40 group-hover:opacity-60'
+                                }`}
+                                animate={{ scale: [1, 1.1, 1] }}
+                                transition={{ duration: 3, repeat: Infinity }}
+                            />
+                            <motion.div
+                                className="relative w-16 h-16 bg-gradient-to-br from-blue-500 via-indigo-600 to-blue-600 rounded-2xl flex items-center justify-center shadow-xl"
+                                whileHover={{ scale: 1.1, rotate: 6 }}
+                                transition={{ type: "spring", stiffness: 300 }}
+                            >
+                              <span className="text-4xl filter drop-shadow-lg">{plan.icon}</span>
+                            </motion.div>
+                          </div>
+                        </div>
+
+                        {/* Content */}
+                        <div className="relative z-10 flex-grow">
+                          <h3 className="text-xl font-bold text-gray-900 mb-3 group-hover:bg-gradient-to-r group-hover:from-blue-600 group-hover:to-indigo-600 group-hover:bg-clip-text group-hover:text-transparent transition-all duration-300">
+                            {plan.name}
+                          </h3>
+                          <p className="text-gray-600 leading-relaxed text-[15px] mb-6">
+                            {plan.description}
+                          </p>
+
+                          {/* Prix ultra premium */}
+                          <div className="mb-2">
+                            <div className={`text-4xl font-black mb-1 ${
+                                isRecommended
+                                    ? 'bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-700 bg-clip-text text-transparent'
+                                    : 'text-gray-900'
+                            }`}>
+                              {plan.displayPrice}
+                            </div>
+                            <div className="text-xs font-medium text-gray-500">
+                              {plan.duration}
+                            </div>
+                          </div>
+
+                          {/* Divider élégant */}
+                          <div className="relative h-px my-6">
+                            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-gray-300 to-transparent" />
+                            <motion.div
+                                className="absolute inset-0 bg-gradient-to-r from-transparent via-blue-400 to-transparent opacity-0 group-hover:opacity-100"
+                                animate={{ x: ['-100%', '100%'] }}
+                                transition={{ duration: 2, repeat: Infinity }}
+                            />
+                          </div>
+
+                          {/* Features - TOUT EN VERT ! */}
+                          <div className="space-y-3 mb-6">
+                            {plan.features.map((feature, idx) => (
+                                <motion.div
+                                    key={idx}
+                                    initial={{ opacity: 0, x: -10 }}
+                                    whileInView={{ opacity: 1, x: 0 }}
+                                    viewport={{ once: true }}
+                                    transition={{ delay: idx * 0.05 }}
+                                    className="flex items-start gap-3"
+                                >
+                                  <div className="flex-shrink-0 w-5 h-5 rounded-lg flex items-center justify-center mt-0.5 bg-gradient-to-br from-emerald-400 to-green-500 shadow-md transition-transform duration-300 hover:scale-110">
+                                    <CheckIcon className="w-3 h-3 text-white" />
+                                  </div>
+                                  <span className="text-gray-700 text-sm leading-relaxed">
+                                    {feature}
+                                  </span>
+                                </motion.div>
+                            ))}
+                          </div>
+                        </div>
+
+                        {/* CTA Button ultra premium */}
+                        <div className="relative z-10 mt-auto">
+                          <motion.button
+                              onClick={() => handleClick(plan.name)}
+                              whileHover={{ scale: 1.02 }}
+                              whileTap={{ scale: 0.98 }}
+                              className={`group/btn relative w-full overflow-hidden px-6 py-4 rounded-xl font-bold transition-all duration-300 flex items-center justify-center gap-2 ${
+                                  isRecommended
+                                      ? 'bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-600 hover:from-blue-700 hover:via-indigo-700 hover:to-blue-700 text-white shadow-lg hover:shadow-2xl'
+                                      : 'bg-white hover:bg-gray-50 text-gray-900 border-2 border-gray-300 hover:border-blue-400 hover:text-blue-600 shadow-md hover:shadow-lg'
+                              }`}
+                          >
+                            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -skew-x-12 translate-x-[-200%] group-hover/btn:translate-x-[200%] transition-transform duration-1000" />
+                            <span className="relative z-10">Choisir ce pack</span>
+                            <ArrowRightIcon className="relative z-10 w-5 h-5 group-hover/btn:translate-x-1 transition-transform" />
+                          </motion.button>
                         </div>
                       </div>
-                  )}
-
-                  <div className={`relative h-full p-8 flex flex-col rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 border-2 ${
-                      plan.recommended
-                          ? 'bg-gradient-to-br from-white to-blue-50 border-blue-300 shadow-blue-100'
-                          : `bg-gradient-to-br ${getColorClasses(plan.color)} hover:shadow-lg`
-                  }`}>
-
-                    {/* Header */}
-                    <div className="text-center mb-6">
-                      <div className="text-4xl mb-4">{plan.icon}</div>
-                      <h3 className="text-2xl font-bold text-gray-900 mb-2">{plan.name}</h3>
-                      <p className="text-sm text-gray-600 mb-4">{plan.description}</p>
-
-                      {/* Price */}
-                      <div className="mb-2">
-                        <span className="text-3xl font-bold text-gray-900">{plan.price}</span>
-                      </div>
-                      <p className="text-sm text-gray-500">{plan.duration}</p>
-                    </div>
-
-                    {/* Features */}
-                    <div className="mb-8 flex-grow">
-                      <ul className="space-y-3">
-                        {plan.features.map((feature, idx) => (
-                            <li key={idx} className="flex items-start gap-3">
-                              <CheckIcon className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
-                              <span className="text-gray-700 text-sm">{feature}</span>
-                            </li>
-                        ))}
-                      </ul>
-                    </div>
-
-                    {/* CTA Button ALIGNÉ BAS */}
-                    <div className="mt-auto">
-                      <button
-                          onClick={() => handleClick(plan.name)}
-                          className={`w-full group/btn flex items-center justify-center gap-2 px-6 py-4 rounded-lg font-semibold transition-all duration-300 ${
-                              plan.recommended
-                                  ? 'bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white shadow-lg hover:shadow-xl transform hover:-translate-y-1'
-                                  : 'bg-white hover:bg-gray-50 text-gray-900 border-2 border-gray-200 hover:border-blue-300 hover:text-blue-600'
-                          }`}
-                      >
-                        <span>{plan.ctaText}</span>
-                        <ArrowRightIcon className="w-4 h-4 group-hover/btn:translate-x-1 transition-transform" />
-                      </button>
-                    </div>
-                  </div>
-                </motion.div>
-            ))}
+                    </motion.div>
+                );
+              })}
+            </AnimatePresence>
           </motion.div>
 
-          {/* FAQ Section */}
+          {/* Bouton "Voir tous les tarifs" */}
+          {hasMorePlans && (
+              <motion.div
+                  className="flex justify-center mt-14"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.4 }}
+              >
+                <motion.button
+                    onClick={() => setShowAll(!showAll)}
+                    whileHover={{ scale: 1.02, y: -2 }}
+                    whileTap={{ scale: 0.98 }}
+                    className="group relative inline-flex items-center gap-3 bg-white hover:bg-gradient-to-r hover:from-blue-50 hover:to-indigo-50 text-gray-700 hover:text-blue-600 px-8 py-4 rounded-xl font-semibold transition-all duration-300 border-2 border-gray-200 hover:border-blue-300 shadow-lg hover:shadow-xl overflow-hidden"
+                >
+                  <div className="absolute inset-0 bg-gradient-to-r from-blue-600/0 to-indigo-600/0 group-hover:from-blue-600/5 group-hover:to-indigo-600/5 transition-all duration-300" />
+                  <SparklesIcon className="relative w-5 h-5 text-blue-500 group-hover:rotate-12 transition-transform" />
+                  <span className="relative">{showAll ? 'Voir moins de tarifs' : 'Découvrir tous nos tarifs'}</span>
+                  <ChevronDownIcon className={`relative w-5 h-5 transform transition-transform ${showAll ? 'rotate-180' : 'group-hover:translate-y-1'}`} />
+                </motion.button>
+              </motion.div>
+          )}
+
+          {/* FAQ ultra premium */}
           <motion.div
-              className="mt-20 text-center"
+              className="mt-24"
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: 0.4, duration: 0.6 }}
           >
-            <div className="bg-white rounded-2xl p-8 shadow-lg border border-gray-100 max-w-4xl mx-auto">
-              <h3 className="text-2xl font-bold text-gray-900 mb-6">Questions fréquentes</h3>
-              <div className="grid md:grid-cols-2 gap-6 text-left">
+            <div className="relative bg-white rounded-3xl p-10 shadow-xl border border-gray-200 overflow-hidden">
+              <div className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-br from-blue-50 to-indigo-50 rounded-full blur-3xl opacity-30" />
+
+              <h3 className="relative text-3xl font-bold text-gray-900 text-center mb-12">
+                Questions fréquentes
+              </h3>
+
+              <div className="relative grid md:grid-cols-2 gap-8">
                 {[
                   {
-                    q: "Incluez-vous la maintenance dans vos offres ?",
-                    a: "Oui, chaque projet inclut une période de garantie et un support technique de démarrage. Nous proposons aussi des packs d'heures pour suivre, maintenir et améliorer votre solution dans la durée."
+                    q: "Les tarifs \"À partir de\" incluent quoi exactement ?",
+                    a: "Les tarifs \"À partir de\" correspondent à une configuration de base. Le prix final dépend de vos besoins spécifiques (fonctionnalités, complexité, intégrations). Nous vous fournissons toujours un devis détaillé avant de démarrer."
                   },
                   {
-                    q: "Vos devis sont-ils vraiment gratuits et sans engagement ?",
-                    a: "Oui, vous pouvez demander un diagnostic initial et un chiffrage détaillé, le tout sans aucune obligation de votre part. Notre premier conseil est toujours offert."
+                    q: "Proposez-vous des facilités de paiement ?",
+                    a: "Oui ! Pour les projets supérieurs à 3000€, nous proposons des paiements échelonnés : 30% au démarrage, 40% à mi-projet, 30% à la livraison. Nous pouvons adapter selon votre situation."
                   },
                   {
                     q: "Quels sont vos délais pour un projet ?",
-                    a: "Nos délais sont adaptés à notre taille et à la complexité de chaque mission : environ 2 à 6 semaines pour une installation, jusqu’à plusieurs mois pour une application sur-mesure. Nous co-construisons le planning avec vous."
+                    a: "Les délais varient : 2-4 semaines pour un site vitrine, 6-12 semaines pour une app web, jusqu'à plusieurs mois pour des solutions sur-mesure. Nous co-construisons le planning avec vous."
                   },
                   {
-                    q: "Le support technique est-il réactif ?",
-                    a: "Oui ! Notre équipe est proche de ses clients : vous avez un interlocuteur dédié, et les tickets sont traités en quelques heures ou sous 24h ouvrées selon priorité."
+                    q: "La maintenance est-elle incluse ?",
+                    a: "Chaque projet inclut une période de garantie et support de démarrage. Pour le suivi long-terme, nous proposons des packs d'heures flexibles adaptés à vos besoins."
                   },
                   {
-                    q: "J’ai un besoin très spécifique, pouvez-vous m’accompagner ?",
-                    a: "Notre force, c’est justement la personnalisation : solution cloud, outil métier, audit sécurité, missions sur-mesure… tout est modulable. Parlez-nous de votre contexte, on s’adapte !"
+                    q: "Puis-je combiner plusieurs services ?",
+                    a: "Absolument ! Nous créons souvent des bundles personnalisés (ex: Cloud + Développement + Support). Cela permet souvent d'optimiser votre investissement. Parlons-en !"
                   },
                   {
-                    q: "Combien de clients accompagnez-vous aujourd'hui ?",
-                    a: "Nous sommes en plein développement et chaque nouveau projet est traité avec une implication maximale. Vous n’êtes ni un numéro, ni un ticket de support : vous êtes notre priorité !"
+                    q: "Vos devis sont-ils vraiment gratuits ?",
+                    a: "Oui, 100% gratuit et sans engagement ! Nous analysons votre besoin, vous conseillons, et vous fournissons un chiffrage détaillé. Aucune obligation de votre part."
                   }
                 ].map((faq, idx) => (
-                    <div key={idx} className="space-y-2">
-                      <h4 className="font-semibold text-gray-900">{faq.q}</h4>
-                      <p className="text-gray-600 text-sm">{faq.a}</p>
-                    </div>
+                    <motion.div
+                        key={idx}
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ delay: idx * 0.1 }}
+                        className="relative p-6 rounded-2xl bg-gradient-to-br from-gray-50 to-white border border-gray-100 hover:border-blue-200 hover:shadow-lg transition-all duration-300 group"
+                    >
+                      <div className="absolute inset-0 bg-gradient-to-br from-blue-50/0 to-indigo-50/0 group-hover:from-blue-50/50 group-hover:to-indigo-50/30 rounded-2xl transition-all duration-300" />
+
+                      <h4 className="relative font-bold text-gray-900 mb-3 flex items-start gap-2">
+                        <span className="text-blue-600 text-xl flex-shrink-0">→</span>
+                        <span>{faq.q}</span>
+                      </h4>
+                      <p className="relative text-gray-600 text-sm leading-relaxed pl-7">
+                        {faq.a}
+                      </p>
+                    </motion.div>
                 ))}
               </div>
             </div>
           </motion.div>
 
-          {/* Bottom CTA */}
+          {/* Bottom CTA ultra premium */}
           <motion.div
-              className="text-center mt-16"
+              className="relative text-center mt-20 p-12 bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-600 rounded-3xl text-white shadow-2xl overflow-hidden"
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: 0.6, duration: 0.6 }}
           >
-            <p className="text-lg text-gray-600 mb-6">
-              Besoin d'aide pour choisir la solution adaptée ?
+            <div className="absolute inset-0 bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 opacity-50" />
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(255,255,255,0.1),transparent_50%)]" />
+
+            <motion.div
+                className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -skew-x-12"
+                animate={{ x: ['-200%', '200%'] }}
+                transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
+            />
+
+            <h3 className="relative text-3xl font-bold mb-4">Besoin d'aide pour choisir ?</h3>
+            <p className="relative text-blue-100 mb-8 text-lg max-w-2xl mx-auto">
+              Notre équipe analyse vos besoins et conçoit une solution sur-mesure.
             </p>
-            <a
+            <motion.a
                 href="#contact"
-                className="inline-flex items-center gap-2 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white px-8 py-4 rounded-lg font-semibold transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1"
+                whileHover={{ scale: 1.05, y: -2 }}
+                whileTap={{ scale: 0.95 }}
+                className="relative inline-flex items-center bg-white text-blue-600 hover:bg-gray-50 px-10 py-5 rounded-xl font-bold text-lg transition-all duration-300 shadow-2xl group"
             >
+              <SparklesIcon className="w-6 h-6 mr-3 group-hover:rotate-12 transition-transform" />
               Consultation gratuite
-              <ArrowRightIcon className="w-5 h-5" />
-            </a>
+              <ArrowRightIcon className="w-6 h-6 ml-3 group-hover:translate-x-1 transition-transform" />
+            </motion.a>
           </motion.div>
         </div>
       </section>

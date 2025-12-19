@@ -13,18 +13,31 @@ import {
   CalendarDaysIcon
 } from "@heroicons/react/24/outline";
 
+// ✅ NOMS EXACTS DES PACKS DE LA SECTION PRICING
 const plans = [
-  "Pack Start",
-  "Pack Pro",
-  "Pack Cloud",
-  "Heures Essentiel",
-  "Heures Business",
-  "Heures Premium",
-  "Pack Développement",
-  "Audit & Conseil",
-  "Mission Sur Mesure",
+  // Cloud
+  "Cloud Start",
+  "Cloud Pro",
+  "Cloud Enterprise",
+  // Infrastructure
+  "Réseau Start",
+  "Réseau Pro",
+  "Infra Enterprise",
+  // Développement
+  "Site Vitrine",
+  "Application Mobile",
+  "Application Web",
+  "Solution Full-Stack",
+  // Support
+  "Pack 10h",
+  "Pack 25h",
+  "Pack 50h Premium",
+  "Support Sur Mesure",
+  // Conseil
+  "Audit Express",
+  "Audit Complet",
+  "Mission Sur Mesure"
 ];
-
 
 const contactMethods = [
   {
@@ -75,20 +88,21 @@ export default function Contact() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [formStatus, setFormStatus] = useState("");
 
+  // ✅ ÉCOUTE L'ÉVÉNEMENT PLANSELECTED
   useEffect(() => {
+    // Récupère depuis localStorage au chargement
     const stored = localStorage.getItem("selectedPack");
-    if (stored && plans.includes(stored)) {
+    if (stored) {
       setFormData((f) => ({ ...f, selectedPack: stored }));
     }
 
+    // Écoute les nouveaux clics
     const onPlan = (e: Event) => {
       const pack = (e as CustomEvent).detail as string;
-      if (plans.includes(pack)) {
-        setFormData((f) => ({ ...f, selectedPack: pack }));
-      }
+      setFormData((f) => ({ ...f, selectedPack: pack }));
     };
-    window.addEventListener("planSelected", onPlan);
 
+    window.addEventListener("planSelected", onPlan);
     return () => window.removeEventListener("planSelected", onPlan);
   }, []);
 
@@ -229,7 +243,6 @@ export default function Contact() {
                       <p key={idx} className="text-blue-100 text-sm">{benefit}</p>
                   ))}
                 </div>
-
               </motion.div>
             </motion.div>
 
@@ -299,20 +312,52 @@ export default function Contact() {
                     </div>
                   </div>
 
-                  {/* Project Details */}
+                  {/* Project Details - SERVICE SÉLECTIONNÉ AUTOMATIQUEMENT */}
                   <div className="grid md:grid-cols-2 gap-6">
                     <div className="space-y-2">
                       <label className="text-gray-700 font-medium text-sm">Service souhaité</label>
                       <select
                           value={formData.selectedPack}
                           onChange={(e) => handleInputChange("selectedPack", e.target.value)}
-                          className="w-full border border-gray-300 rounded-lg px-4 py-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                          className={`w-full border border-gray-300 rounded-lg px-4 py-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all ${
+                              formData.selectedPack ? 'bg-blue-50 border-blue-300' : ''
+                          }`}
                       >
                         <option value="">Sélectionnez un service</option>
-                        {plans.map((pack) => (
-                            <option key={pack} value={pack}>{pack}</option>
-                        ))}
+                        <optgroup label="☁️ Cloud">
+                          <option value="Cloud Start">Cloud Start</option>
+                          <option value="Cloud Pro">Cloud Pro</option>
+                          <option value="Cloud Enterprise">Cloud Enterprise</option>
+                        </optgroup>
+                        <optgroup label="🏢 Infrastructure">
+                          <option value="Réseau Start">Réseau Start</option>
+                          <option value="Réseau Pro">Réseau Pro</option>
+                          <option value="Infra Enterprise">Infra Enterprise</option>
+                        </optgroup>
+                        <optgroup label="💻 Développement">
+                          <option value="Site Vitrine">Site Vitrine</option>
+                          <option value="Application Mobile">Application Mobile</option>
+                          <option value="Application Web">Application Web</option>
+                          <option value="Solution Full-Stack">Solution Full-Stack</option>
+                        </optgroup>
+                        <optgroup label="🔧 Support">
+                          <option value="Pack 10h">Pack 10h</option>
+                          <option value="Pack 25h">Pack 25h</option>
+                          <option value="Pack 50h Premium">Pack 50h Premium</option>
+                          <option value="Support Sur Mesure">Support Sur Mesure</option>
+                        </optgroup>
+                        <optgroup label="🎯 Conseil">
+                          <option value="Audit Express">Audit Express</option>
+                          <option value="Audit Complet">Audit Complet</option>
+                          <option value="Mission Sur Mesure">Mission Sur Mesure</option>
+                        </optgroup>
                       </select>
+                      {formData.selectedPack && (
+                          <p className="text-xs text-green-600 flex items-center gap-1 mt-1">
+                            <CheckCircleIcon className="w-4 h-4" />
+                            Pack sélectionné depuis la page tarifs
+                          </p>
+                      )}
                     </div>
 
                     <div className="space-y-2">
@@ -436,27 +481,27 @@ export default function Contact() {
                     a: "Nous nous engageons à vous répondre sous 24h ouvrées avec une première analyse et un devis personnalisé."
                   },
                   {
-                    q: "Quel est votre délai de réponse ?",
+                    q: "Quel est votre délai de réponse ?",
                     a: "Nous garantissons un premier retour sous 24h ouvrées, avec analyse personnalisée et premier échange pour bien comprendre votre besoin."
                   },
                   {
-                    q: "La consultation et le devis sont-ils vraiment gratuits ?",
-                    a: "Oui, 100 %! Notre audit préalable et notre proposition personnalisée sont sans engagement, quelle que soit la taille de votre projet."
+                    q: "La consultation et le devis sont-ils vraiment gratuits ?",
+                    a: "Oui, 100% ! Notre audit préalable et notre proposition personnalisée sont sans engagement, quelle que soit la taille de votre projet."
                   },
                   {
-                    q: "Intervenez-vous partout en France ?",
-                    a: "Notre cœur d’intervention est en Île-de-France, mais nous accompagnons aussi des clients partout en France en télémaintenance ou déplacement sur demande spécifique."
+                    q: "Intervenez-vous partout en France ?",
+                    a: "Notre cœur d'intervention est en Île-de-France, mais nous accompagnons aussi des clients partout en France en télémaintenance ou déplacement sur demande spécifique."
                   },
                   {
-                    q: "Quels engagements de qualité proposez-vous ?",
+                    q: "Quels engagements de qualité proposez-vous ?",
                     a: "Chaque prestation inclut : garantie sur livrable, support technique dédié, documentation complète et accompagnement post-projet pour assurer votre sérénité à long terme."
                   },
                   {
                     q: "Est-il possible de cumuler plusieurs services ?",
-                    a: "Oui, nos solutions sont totalement modulaires : vous pouvez combiner conseil, création d’infrastructure, support à la demande ou développement, selon vos priorités."
+                    a: "Oui, nos solutions sont totalement modulaires : vous pouvez combiner conseil, création d'infrastructure, support à la demande ou développement, selon vos priorités."
                   },
                   {
-                    q: "Quels types d'organisations font appel à vous ?",
+                    q: "Quels types d'organisations font appel à vous ?",
                     a: "Nous travaillons avec des indépendants, PME, conciergeries, sociétés de services et groupes multi-sites, dans des secteurs variés (immobilier, services, tech, conseil...)."
                   }
                 ].map((faq, idx) => (
