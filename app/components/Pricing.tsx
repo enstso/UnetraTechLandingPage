@@ -2,7 +2,9 @@
 
 import { motion, AnimatePresence } from "framer-motion";
 import { CheckIcon, StarIcon, ArrowRightIcon, SparklesIcon, ChevronDownIcon, BoltIcon, FireIcon } from "@heroicons/react/24/solid";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useKeenSlider } from "keen-slider/react";
+import "keen-slider/keen-slider.min.css";
 
 const container = {
   hidden: {},
@@ -341,19 +343,39 @@ const categories = [
 ];
 
 export default function Pricing() {
+  const [isMobile, setIsMobile] = useState(false);
   const [activeCategory, setActiveCategory] = useState("Tous");
   const [showAll, setShowAll] = useState(false);
+
+  const [sliderRef] = useKeenSlider<HTMLDivElement>({
+    slides: { perView: 1.1, spacing: 20 },
+    loop: false,
+    breakpoints: {
+      "(min-width: 640px)": {
+        slides: { perView: 2.1, spacing: 20 },
+      },
+    },
+  });
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 1024);
+    };
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   const filteredPlans = activeCategory === "Tous"
       ? pricingPlans
       : pricingPlans.filter(plan => plan.category === activeCategory);
 
-  // LIMITE À 6 PACKS INITIALEMENT
-  const displayedPlans = showAll
+  // LIMITE À 6 PACKS INITIALEMENT (Desktop uniquement)
+  const displayedPlans = showAll || isMobile
       ? filteredPlans
       : filteredPlans.slice(0, 6);
 
-  const hasMorePlans = filteredPlans.length > displayedPlans.length;
+  const hasMorePlans = !isMobile && filteredPlans.length > 6;
 
   // CALCUL AUTOMATIQUE DU PACK RECOMMANDÉ (MILIEU)
   const getRecommendedPlan = (plans: typeof pricingPlans) => {
@@ -423,257 +445,111 @@ export default function Pricing() {
             </div>
           </motion.div>
 
-          {/* Category Filter premium */}
-          <motion.div
-              className="flex flex-wrap justify-center gap-3 mb-14"
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.2, duration: 0.6 }}
-          >
-            {categories.map((category) => (
-                <motion.button
-                    key={category}
-                    onClick={() => {
-                      setActiveCategory(category);
-                      setShowAll(false);
-                    }}
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                    className={`relative px-7 py-3.5 rounded-full font-semibold transition-all duration-300 ${
-                        activeCategory === category
-                            ? 'text-white shadow-lg shadow-blue-200'
-                            : 'bg-white text-gray-600 hover:text-blue-600 border border-gray-200 hover:border-blue-300 hover:shadow-md'
-                    }`}
-                >
-                  {activeCategory === category && (
-                      <>
-                        <motion.div
-                            layoutId="activeTab"
-                            className="absolute inset-0 bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-600 rounded-full"
-                            transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
-                        />
-                        <div className="absolute inset-0 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-full blur opacity-40" />
-                      </>
-                  )}
-                  <span className="relative z-10">{category}</span>
-                </motion.button>
-            ))}
-          </motion.div>
-
-          {/* Cards ULTRA PREMIUM */}
-          <motion.div
-              className="grid md:grid-cols-2 lg:grid-cols-3 gap-8"
-              variants={container}
-              initial="hidden"
-              whileInView="show"
-              viewport={{ once: true }}
-              key={`${activeCategory}-${showAll}`}
-          >
-            <AnimatePresence mode="popLayout">
-              {displayedPlans.map((plan, i) => {
-                const isRecommended = plan.name === recommendedPlanName;
-
-                return (
-                    <motion.div
-                        key={`${plan.name}-${i}`}
-                        variants={item}
-                        layout
-                        className="relative group"
-                    >
-                      {/* Glow effect premium */}
-                      <div className={`absolute -inset-1 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-3xl opacity-0 group-hover:opacity-20 blur-2xl transition-all duration-700 ${
-                          isRecommended ? 'opacity-15' : ''
-                      }`} />
-
-                      {/* Card ultra premium */}
-                      <div className="relative bg-white rounded-3xl p-8 shadow-xl border-2 border-gray-100 hover:shadow-2xl hover:border-blue-200 transition-all duration-500 hover:-translate-y-3 h-full flex flex-col overflow-hidden">
-
-                        {/* Gradient background subtil */}
-                        <div className={`absolute inset-0 bg-gradient-to-br transition-all duration-500 rounded-3xl ${
-                            isRecommended
-                                ? 'from-blue-50/70 via-indigo-50/50 to-blue-50/30'
-                                : 'from-blue-50/0 to-indigo-50/0 group-hover:from-blue-50/50 group-hover:to-indigo-50/30'
-                        }`} />
-
-                        {/* Shine effect animé */}
-                        <div className="absolute inset-0 bg-gradient-to-br from-white/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 rounded-3xl" />
-
-                        {/* Badge "Meilleur choix" ultra premium */}
-                        {isRecommended && (
-                            <div className="relative z-10 mb-4">
-                              <motion.div
-                                  initial={{ scale: 0, rotate: -10 }}
-                                  animate={{ scale: 1, rotate: 0 }}
-                                  transition={{ type: "spring", stiffness: 200, damping: 15 }}
-                                  className="inline-flex items-center gap-1.5 text-xs font-bold text-amber-900 bg-gradient-to-r from-amber-100 via-yellow-100 to-orange-100 px-4 py-2 rounded-full border-2 border-amber-300 shadow-lg"
-                              >
-                                <div className="w-2 h-2 bg-amber-500 rounded-full animate-pulse" />
-                                <StarIcon className="w-4 h-4 text-amber-600" />
-                                <span>Meilleur choix</span>
-                                <StarIcon className="w-4 h-4 text-amber-600" />
-                              </motion.div>
-                            </div>
-                        )}
-
-                        {/* Badge "Populaire" */}
-                        {plan.popular && !isRecommended && (
-                            <div className="relative z-10 mb-4">
-                              <motion.div
-                                  initial={{ scale: 0 }}
-                                  animate={{ scale: 1 }}
-                                  transition={{ type: "spring", stiffness: 200, damping: 15 }}
-                                  className="inline-flex items-center gap-1.5 text-xs font-bold text-pink-800 bg-gradient-to-r from-pink-100 to-rose-100 px-4 py-2 rounded-full border-2 border-pink-300 shadow-lg"
-                              >
-                                <FireIcon className="w-4 h-4 text-pink-600 animate-pulse" />
-                                <span>Populaire</span>
-                              </motion.div>
-                            </div>
-                        )}
-
-                        {/* Header compact */}
-                        <div className="relative z-10 flex items-center justify-between mb-6">
-                          <span className="text-xs font-bold text-blue-700 bg-gradient-to-r from-blue-100 to-blue-50 px-3 py-1.5 rounded-full border border-blue-200 shadow-sm">
-                            {plan.category}
-                          </span>
-                          {plan.priceType === 'from' && (
-                              <span className="text-[10px] font-bold text-indigo-600 bg-indigo-50 px-2.5 py-1 rounded-full border border-indigo-200">
-                                À partir de
-                              </span>
-                          )}
-                          {plan.priceType === 'fixed' && (
-                              <span className="text-[10px] font-bold text-emerald-600 bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-200">
-                                Prix fixe
-                              </span>
-                          )}
-                          {plan.priceType === 'custom' && (
-                              <span className="text-[10px] font-bold text-purple-600 bg-purple-50 px-2.5 py-1 rounded-full border border-purple-200">
-                                Sur mesure
-                              </span>
-                          )}
-                        </div>
-
-                        {/* Icon premium avec glow */}
-                        <div className="relative z-10 mb-6">
-                          <div className="relative w-16 h-16">
-                            <motion.div
-                                className={`absolute inset-0 rounded-2xl blur-xl transition-all duration-500 ${
-                                    isRecommended
-                                        ? 'bg-gradient-to-br from-blue-400 to-indigo-500 opacity-70 group-hover:opacity-90'
-                                        : 'bg-gradient-to-br from-blue-400 to-indigo-500 opacity-40 group-hover:opacity-60'
-                                }`}
-                                animate={{ scale: [1, 1.1, 1] }}
-                                transition={{ duration: 3, repeat: Infinity }}
-                            />
-                            <motion.div
-                                className="relative w-16 h-16 bg-gradient-to-br from-blue-500 via-indigo-600 to-blue-600 rounded-2xl flex items-center justify-center shadow-xl"
-                                whileHover={{ scale: 1.1, rotate: 6 }}
-                                transition={{ type: "spring", stiffness: 300 }}
-                            >
-                              <span className="text-4xl filter drop-shadow-lg">{plan.icon}</span>
-                            </motion.div>
-                          </div>
-                        </div>
-
-                        {/* Content */}
-                        <div className="relative z-10 flex-grow">
-                          <h3 className="text-xl font-bold text-gray-900 mb-3 group-hover:bg-gradient-to-r group-hover:from-blue-600 group-hover:to-indigo-600 group-hover:bg-clip-text group-hover:text-transparent transition-all duration-300">
-                            {plan.name}
-                          </h3>
-                          <p className="text-gray-600 leading-relaxed text-[15px] mb-6">
-                            {plan.description}
-                          </p>
-
-                          {/* Prix ultra premium */}
-                          <div className="mb-2">
-                            <div className={`text-4xl font-black mb-1 ${
-                                isRecommended
-                                    ? 'bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-700 bg-clip-text text-transparent'
-                                    : 'text-gray-900'
-                            }`}>
-                              {plan.displayPrice}
-                            </div>
-                            <div className="text-xs font-medium text-gray-500">
-                              {plan.duration}
-                            </div>
-                          </div>
-
-                          {/* Divider élégant */}
-                          <div className="relative h-px my-6">
-                            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-gray-300 to-transparent" />
-                            <motion.div
-                                className="absolute inset-0 bg-gradient-to-r from-transparent via-blue-400 to-transparent opacity-0 group-hover:opacity-100"
-                                animate={{ x: ['-100%', '100%'] }}
-                                transition={{ duration: 2, repeat: Infinity }}
-                            />
-                          </div>
-
-                          {/* Features - TOUT EN VERT ! */}
-                          <div className="space-y-3 mb-6">
-                            {plan.features.map((feature, idx) => (
-                                <motion.div
-                                    key={idx}
-                                    initial={{ opacity: 0, x: -10 }}
-                                    whileInView={{ opacity: 1, x: 0 }}
-                                    viewport={{ once: true }}
-                                    transition={{ delay: idx * 0.05 }}
-                                    className="flex items-start gap-3"
-                                >
-                                  <div className="flex-shrink-0 w-5 h-5 rounded-lg flex items-center justify-center mt-0.5 bg-gradient-to-br from-emerald-400 to-green-500 shadow-md transition-transform duration-300 hover:scale-110">
-                                    <CheckIcon className="w-3 h-3 text-white" />
-                                  </div>
-                                  <span className="text-gray-700 text-sm leading-relaxed">
-                                    {feature}
-                                  </span>
-                                </motion.div>
-                            ))}
-                          </div>
-                        </div>
-
-                        {/* CTA Button ultra premium */}
-                        <div className="relative z-10 mt-auto">
-                          <motion.button
-                              onClick={() => handleClick(plan.name)}
-                              whileHover={{ scale: 1.02 }}
-                              whileTap={{ scale: 0.98 }}
-                              className={`group/btn relative w-full overflow-hidden px-6 py-4 rounded-xl font-bold transition-all duration-300 flex items-center justify-center gap-2 ${
-                                  isRecommended
-                                      ? 'bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-600 hover:from-blue-700 hover:via-indigo-700 hover:to-blue-700 text-white shadow-lg hover:shadow-2xl'
-                                      : 'bg-white hover:bg-gray-50 text-gray-900 border-2 border-gray-300 hover:border-blue-400 hover:text-blue-600 shadow-md hover:shadow-lg'
-                              }`}
-                          >
-                            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -skew-x-12 translate-x-[-200%] group-hover/btn:translate-x-[200%] transition-transform duration-1000" />
-                            <span className="relative z-10">Choisir ce pack</span>
-                            <ArrowRightIcon className="relative z-10 w-5 h-5 group-hover/btn:translate-x-1 transition-transform" />
-                          </motion.button>
-                        </div>
-                      </div>
-                    </motion.div>
-                );
-              })}
-            </AnimatePresence>
-          </motion.div>
-
-          {/* Bouton "Voir tous les tarifs" */}
-          {hasMorePlans && (
+          {/* Category Filter premium - Desktop only */}
+          {!isMobile && (
               <motion.div
-                  className="flex justify-center mt-14"
+                  className="flex flex-wrap justify-center gap-3 mb-14"
                   initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.4 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: 0.2, duration: 0.6 }}
               >
-                <motion.button
-                    onClick={() => setShowAll(!showAll)}
-                    whileHover={{ scale: 1.02, y: -2 }}
-                    whileTap={{ scale: 0.98 }}
-                    className="group relative inline-flex items-center gap-3 bg-white hover:bg-gradient-to-r hover:from-blue-50 hover:to-indigo-50 text-gray-700 hover:text-blue-600 px-8 py-4 rounded-xl font-semibold transition-all duration-300 border-2 border-gray-200 hover:border-blue-300 shadow-lg hover:shadow-xl overflow-hidden"
-                >
-                  <div className="absolute inset-0 bg-gradient-to-r from-blue-600/0 to-indigo-600/0 group-hover:from-blue-600/5 group-hover:to-indigo-600/5 transition-all duration-300" />
-                  <SparklesIcon className="relative w-5 h-5 text-blue-500 group-hover:rotate-12 transition-transform" />
-                  <span className="relative">{showAll ? 'Voir moins de tarifs' : 'Découvrir tous nos tarifs'}</span>
-                  <ChevronDownIcon className={`relative w-5 h-5 transform transition-transform ${showAll ? 'rotate-180' : 'group-hover:translate-y-1'}`} />
-                </motion.button>
+                {categories.map((category) => (
+                    <motion.button
+                        key={category}
+                        onClick={() => {
+                          setActiveCategory(category);
+                          setShowAll(false);
+                        }}
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                        className={`relative px-7 py-3.5 rounded-full font-semibold transition-all duration-300 ${
+                            activeCategory === category
+                                ? 'text-white shadow-lg shadow-blue-200'
+                                : 'bg-white text-gray-600 hover:text-blue-600 border border-gray-200 hover:border-blue-300 hover:shadow-md'
+                        }`}
+                    >
+                      {activeCategory === category && (
+                          <>
+                            <motion.div
+                                layoutId="activeTab"
+                                className="absolute inset-0 bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-600 rounded-full"
+                                transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
+                            />
+                            <div className="absolute inset-0 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-full blur opacity-40" />
+                          </>
+                      )}
+                      <span className="relative z-10">{category}</span>
+                    </motion.button>
+                ))}
               </motion.div>
+          )}
+
+          {/* Cards Grid/Slider */}
+          {isMobile ? (
+              <div className="relative">
+                <div ref={sliderRef} className="keen-slider">
+                  {filteredPlans.map((plan, idx) => (
+                      <div key={idx} className="keen-slider__slide">
+                        <PricingCard
+                            plan={plan}
+                            isRecommended={plan.name === recommendedPlanName}
+                            handleClick={handleClick}
+                        />
+                      </div>
+                  ))}
+                </div>
+                <SliderNavigation sliderRef={sliderRef} />
+              </div>
+          ) : (
+              <>
+                <motion.div
+                    className="grid md:grid-cols-2 lg:grid-cols-3 gap-8"
+                    variants={container}
+                    initial="hidden"
+                    whileInView="show"
+                    viewport={{ once: true }}
+                    key={`${activeCategory}-${showAll}`}
+                >
+                  <AnimatePresence mode="popLayout">
+                    {displayedPlans.map((plan, i) => (
+                        <motion.div
+                            key={`${plan.name}-${i}`}
+                            variants={item}
+                            layout
+                        >
+                          <PricingCard
+                              plan={plan}
+                              isRecommended={plan.name === recommendedPlanName}
+                              handleClick={handleClick}
+                          />
+                        </motion.div>
+                    ))}
+                  </AnimatePresence>
+                </motion.div>
+
+                {/* Bouton "Voir tous les tarifs" */}
+                {hasMorePlans && (
+                    <motion.div
+                        className="flex justify-center mt-14"
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.4 }}
+                    >
+                      <motion.button
+                          onClick={() => setShowAll(!showAll)}
+                          whileHover={{ scale: 1.02, y: -2 }}
+                          whileTap={{ scale: 0.98 }}
+                          className="group relative inline-flex items-center gap-3 bg-white hover:bg-gradient-to-r hover:from-blue-50 hover:to-indigo-50 text-gray-700 hover:text-blue-600 px-8 py-4 rounded-xl font-semibold transition-all duration-300 border-2 border-gray-200 hover:border-blue-300 shadow-lg hover:shadow-xl overflow-hidden"
+                      >
+                        <div className="absolute inset-0 bg-gradient-to-r from-blue-600/0 to-indigo-600/0 group-hover:from-blue-600/5 group-hover:to-indigo-600/5 transition-all duration-300" />
+                        <SparklesIcon className="relative w-5 h-5 text-blue-500 group-hover:rotate-12 transition-transform" />
+                        <span className="relative">{showAll ? 'Voir moins de tarifs' : 'Découvrir tous nos tarifs'}</span>
+                        <ChevronDownIcon className={`relative w-5 h-5 transform transition-transform ${showAll ? 'rotate-180' : 'group-hover:translate-y-1'}`} />
+                      </motion.button>
+                    </motion.div>
+                )}
+              </>
           )}
 
           {/* FAQ ultra premium */}
@@ -775,5 +651,228 @@ export default function Pricing() {
           </motion.div>
         </div>
       </section>
+  );
+}
+
+// Pricing Card Component
+function PricingCard({ plan, isRecommended, handleClick }: {
+  plan: typeof pricingPlans[0],
+  isRecommended: boolean,
+  handleClick: (name: string) => void
+}) {
+  return (
+      <div className="relative group h-full">
+        {/* Glow effect premium */}
+        <div className={`absolute -inset-1 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-3xl opacity-0 group-hover:opacity-20 blur-2xl transition-all duration-700 ${
+            isRecommended ? 'opacity-15' : ''
+        }`} />
+
+        {/* Card ultra premium */}
+        <div className="relative bg-white rounded-3xl p-8 shadow-xl border-2 border-gray-100 hover:shadow-2xl hover:border-blue-200 transition-all duration-500 hover:-translate-y-3 h-full flex flex-col overflow-hidden">
+
+          {/* Gradient background subtil */}
+          <div className={`absolute inset-0 bg-gradient-to-br transition-all duration-500 rounded-3xl ${
+              isRecommended
+                  ? 'from-blue-50/70 via-indigo-50/50 to-blue-50/30'
+                  : 'from-blue-50/0 to-indigo-50/0 group-hover:from-blue-50/50 group-hover:to-indigo-50/30'
+          }`} />
+
+          {/* Shine effect animé */}
+          <div className="absolute inset-0 bg-gradient-to-br from-white/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 rounded-3xl" />
+
+          {/* Badge "Meilleur choix" ultra premium */}
+          {isRecommended && (
+              <div className="relative z-10 mb-4">
+                <motion.div
+                    initial={{ scale: 0, rotate: -10 }}
+                    animate={{ scale: 1, rotate: 0 }}
+                    transition={{ type: "spring", stiffness: 200, damping: 15 }}
+                    className="inline-flex items-center gap-1.5 text-xs font-bold text-amber-900 bg-gradient-to-r from-amber-100 via-yellow-100 to-orange-100 px-4 py-2 rounded-full border-2 border-amber-300 shadow-lg"
+                >
+                  <div className="w-2 h-2 bg-amber-500 rounded-full animate-pulse" />
+                  <StarIcon className="w-4 h-4 text-amber-600" />
+                  <span>Meilleur choix</span>
+                  <StarIcon className="w-4 h-4 text-amber-600" />
+                </motion.div>
+              </div>
+          )}
+
+          {/* Badge "Populaire" */}
+          {plan.popular && !isRecommended && (
+              <div className="relative z-10 mb-4">
+                <motion.div
+                    initial={{ scale: 0 }}
+                    animate={{ scale: 1 }}
+                    transition={{ type: "spring", stiffness: 200, damping: 15 }}
+                    className="inline-flex items-center gap-1.5 text-xs font-bold text-pink-800 bg-gradient-to-r from-pink-100 to-rose-100 px-4 py-2 rounded-full border-2 border-pink-300 shadow-lg"
+                >
+                  <FireIcon className="w-4 h-4 text-pink-600 animate-pulse" />
+                  <span>Populaire</span>
+                </motion.div>
+              </div>
+          )}
+
+          {/* Header compact */}
+          <div className="relative z-10 flex items-center justify-between mb-6">
+          <span className="text-xs font-bold text-blue-700 bg-gradient-to-r from-blue-100 to-blue-50 px-3 py-1.5 rounded-full border border-blue-200 shadow-sm">
+            {plan.category}
+          </span>
+            {plan.priceType === 'from' && (
+                <span className="text-[10px] font-bold text-indigo-600 bg-indigo-50 px-2.5 py-1 rounded-full border border-indigo-200">
+              À partir de
+            </span>
+            )}
+            {plan.priceType === 'fixed' && (
+                <span className="text-[10px] font-bold text-emerald-600 bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-200">
+              Prix fixe
+            </span>
+            )}
+            {plan.priceType === 'custom' && (
+                <span className="text-[10px] font-bold text-purple-600 bg-purple-50 px-2.5 py-1 rounded-full border border-purple-200">
+              Sur mesure
+            </span>
+            )}
+          </div>
+
+          {/* Icon premium avec glow */}
+          <div className="relative z-10 mb-6">
+            <div className="relative w-16 h-16">
+              <motion.div
+                  className={`absolute inset-0 rounded-2xl blur-xl transition-all duration-500 ${
+                      isRecommended
+                          ? 'bg-gradient-to-br from-blue-400 to-indigo-500 opacity-70 group-hover:opacity-90'
+                          : 'bg-gradient-to-br from-blue-400 to-indigo-500 opacity-40 group-hover:opacity-60'
+                  }`}
+                  animate={{ scale: [1, 1.1, 1] }}
+                  transition={{ duration: 3, repeat: Infinity }}
+              />
+              <motion.div
+                  className="relative w-16 h-16 bg-gradient-to-br from-blue-500 via-indigo-600 to-blue-600 rounded-2xl flex items-center justify-center shadow-xl"
+                  whileHover={{ scale: 1.1, rotate: 6 }}
+                  transition={{ type: "spring", stiffness: 300 }}
+              >
+                <span className="text-4xl filter drop-shadow-lg">{plan.icon}</span>
+              </motion.div>
+            </div>
+          </div>
+
+          {/* Content */}
+          <div className="relative z-10 flex-grow">
+            <h3 className="text-xl font-bold text-gray-900 mb-3 group-hover:bg-gradient-to-r group-hover:from-blue-600 group-hover:to-indigo-600 group-hover:bg-clip-text group-hover:text-transparent transition-all duration-300">
+              {plan.name}
+            </h3>
+            <p className="text-gray-600 leading-relaxed text-[15px] mb-6">
+              {plan.description}
+            </p>
+
+            {/* Prix ultra premium */}
+            <div className="mb-2">
+              <div className={`text-4xl font-black mb-1 ${
+                  isRecommended
+                      ? 'bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-700 bg-clip-text text-transparent'
+                      : 'text-gray-900'
+              }`}>
+                {plan.displayPrice}
+              </div>
+              <div className="text-xs font-medium text-gray-500">
+                {plan.duration}
+              </div>
+            </div>
+
+            {/* Divider élégant */}
+            <div className="relative h-px my-6">
+              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-gray-300 to-transparent" />
+              <motion.div
+                  className="absolute inset-0 bg-gradient-to-r from-transparent via-blue-400 to-transparent opacity-0 group-hover:opacity-100"
+                  animate={{ x: ['-100%', '100%'] }}
+                  transition={{ duration: 2, repeat: Infinity }}
+              />
+            </div>
+
+            {/* Features - TOUT EN VERT ! */}
+            <div className="space-y-3 mb-6">
+              {plan.features.map((feature, idx) => (
+                  <motion.div
+                      key={idx}
+                      initial={{ opacity: 0, x: -10 }}
+                      whileInView={{ opacity: 1, x: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ delay: idx * 0.05 }}
+                      className="flex items-start gap-3"
+                  >
+                    <div className="flex-shrink-0 w-5 h-5 rounded-lg flex items-center justify-center mt-0.5 bg-gradient-to-br from-emerald-400 to-green-500 shadow-md transition-transform duration-300 hover:scale-110">
+                      <CheckIcon className="w-3 h-3 text-white" />
+                    </div>
+                    <span className="text-gray-700 text-sm leading-relaxed">
+                  {feature}
+                </span>
+                  </motion.div>
+              ))}
+            </div>
+          </div>
+
+          {/* CTA Button ultra premium */}
+          <div className="relative z-10 mt-auto">
+            <motion.button
+                onClick={() => handleClick(plan.name)}
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                className={`group/btn relative w-full overflow-hidden px-6 py-4 rounded-xl font-bold transition-all duration-300 flex items-center justify-center gap-2 ${
+                    isRecommended
+                        ? 'bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-600 hover:from-blue-700 hover:via-indigo-700 hover:to-blue-700 text-white shadow-lg hover:shadow-2xl'
+                        : 'bg-white hover:bg-gray-50 text-gray-900 border-2 border-gray-300 hover:border-blue-400 hover:text-blue-600 shadow-md hover:shadow-lg'
+                }`}
+            >
+              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -skew-x-12 translate-x-[-200%] group-hover/btn:translate-x-[200%] transition-transform duration-1000" />
+              <span className="relative z-10">Choisir ce pack</span>
+              <ArrowRightIcon className="relative z-10 w-5 h-5 group-hover/btn:translate-x-1 transition-transform" />
+            </motion.button>
+          </div>
+        </div>
+      </div>
+  );
+}
+
+// Slider Navigation Component
+function SliderNavigation({ sliderRef }: { sliderRef: any }) {
+  const [loaded, setLoaded] = useState(false);
+  const [currentSlide, setCurrentSlide] = useState(0);
+  const [sliderInstance, setSliderInstance] = useState<any>(null);
+
+  useEffect(() => {
+    const slider = sliderRef.current;
+    if (!slider) return;
+
+    setLoaded(true);
+    setSliderInstance(slider);
+    const onSlideChanged = (s: any) => setCurrentSlide(s.track.details.rel);
+    slider.on("slideChanged", onSlideChanged);
+
+    return () => slider.off("slideChanged", onSlideChanged);
+  }, [sliderRef]);
+
+  if (!loaded || !sliderInstance) return null;
+
+  return (
+      <div className="flex justify-center gap-4 mt-8">
+        <button
+            className="bg-white border-2 border-gray-200 hover:border-blue-500 text-gray-600 hover:text-blue-600 p-3 rounded-full shadow-md transition-all disabled:opacity-30 disabled:cursor-not-allowed"
+            onClick={() => sliderInstance.prev()}
+            disabled={currentSlide === 0}
+        >
+          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+          </svg>
+        </button>
+        <button
+            className="bg-white border-2 border-gray-200 hover:border-blue-500 text-gray-600 hover:text-blue-600 p-3 rounded-full shadow-md transition-all disabled:opacity-30 disabled:cursor-not-allowed"
+            onClick={() => sliderInstance.next()}
+            disabled={currentSlide === sliderInstance.track.details.slides.length - 1}
+        >
+          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+          </svg>
+        </button>
+      </div>
   );
 }
