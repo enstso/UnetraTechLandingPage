@@ -152,7 +152,7 @@ const pricingPlans = [
     category: "Développement",
     description: "App mobile native iOS/Android performante.",
     price: 8500,
-    displayPrice: "8 500€",
+    displayPrice: "38 500€",
     priceType: "from",
     duration: "À partir de",
     features: [
@@ -171,7 +171,7 @@ const pricingPlans = [
     category: "Développement",
     description: "App web moderne React/Next.js avec APIs intégrées.",
     price: 6500,
-    displayPrice: "6 500€",
+    displayPrice: "45 500€",
     priceType: "from",
     duration: "À partir de",
     features: [
@@ -190,7 +190,7 @@ const pricingPlans = [
     category: "Développement",
     description: "Application complète web + mobile + backend sur-mesure.",
     price: 15000,
-    displayPrice: "15 000€",
+    displayPrice: "75 000€",
     priceType: "from",
     duration: "À partir de",
     features: [
@@ -200,7 +200,7 @@ const pricingPlans = [
       "Panel admin complet",
       "Intégrations tierces illimitées",
       "Formation & documentation",
-      "Maintenance 6 mois incluse"
+      "Maintenance 3 mois incluse"
     ],
     icon: "🚀",
     priority: false
@@ -445,15 +445,16 @@ export default function Pricing() {
             </div>
           </motion.div>
 
-          {/* Category Filter premium - Desktop only */}
-          {!isMobile && (
-              <motion.div
-                  className="flex flex-wrap justify-center gap-3 mb-14"
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: 0.2, duration: 0.6 }}
-              >
+          {/* Category Filter premium - SCROLLABLE HORIZONTAL SUR MOBILE */}
+          <motion.div
+              className={`mb-14 ${isMobile ? '-mx-4 px-4' : ''}`}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.2, duration: 0.6 }}
+          >
+            <div className={`${isMobile ? 'overflow-x-auto scrollbar-hide' : 'flex flex-wrap justify-center'} flex gap-3`}>
+              <div className={`flex gap-3 ${isMobile ? 'w-max' : ''}`}>
                 {categories.map((category) => (
                     <motion.button
                         key={category}
@@ -463,7 +464,7 @@ export default function Pricing() {
                         }}
                         whileHover={{ scale: 1.05 }}
                         whileTap={{ scale: 0.95 }}
-                        className={`relative px-7 py-3.5 rounded-full font-semibold transition-all duration-300 ${
+                        className={`relative px-6 py-3 rounded-full font-semibold transition-all duration-300 whitespace-nowrap ${
                             activeCategory === category
                                 ? 'text-white shadow-lg shadow-blue-200'
                                 : 'bg-white text-gray-600 hover:text-blue-600 border border-gray-200 hover:border-blue-300 hover:shadow-md'
@@ -482,8 +483,9 @@ export default function Pricing() {
                       <span className="relative z-10">{category}</span>
                     </motion.button>
                 ))}
-              </motion.div>
-          )}
+              </div>
+            </div>
+          </motion.div>
 
           {/* Cards Grid/Slider */}
           {isMobile ? (
@@ -650,11 +652,22 @@ export default function Pricing() {
             </motion.a>
           </motion.div>
         </div>
+
+        {/* CSS pour cacher la scrollbar sur mobile */}
+        <style jsx>{`
+          .scrollbar-hide::-webkit-scrollbar {
+            display: none;
+          }
+          .scrollbar-hide {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+          }
+        `}</style>
       </section>
   );
 }
 
-// Pricing Card Component
+// Pricing Card Component (reste identique)
 function PricingCard({ plan, isRecommended, handleClick }: {
   plan: typeof pricingPlans[0],
   isRecommended: boolean,
@@ -833,7 +846,7 @@ function PricingCard({ plan, isRecommended, handleClick }: {
   );
 }
 
-// Slider Navigation Component
+// Slider Navigation Component (reste identique)
 function SliderNavigation({ sliderRef }: { sliderRef: any }) {
   const [loaded, setLoaded] = useState(false);
   const [currentSlide, setCurrentSlide] = useState(0);

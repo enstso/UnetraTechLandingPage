@@ -222,14 +222,17 @@ export default function Features() {
       : services.filter(service => service.category === activeCategory);
 
   // ✅ LOGIQUE MODIFIÉE :
-  // - Si "Tous" → afficher 6 prioritaires (ou tous si showAll)
+  // - Si "Tous" → afficher 6 prioritaires (ou tous si showAll) - DESKTOP UNIQUEMENT
   // - Si catégorie spécifique → afficher TOUS les services de cette catégorie
-  const displayedServices = activeCategory === "Tous"
-      ? (showAll ? filteredServices : filteredServices.filter(s => s.priority))
-      : filteredServices; // Affiche TOUS les services de la catégorie
+  // - Sur mobile : toujours afficher tous les services filtrés
+  const displayedServices = isMobile
+      ? filteredServices
+      : (activeCategory === "Tous"
+          ? (showAll ? filteredServices : filteredServices.filter(s => s.priority))
+          : filteredServices);
 
-  // Le bouton "Voir plus" n'apparaît que sur "Tous"
-  const hasMoreServices = activeCategory === "Tous" && filteredServices.length > displayedServices.length;
+  // Le bouton "Voir plus" n'apparaît que sur "Tous" en desktop
+  const hasMoreServices = !isMobile && activeCategory === "Tous" && filteredServices.length > displayedServices.length;
 
   // FONCTION POUR CHANGER DE CATÉGORIE ET SCROLLER
   const handleCategoryChange = (category: string) => {
@@ -274,36 +277,50 @@ export default function Features() {
             <div className="w-24 h-1 bg-gradient-to-r from-blue-600 to-indigo-600 mx-auto mt-6 rounded-full" />
           </motion.div>
 
-          {/* Category Filter - Desktop only */}
-          {!isMobile && (
-              <motion.div
-                  className="flex flex-wrap justify-center gap-3 mb-12"
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: 0.2, duration: 0.6 }}
-              >
+          {/* Category Filter - SCROLLABLE HORIZONTAL SUR MOBILE */}
+          <motion.div
+              className={`mb-12 ${isMobile ? '-mx-4 px-4' : ''}`}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.2, duration: 0.6 }}
+          >
+            <div className={`${isMobile ? 'overflow-x-auto scrollbar-hide' : 'flex flex-wrap justify-center'} flex gap-3`}>
+              <div className={`flex gap-3 ${isMobile ? 'w-max' : ''}`}>
                 {categories.map((category) => (
-                    <button
+                    <motion.button
                         key={category}
                         onClick={() => handleCategoryChange(category)}
-                        className={`px-6 py-3 rounded-full font-medium transition-all duration-300 ${
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                        className={`relative px-6 py-3 rounded-full font-medium transition-all duration-300 whitespace-nowrap ${
                             activeCategory === category
-                                ? 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-lg transform scale-105'
+                                ? 'text-white shadow-lg shadow-blue-200'
                                 : 'bg-white/80 backdrop-blur-sm text-gray-600 hover:text-blue-600 border border-gray-200 hover:border-blue-300 hover:shadow-md'
                         }`}
                     >
-                      {category}
-                    </button>
+                      {activeCategory === category && (
+                          <>
+                            <motion.div
+                                layoutId="activeServiceTab"
+                                className="absolute inset-0 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-full"
+                                transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
+                            />
+                            <div className="absolute inset-0 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-full blur opacity-40" />
+                          </>
+                      )}
+                      <span className="relative z-10">{category}</span>
+                    </motion.button>
                 ))}
-              </motion.div>
-          )}
+              </div>
+            </div>
+          </motion.div>
 
           {/* Services Grid/Slider */}
           {isMobile ? (
               <div className="relative">
                 <div ref={sliderRef} className="keen-slider">
-                  {services.map((service, idx) => (
+                  {filteredServices.map((service, idx) => (
                       <div key={idx} className="keen-slider__slide">
                         <ServiceCard service={service} />
                       </div>
@@ -337,7 +354,7 @@ export default function Features() {
                   </AnimatePresence>
                 </motion.div>
 
-                {/* Bouton "Voir plus" (seulement sur "Tous") */}
+                {/* Bouton "Voir plus" (seulement sur "Tous" en desktop) */}
                 {hasMoreServices && (
                     <motion.div
                         className="flex justify-center mt-12"
@@ -385,6 +402,7 @@ export default function Features() {
           </motion.div>
         </div>
 
+        {/* CSS pour cacher la scrollbar sur mobile */}
         <style jsx>{`
           @keyframes shine {
             from {
@@ -396,6 +414,13 @@ export default function Features() {
           }
           .animate-shine {
             animation: shine 3s infinite;
+          }
+          .scrollbar-hide::-webkit-scrollbar {
+            display: none;
+          }
+          .scrollbar-hide {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
           }
         `}</style>
       </section>
