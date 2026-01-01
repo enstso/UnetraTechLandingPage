@@ -152,7 +152,7 @@ const pricingPlans = [
     category: "Développement",
     description: "App mobile native iOS/Android performante.",
     price: 8500,
-    displayPrice: "38 500€",
+    displayPrice: "8 500€",
     priceType: "from",
     duration: "À partir de",
     features: [
@@ -171,7 +171,7 @@ const pricingPlans = [
     category: "Développement",
     description: "App web moderne React/Next.js avec APIs intégrées.",
     price: 6500,
-    displayPrice: "45 500€",
+    displayPrice: "6 500€",
     priceType: "from",
     duration: "À partir de",
     features: [
@@ -190,7 +190,7 @@ const pricingPlans = [
     category: "Développement",
     description: "Application complète web + mobile + backend sur-mesure.",
     price: 15000,
-    displayPrice: "75 000€",
+    displayPrice: "15 000€",
     priceType: "from",
     duration: "À partir de",
     features: [
@@ -347,9 +347,12 @@ export default function Pricing() {
   const [activeCategory, setActiveCategory] = useState("Tous");
   const [showAll, setShowAll] = useState(false);
 
-  const [sliderRef] = useKeenSlider<HTMLDivElement>({
+  // ✅ CONFIGURATION CORRIGÉE DU SLIDER
+  const [sliderRef, instanceRef] = useKeenSlider<HTMLDivElement>({
     slides: { perView: 1.1, spacing: 20 },
     loop: false,
+    mode: "snap",
+    rubberband: false,
     breakpoints: {
       "(min-width: 640px)": {
         slides: { perView: 2.1, spacing: 20 },
@@ -365,6 +368,13 @@ export default function Pricing() {
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
+
+  // ✅ FORCER LA MISE À JOUR DU SLIDER QUAND LA CATÉGORIE CHANGE
+  useEffect(() => {
+    if (instanceRef.current) {
+      instanceRef.current.update();
+    }
+  }, [activeCategory, instanceRef]);
 
   const filteredPlans = activeCategory === "Tous"
       ? pricingPlans
@@ -473,7 +483,7 @@ export default function Pricing() {
                       {activeCategory === category && (
                           <>
                             <motion.div
-                                layoutId="activeTab"
+                                layoutId="activePricingTab"
                                 className="absolute inset-0 bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-600 rounded-full"
                                 transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
                             />
@@ -489,10 +499,11 @@ export default function Pricing() {
 
           {/* Cards Grid/Slider */}
           {isMobile ? (
-              <div className="relative">
+              // ✅ KEY POUR FORCER LE REMOUNT
+              <div className="relative" key={activeCategory}>
                 <div ref={sliderRef} className="keen-slider">
                   {filteredPlans.map((plan, idx) => (
-                      <div key={idx} className="keen-slider__slide">
+                      <div key={`${plan.name}-${idx}`} className="keen-slider__slide">
                         <PricingCard
                             plan={plan}
                             isRecommended={plan.name === recommendedPlanName}
@@ -501,7 +512,8 @@ export default function Pricing() {
                       </div>
                   ))}
                 </div>
-                <SliderNavigation sliderRef={sliderRef} />
+                {/* ✅ PASSER instanceRef au lieu de sliderRef */}
+                <SliderNavigation instanceRef={instanceRef} />
               </div>
           ) : (
               <>
@@ -846,31 +858,41 @@ function PricingCard({ plan, isRecommended, handleClick }: {
   );
 }
 
-// Slider Navigation Component (reste identique)
-function SliderNavigation({ sliderRef }: { sliderRef: any }) {
-  const [loaded, setLoaded] = useState(false);
+// ✅ Slider Navigation Component CORRIGÉ
+function SliderNavigation({ instanceRef }: { instanceRef: any }) {
   const [currentSlide, setCurrentSlide] = useState(0);
-  const [sliderInstance, setSliderInstance] = useState<any>(null);
+  const [maxSlide, setMaxSlide] = useState(0);
 
   useEffect(() => {
-    const slider = sliderRef.current;
-    if (!slider) return;
+    if (!instanceRef.current) return;
 
-    setLoaded(true);
-    setSliderInstance(slider);
-    const onSlideChanged = (s: any) => setCurrentSlide(s.track.details.rel);
-    slider.on("slideChanged", onSlideChanged);
+    const slider = instanceRef.current;
 
-    return () => slider.off("slideChanged", onSlideChanged);
-  }, [sliderRef]);
+    // ✅ Initialiser les valeurs
+    setCurrentSlide(slider.track.details.rel);
+    setMaxSlide(slider.track.details.slides.length - 1);
 
-  if (!loaded || !sliderInstance) return null;
+    // ✅ Écouter les changements
+    const updateSlide = () => {
+      setCurrentSlide(slider.track.details.rel);
+    };
+
+    slider.on("slideChanged", updateSlide);
+    slider.on("updated", updateSlide);
+
+    return () => {
+      // ✅ SANS UTILISER .off() qui n'existe pas
+      // Le nettoyage se fera automatiquement
+    };
+  }, [instanceRef]);
+
+  if (!instanceRef.current) return null;
 
   return (
       <div className="flex justify-center gap-4 mt-8">
         <button
             className="bg-white border-2 border-gray-200 hover:border-blue-500 text-gray-600 hover:text-blue-600 p-3 rounded-full shadow-md transition-all disabled:opacity-30 disabled:cursor-not-allowed"
-            onClick={() => sliderInstance.prev()}
+            onClick={() => instanceRef.current?.prev()}
             disabled={currentSlide === 0}
         >
           <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -879,8 +901,8 @@ function SliderNavigation({ sliderRef }: { sliderRef: any }) {
         </button>
         <button
             className="bg-white border-2 border-gray-200 hover:border-blue-500 text-gray-600 hover:text-blue-600 p-3 rounded-full shadow-md transition-all disabled:opacity-30 disabled:cursor-not-allowed"
-            onClick={() => sliderInstance.next()}
-            disabled={currentSlide === sliderInstance.track.details.slides.length - 1}
+            onClick={() => instanceRef.current?.next()}
+            disabled={currentSlide >= maxSlide}
         >
           <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />

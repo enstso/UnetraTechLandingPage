@@ -185,9 +185,13 @@ export default function Features() {
   const [isMobile, setIsMobile] = useState(false);
   const [activeCategory, setActiveCategory] = useState("Tous");
   const [showAll, setShowAll] = useState(false);
-  const [sliderRef] = useKeenSlider<HTMLDivElement>({
+
+  // ✅ CONFIGURATION CORRIGÉE DU SLIDER
+  const [sliderRef, instanceRef] = useKeenSlider<HTMLDivElement>({
     slides: { perView: 1.1, spacing: 20 },
     loop: false,
+    mode: "snap",
+    rubberband: false,
     breakpoints: {
       "(min-width: 640px)": {
         slides: { perView: 2.1, spacing: 20 },
@@ -203,6 +207,13 @@ export default function Features() {
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
+
+  // ✅ FORCER LA MISE À JOUR DU SLIDER QUAND LA CATÉGORIE CHANGE
+  useEffect(() => {
+    if (instanceRef.current) {
+      instanceRef.current.update();
+    }
+  }, [activeCategory, instanceRef]);
 
   // ✅ ÉCOUTEUR D'ÉVÉNEMENT POUR LES CLICS DU FOOTER
   useEffect(() => {
@@ -221,25 +232,18 @@ export default function Features() {
       ? services
       : services.filter(service => service.category === activeCategory);
 
-  // ✅ LOGIQUE MODIFIÉE :
-  // - Si "Tous" → afficher 6 prioritaires (ou tous si showAll) - DESKTOP UNIQUEMENT
-  // - Si catégorie spécifique → afficher TOUS les services de cette catégorie
-  // - Sur mobile : toujours afficher tous les services filtrés
   const displayedServices = isMobile
       ? filteredServices
       : (activeCategory === "Tous"
           ? (showAll ? filteredServices : filteredServices.filter(s => s.priority))
           : filteredServices);
 
-  // Le bouton "Voir plus" n'apparaît que sur "Tous" en desktop
   const hasMoreServices = !isMobile && activeCategory === "Tous" && filteredServices.length > displayedServices.length;
 
-  // FONCTION POUR CHANGER DE CATÉGORIE ET SCROLLER
   const handleCategoryChange = (category: string) => {
     setActiveCategory(category);
     setShowAll(false);
 
-    // Scroll vers la grille de services après un court délai
     setTimeout(() => {
       const servicesGrid = document.getElementById('services-grid');
       if (servicesGrid) {
@@ -318,15 +322,17 @@ export default function Features() {
 
           {/* Services Grid/Slider */}
           {isMobile ? (
-              <div className="relative">
+              // ✅ KEY POUR FORCER LE REMOUNT
+              <div className="relative" key={activeCategory}>
                 <div ref={sliderRef} className="keen-slider">
                   {filteredServices.map((service, idx) => (
-                      <div key={idx} className="keen-slider__slide">
+                      <div key={`${service.id}-${idx}`} className="keen-slider__slide">
                         <ServiceCard service={service} />
                       </div>
                   ))}
                 </div>
-                <SliderNavigation sliderRef={sliderRef} />
+                {/* ✅ PASSER instanceRef au lieu de sliderInstance */}
+                <SliderNavigation instanceRef={instanceRef} />
               </div>
           ) : (
               <>
@@ -354,7 +360,6 @@ export default function Features() {
                   </AnimatePresence>
                 </motion.div>
 
-                {/* Bouton "Voir plus" (seulement sur "Tous" en desktop) */}
                 {hasMoreServices && (
                     <motion.div
                         className="flex justify-center mt-12"
@@ -383,7 +388,6 @@ export default function Features() {
               viewport={{ once: true }}
               transition={{ delay: 0.4, duration: 0.6 }}
           >
-            {/* Effet de brillance animé */}
             <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -skew-x-12 animate-shine" />
 
             <h3 className="text-3xl font-bold mb-4 relative z-10">Besoin d'une solution personnalisée&nbsp;?</h3>
@@ -402,7 +406,6 @@ export default function Features() {
           </motion.div>
         </div>
 
-        {/* CSS pour cacher la scrollbar sur mobile */}
         <style jsx>{`
           @keyframes shine {
             from {
@@ -433,11 +436,8 @@ function ServiceCard({ service }: { service: typeof services[0] }) {
 
   return (
       <div className="group relative bg-white rounded-3xl p-8 shadow-lg border-2 border-gray-100 hover:shadow-2xl hover:border-blue-200 transition-all duration-500 hover:-translate-y-3 h-full flex flex-col overflow-hidden">
-
-        {/* Effet gradient au hover */}
         <div className="absolute inset-0 bg-gradient-to-br from-blue-50/0 to-indigo-50/0 group-hover:from-blue-50/50 group-hover:to-indigo-50/30 transition-all duration-500 rounded-3xl" />
 
-        {/* Badge subtil en haut */}
         {badge && (
             <div className="relative z-10 mb-4">
             <span className="inline-flex items-center gap-1.5 text-xs font-bold text-indigo-600 bg-indigo-50 px-3 py-1.5 rounded-full border border-indigo-100">
@@ -447,7 +447,6 @@ function ServiceCard({ service }: { service: typeof services[0] }) {
             </div>
         )}
 
-        {/* Category + Highlight */}
         <div className="relative z-10 flex items-center justify-between mb-6">
           <span className="text-xs font-semibold text-blue-600 bg-blue-50 px-3 py-1.5 rounded-full border border-blue-100">
             {category}
@@ -457,7 +456,6 @@ function ServiceCard({ service }: { service: typeof services[0] }) {
           </span>
         </div>
 
-        {/* Icon avec effet glow premium */}
         <div className="relative z-10 w-16 h-16 mb-6">
           <div className="absolute inset-0 bg-gradient-to-br from-blue-400 to-indigo-500 rounded-2xl blur-xl opacity-40 group-hover:opacity-70 group-hover:scale-125 transition-all duration-500" />
           <div className="relative w-16 h-16 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-2xl flex items-center justify-center group-hover:scale-110 group-hover:rotate-3 transition-all duration-500 shadow-xl">
@@ -465,7 +463,6 @@ function ServiceCard({ service }: { service: typeof services[0] }) {
           </div>
         </div>
 
-        {/* Content */}
         <div className="relative z-10 flex-grow">
           <h3 className="text-xl font-bold text-gray-900 mb-4 group-hover:bg-gradient-to-r group-hover:from-blue-600 group-hover:to-indigo-600 group-hover:bg-clip-text group-hover:text-transparent transition-all duration-300">
             {title}
@@ -475,7 +472,6 @@ function ServiceCard({ service }: { service: typeof services[0] }) {
           </p>
         </div>
 
-        {/* Arrow premium */}
         <div className="relative z-10 mt-8 flex justify-end">
           <div className="w-11 h-11 bg-gradient-to-br from-gray-50 to-gray-100 group-hover:from-blue-500 group-hover:to-indigo-600 rounded-xl flex items-center justify-center transition-all duration-300 shadow-md group-hover:shadow-xl">
             <svg className="w-5 h-5 text-gray-400 group-hover:text-white transform group-hover:translate-x-1 transition-all" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2.5}>
@@ -487,31 +483,41 @@ function ServiceCard({ service }: { service: typeof services[0] }) {
   );
 }
 
-// Slider Navigation Component
-function SliderNavigation({ sliderRef }: { sliderRef: any }) {
-  const [loaded, setLoaded] = useState(false);
+// ✅ Slider Navigation Component CORRIGÉ
+function SliderNavigation({ instanceRef }: { instanceRef: any }) {
   const [currentSlide, setCurrentSlide] = useState(0);
-  const [sliderInstance, setSliderInstance] = useState<any>(null);
+  const [maxSlide, setMaxSlide] = useState(0);
 
   useEffect(() => {
-    const slider = sliderRef.current;
-    if (!slider) return;
+    if (!instanceRef.current) return;
 
-    setLoaded(true);
-    setSliderInstance(slider);
-    const onSlideChanged = (s: any) => setCurrentSlide(s.track.details.rel);
-    slider.on("slideChanged", onSlideChanged);
+    const slider = instanceRef.current;
 
-    return () => slider.off("slideChanged", onSlideChanged);
-  }, [sliderRef]);
+    // ✅ Initialiser les valeurs
+    setCurrentSlide(slider.track.details.rel);
+    setMaxSlide(slider.track.details.slides.length - 1);
 
-  if (!loaded || !sliderInstance) return null;
+    // ✅ Écouter les changements
+    const updateSlide = () => {
+      setCurrentSlide(slider.track.details.rel);
+    };
+
+    slider.on("slideChanged", updateSlide);
+    slider.on("updated", updateSlide);
+
+    return () => {
+      // ✅ SANS UTILISER .off() qui n'existe pas
+      // Le nettoyage se fera automatiquement
+    };
+  }, [instanceRef]);
+
+  if (!instanceRef.current) return null;
 
   return (
       <div className="flex justify-center gap-4 mt-8">
         <button
             className="bg-white border-2 border-gray-200 hover:border-blue-500 text-gray-600 hover:text-blue-600 p-3 rounded-full shadow-md transition-all disabled:opacity-30 disabled:cursor-not-allowed"
-            onClick={() => sliderInstance.prev()}
+            onClick={() => instanceRef.current?.prev()}
             disabled={currentSlide === 0}
         >
           <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -520,8 +526,8 @@ function SliderNavigation({ sliderRef }: { sliderRef: any }) {
         </button>
         <button
             className="bg-white border-2 border-gray-200 hover:border-blue-500 text-gray-600 hover:text-blue-600 p-3 rounded-full shadow-md transition-all disabled:opacity-30 disabled:cursor-not-allowed"
-            onClick={() => sliderInstance.next()}
-            disabled={currentSlide === sliderInstance.track.details.slides.length - 1}
+            onClick={() => instanceRef.current?.next()}
+            disabled={currentSlide >= maxSlide}
         >
           <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
