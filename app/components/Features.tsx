@@ -40,7 +40,7 @@ const services = [
   {
     id: "service-developpement",
     title: "Sites Vitrines Premium",
-    desc: "Sites web modernes, rapides et optimisés SEO. Design sur-mesure, responsive, performant et pensé pour convertir vos visiteurs en clients.",
+    desc: "Sites web modernes, rapides et optimisés SEO. Responsive, performant et pensé pour convertir vos visiteurs en clients.",
     icon: ComputerDesktopIcon,
     category: "Développement",
     highlight: "SEO optimisé",
@@ -69,10 +69,9 @@ const services = [
   {
     id: "service-securite",
     title: "Audit de Sécurité",
-    desc: "Audits techniques approfondis, tests d'intrusion, analyse de vulnérabilités et recommandations actionnables pour durcir votre SI.",
+    desc: "Audits techniques approfondis, analyse de vulnérabilités et recommandations actionnables pour durcir votre SI.",
     icon: DocumentMagnifyingGlassIcon,
     category: "Sécurité",
-    highlight: "Pentest inclus",
     badge: "Essentiel",
     priority: true
   },
@@ -108,10 +107,10 @@ const services = [
   {
     id: "service-developpement-mobile",
     title: "Applications Mobile",
-    desc: "Apps natives iOS/Android et solutions cross-platform conçues pour votre métier.",
+    desc: "Solutions cross-platform conçues pour votre métier.",
     icon: DevicePhoneMobileIcon,
     category: "Développement",
-    highlight: "Native & Cross-platform",
+    highlight: "Cross-platform",
     priority: false
   },
   {

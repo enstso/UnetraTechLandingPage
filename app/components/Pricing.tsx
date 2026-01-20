@@ -63,7 +63,7 @@ const pricingPlans = [
     duration: "À partir de",
     features: [
       "Architecture multi-cloud",
-      "Infrastructure as Code (Terraform)",
+      "Infrastructure as Code",
       "DevOps CI/CD complet",
       "Audit sécurité inclus",
       "SLA & astreinte 24/7"
@@ -137,7 +137,6 @@ const pricingPlans = [
     priceType: "from",
     duration: "À partir de",
     features: [
-      "Design sur-mesure moderne",
       "100% responsive mobile",
       "Optimisation SEO avancée",
       "Formulaire de contact",
@@ -150,14 +149,14 @@ const pricingPlans = [
   {
     name: "Application Mobile",
     category: "Développement",
-    description: "App mobile native iOS/Android performante.",
+    description: "App mobile cross-platform performante.",
     price: 8500,
     displayPrice: "8 500€",
     priceType: "from",
     duration: "À partir de",
     features: [
-      "Développement natif iOS & Android",
-      "Design UX/UI mobile-first",
+      "Développement cross-platform",
+      "Design UX/UI",
       "APIs & synchronisation cloud",
       "Notifications push intégrées",
       "Publication stores incluse",
@@ -169,15 +168,15 @@ const pricingPlans = [
   {
     name: "Application Web",
     category: "Développement",
-    description: "App web moderne React/Next.js avec APIs intégrées.",
+    description: "App web moderne avec APIs intégrées.",
     price: 6500,
     displayPrice: "6 500€",
     priceType: "from",
     duration: "À partir de",
     features: [
-      "Architecture React/Next.js",
+      "Architecture",
       "APIs REST/GraphQL custom",
-      "Design UX/UI premium",
+      "Design UX/UI",
       "Authentification sécurisée",
       "CI/CD & déploiement cloud",
       "Maintenance 3 mois offerte"
@@ -194,8 +193,8 @@ const pricingPlans = [
     priceType: "from",
     duration: "À partir de",
     features: [
-      "Web app + App mobile native",
-      "Backend scalable (Node.js/Python)",
+      "Web app + App mobile",
+      "Backend scalable",
       "Base de données optimisée",
       "Panel admin complet",
       "Intégrations tierces illimitées",
@@ -291,8 +290,7 @@ const pricingPlans = [
     features: [
       "Analyse infrastructure/code",
       "Rapport détaillé + roadmap",
-      "Recommandations actionnables",
-      "Session restitution 2h"
+      "Recommandations actionnables"
     ],
     icon: "🔍",
     priority: false
@@ -307,7 +305,7 @@ const pricingPlans = [
     duration: "À partir de",
     features: [
       "Audit infra/sécu/cloud complet",
-      "Pentest & analyse vulnérabilités",
+      "Analyse vulnérabilités",
       "Feuille de route stratégique",
       "Schémas techniques détaillés",
       "Suivi post-audit 30 jours"

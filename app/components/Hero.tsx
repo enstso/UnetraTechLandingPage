@@ -130,13 +130,7 @@ export default function Hero() {
                                 </div>
                                 <span className="text-gray-600">Réponse sous 24h garantie</span>
                             </div>
-                            <div className="flex items-center gap-2.5">
-                                <div className="flex -space-x-3">
-                                    <div className="w-9 h-9 rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 border-2 border-white shadow-md"></div>
-                                    <div className="w-9 h-9 rounded-full bg-gradient-to-br from-indigo-400 to-blue-500 border-2 border-white shadow-md"></div>
-                                </div>
-                                <span className="text-gray-600">Rejoignez nos clients satisfaits</span>
-                            </div>
+
 
 
 
