@@ -1,7 +1,7 @@
 "use client";
 
 import { motion, AnimatePresence } from "framer-motion";
-import { CheckIcon, StarIcon, ArrowRightIcon, SparklesIcon, ChevronDownIcon, BoltIcon, FireIcon } from "@heroicons/react/24/solid";
+import { CheckIcon, StarIcon, ArrowRightIcon, SparklesIcon, ChevronDownIcon, FireIcon } from "@heroicons/react/24/solid";
 import { useEffect, useState } from "react";
 import { useKeenSlider } from "keen-slider/react";
 import "keen-slider/keen-slider.min.css";
@@ -345,8 +345,8 @@ export default function Pricing() {
   const [activeCategory, setActiveCategory] = useState("Tous");
   const [showAll, setShowAll] = useState(false);
 
-  // ✅ CONFIGURATION CORRIGÉE DU SLIDER
-  const [sliderRef, instanceRef] = useKeenSlider<HTMLDivElement>({
+  // Configuration du slider mobile
+  const [sliderRef] = useKeenSlider<HTMLDivElement>({
     slides: { perView: 1.1, spacing: 20 },
     loop: false,
     mode: "snap",
@@ -366,13 +366,6 @@ export default function Pricing() {
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
-
-  // ✅ FORCER LA MISE À JOUR DU SLIDER QUAND LA CATÉGORIE CHANGE
-  useEffect(() => {
-    if (instanceRef.current) {
-      instanceRef.current.update();
-    }
-  }, [activeCategory, instanceRef]);
 
   const filteredPlans = activeCategory === "Tous"
       ? pricingPlans
@@ -497,7 +490,7 @@ export default function Pricing() {
 
           {/* Cards Grid/Slider */}
           {isMobile ? (
-              // ✅ KEY POUR FORCER LE REMOUNT
+              // ✅ SLIDER MOBILE : Glissement tactile uniquement
               <div className="relative" key={activeCategory}>
                 <div ref={sliderRef} className="keen-slider">
                   {filteredPlans.map((plan, idx) => (
@@ -510,8 +503,6 @@ export default function Pricing() {
                       </div>
                   ))}
                 </div>
-                {/* ✅ PASSER instanceRef au lieu de sliderRef */}
-                <SliderNavigation instanceRef={instanceRef} />
               </div>
           ) : (
               <>
@@ -677,7 +668,7 @@ export default function Pricing() {
   );
 }
 
-// Pricing Card Component (reste identique)
+// Pricing Card Component
 function PricingCard({ plan, isRecommended, handleClick }: {
   plan: typeof pricingPlans[0],
   isRecommended: boolean,
@@ -852,60 +843,6 @@ function PricingCard({ plan, isRecommended, handleClick }: {
             </motion.button>
           </div>
         </div>
-      </div>
-  );
-}
-
-// ✅ Slider Navigation Component CORRIGÉ
-function SliderNavigation({ instanceRef }: { instanceRef: any }) {
-  const [currentSlide, setCurrentSlide] = useState(0);
-  const [maxSlide, setMaxSlide] = useState(0);
-
-  useEffect(() => {
-    if (!instanceRef.current) return;
-
-    const slider = instanceRef.current;
-
-    // ✅ Initialiser les valeurs
-    setCurrentSlide(slider.track.details.rel);
-    setMaxSlide(slider.track.details.slides.length - 1);
-
-    // ✅ Écouter les changements
-    const updateSlide = () => {
-      setCurrentSlide(slider.track.details.rel);
-    };
-
-    slider.on("slideChanged", updateSlide);
-    slider.on("updated", updateSlide);
-
-    return () => {
-      // ✅ SANS UTILISER .off() qui n'existe pas
-      // Le nettoyage se fera automatiquement
-    };
-  }, [instanceRef]);
-
-  if (!instanceRef.current) return null;
-
-  return (
-      <div className="flex justify-center gap-4 mt-8">
-        <button
-            className="bg-white border-2 border-gray-200 hover:border-blue-500 text-gray-600 hover:text-blue-600 p-3 rounded-full shadow-md transition-all disabled:opacity-30 disabled:cursor-not-allowed"
-            onClick={() => instanceRef.current?.prev()}
-            disabled={currentSlide === 0}
-        >
-          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-          </svg>
-        </button>
-        <button
-            className="bg-white border-2 border-gray-200 hover:border-blue-500 text-gray-600 hover:text-blue-600 p-3 rounded-full shadow-md transition-all disabled:opacity-30 disabled:cursor-not-allowed"
-            onClick={() => instanceRef.current?.next()}
-            disabled={currentSlide >= maxSlide}
-        >
-          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-          </svg>
-        </button>
       </div>
   );
 }

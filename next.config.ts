@@ -1,14 +1,12 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  output: "standalone", // ✅ C'est cette ligne qui te manque
+  output: "standalone",
   eslint: {
     // Warning: This allows production builds to successfully complete even if
     // your project has ESLint errors.
     ignoreDuringBuilds: process.env.NODE_ENV === "production" ? true : false,
   },
-  /* config options here */
-  optimizeFonts: true,
   experimental: {
     optimizePackageImports: ["@heroicons/react"],
   },

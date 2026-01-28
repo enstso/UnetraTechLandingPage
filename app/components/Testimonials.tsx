@@ -33,7 +33,7 @@ const testimonials = [
     role: "Entrepreneur",
     company: "Le Désencombreur",
     quote:
-        "Unetra Tech a conçu une app mobile parfaitement taillée pour nos clients. L’expérience utilisateur est top, la techno solide, et l’équipe force de proposition.",
+        "Unetra Tech a conçu une app mobile parfaitement taillée pour nos clients. L'expérience utilisateur est top, la techno solide, et l'équipe force de proposition.",
     rating: 5,
     project: "App mobile Désencombreur",
     avatar: "MN",
@@ -44,14 +44,13 @@ const testimonials = [
     role: "Dirigeant",
     company: "ACIS Conseil",
     quote:
-        "Grâce à Unetra Tech, nous avons pu externaliser notre support informatique clients. Résolution rapide des tickets, utilisateurs très satisfaits : un vrai gain de temps, zéro friction et beaucoup de professionnalisme.",
+        "Grâce à Unetra Tech, nous avons pu externaliser notre support informatique clients. Résolution rapide des tickets, utilisateurs très satisfaits : un vrai gain de temps, zéro friction et beaucoup de professionnalisme.",
     rating: 5,
     project: "Support IT externalisé",
     avatar: "FC",
     result: "98% tickets résolus dans les délais"
   }
 ];
-
 
 const stats = [
   { number: "100%", label: "À votre écoute, dès le premier contact" },
@@ -60,13 +59,15 @@ const stats = [
   { number: "0 coût caché", label: "Sérénité garantie" }
 ];
 
-
 export default function Testimonials() {
   const [isMobile, setIsMobile] = useState(false);
 
+  // ✅ Configuration du slider SANS LOOP
   const [sliderRef] = useKeenSlider<HTMLDivElement>({
     slides: { perView: 1.1, spacing: 20 },
-    loop: true,
+    loop: false, // ✅ DÉSACTIVÉ : ne boucle plus
+    mode: "snap",
+    rubberband: false,
     breakpoints: {
       "(min-width: 640px)": {
         slides: { perView: 2.1, spacing: 20 },
@@ -135,6 +136,7 @@ export default function Testimonials() {
           {/* Testimonials */}
           <div className="mb-16">
             {isMobile ? (
+                // ✅ SLIDER MOBILE : glissement tactile uniquement, sans loop
                 <div ref={sliderRef} className="keen-slider">
                   {testimonials.map((testimonial, idx) => (
                       <div key={idx} className="keen-slider__slide">
