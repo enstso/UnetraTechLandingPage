@@ -258,7 +258,6 @@ export default function Footer() {
                                 {[
                                     { name: 'Mentions Légales', href: '/mentions-legales' },
                                     { name: 'Confidentialité', href: '/confidentialite' },
-                                    { name: 'Cookies', href: '/cookies' }
                                 ].map((link, index) => (
                                     <span key={link.name} className="flex items-center">
                                         <a

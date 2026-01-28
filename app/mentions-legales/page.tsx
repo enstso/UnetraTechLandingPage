@@ -14,7 +14,7 @@ export default function MentionsLegales() {
                     <div>
                         <span className="font-semibold">Éditeur du site :</span> Unetra Tech
                         <br />
-                        <span className="font-semibold">Contact :</span> <a href="mailto:contact@unetratech.com" className="text-blue-600 underline">contact@unetratech.com</a>, +33 1 23 45 67 89
+                        <span className="font-semibold">Contact :</span> <a href="mailto:contact@unetratech.com" className="text-blue-600 underline">contact@unetratech.com</a>, +33 6 46 57 46 36
                     </div>
                     <div>
                         <span className="font-semibold">Responsable publication :</span> Enstso Janvier et Diallo Amadou
