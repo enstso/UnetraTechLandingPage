@@ -19,12 +19,12 @@ const item = {
 const testimonials = [
   {
     name: "Hamadi Diallo",
-    role: "Fondateur",
+    role: "Growth Hacker et Conciergerie Airbnb",
     company: "Hamadi Conciergerie",
     quote:
         "Avec leur solution sur mesure, la gestion de nouveaux biens est devenue ultra‑simple. Mon portefeuille a augmenté de 40% en 1 mois, et leur réactivité business a été décisive.",
     rating: 5,
-    project: "Plateforme de gestion conciergerie",
+    project: "Hack de croissance pour conciergerie Airbnb",
     avatar: "HD",
     result: "+40% biens gérés"
   },
@@ -33,9 +33,9 @@ const testimonials = [
     role: "Entrepreneur",
     company: "Le Désencombreur",
     quote:
-        "Unetra Tech a conçu une app mobile parfaitement taillée pour nos clients. L'expérience utilisateur est top, la techno solide, et l'équipe force de proposition.",
+        "Unetra Tech a conçu une app interne parfaitement taillée pour nos équipes. L'expérience utilisateur est top, la techno solide, et l'équipe force de proposition.",
     rating: 5,
-    project: "App mobile Désencombreur",
+    project: "App interne Désencombreur",
     avatar: "MN",
     result: "Note moyenne 4,8/5"
   },
