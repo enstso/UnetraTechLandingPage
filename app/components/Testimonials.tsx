@@ -37,7 +37,7 @@ const testimonials = [
     rating: 5,
     project: "App mobile Désencombreur",
     avatar: "MN",
-    result: "4.8⭐"
+    result: "Note moyenne 4,8/5"
   },
   {
     name: "Foumba Cissé",

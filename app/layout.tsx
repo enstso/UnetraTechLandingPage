@@ -25,38 +25,42 @@ const jetbrainsMono = JetBrains_Mono({
 const GA_ID = "G-XXXXXXXXXX"; // Remplacer par votre vrai ID
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://unetratech.com"),
   title: {
-    default: "Unetra Tech - Solutions Informatiques Innovantes",
+    default: "Support Informatique Paris | Dépannage & Maintenance PME | Unetra Tech",
     template: "%s | Unetra Tech",
   },
   description:
-      "Spécialiste en transformation digitale et solutions informatiques sur mesure. Développement web, cloud, sécurité et conseils pour entreprises modernes.",
+    "Unetra Tech accompagne les PME et indépendants à Paris et en Île-de-France: dépannage informatique, maintenance, sécurité, sauvegarde et support IT récurrent.",
   keywords: [
-    "services informatiques",
-    "transformation digitale",
-    "développement web",
-    "solutions cloud",
-    "sécurité informatique",
-    "conseil IT"
+    "dépannage informatique Paris",
+    "maintenance informatique PME Paris",
+    "support informatique entreprise Île-de-France",
+    "sécurité informatique PME",
+    "sauvegarde données entreprise",
+    "externalisation informatique Paris",
   ],
   openGraph: {
-    title: "Unetra Tech - Solutions Informatiques",
-    description: "Transformation digitale et services informatiques pour entreprises",
+    title: "Support Informatique Paris et Île-de-France | Unetra Tech",
+    description:
+      "Dépannage, sécurité, maintenance et gestion IT pour PME et indépendants à Paris et en Île-de-France.",
     type: "website",
     locale: "fr_FR",
+    url: "https://unetratech.com",
     images: [
       {
         url: "/images/og-image.png",
         width: 1200,
         height: 630,
-        alt: "Unetra Tech - Solutions Informatiques"
-      }
+        alt: "Unetra Tech - Support informatique Paris et Île-de-France",
+      },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Unetra Tech - Solutions Informatiques",
-    description: "Spécialiste en transformation digitale et solutions IT",
+    title: "Dépannage et Maintenance Informatique Paris | Unetra Tech",
+    description:
+      "Support IT pour PME et indépendants: intervention rapide, sécurité et maintenance récurrente.",
     images: ["/images/twitter-card.png"],
   },
   robots: {
@@ -70,11 +74,8 @@ export const metadata: Metadata = {
       "max-snippet": -1,
     },
   },
-  verification: {
-    google: "votre-code-verification-google",
-  },
   alternates: {
-    canonical: "https://votre-domaine.com",
+    canonical: "https://unetratech.com",
   },
 };
 
@@ -86,7 +87,6 @@ export default function RootLayout({
   return (
       <html lang="fr" suppressHydrationWarning className="scroll-smooth">
       <head>
-        <title rel="Unetra Tech - Solutions Informatiques Innovantes" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
       </head>

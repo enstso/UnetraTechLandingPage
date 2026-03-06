@@ -1,42 +1,52 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import {
-  PhoneIcon,
-  EnvelopeIcon,
-  MapPinIcon,
-  ClockIcon,
+  CalendarDaysIcon,
+  CheckBadgeIcon,
   CheckCircleIcon,
-  ExclamationCircleIcon,
   ChatBubbleLeftRightIcon,
-  CalendarDaysIcon
+  EnvelopeIcon,
+  ExclamationCircleIcon,
+  MapPinIcon,
+  PhoneIcon,
+  ShieldCheckIcon,
+  WrenchScrewdriverIcon,
 } from "@heroicons/react/24/outline";
 
-// ✅ NOMS EXACTS DES PACKS DE LA SECTION PRICING
-const plans = [
-  // Cloud
-  "Cloud Start",
-  "Cloud Pro",
-  "Cloud Enterprise",
-  // Infrastructure
-  "Réseau Start",
-  "Réseau Pro",
-  "Infra Enterprise",
-  // Développement
-  "Site Vitrine",
-  "Application Mobile",
-  "Application Web",
-  "Solution Full-Stack",
-  // Support
-  "Pack 10h",
-  "Pack 25h",
-  "Pack 50h Premium",
-  "Support Sur Mesure",
-  // Conseil
-  "Audit Express",
-  "Audit Complet",
-  "Mission Sur Mesure"
+type FormData = {
+  name: string;
+  email: string;
+  phone: string;
+  company: string;
+  message: string;
+  selectedPack: string;
+  projectTimeline: string;
+  budget: string;
+};
+
+const planGroups = [
+  {
+    label: "Intervention",
+    options: ["Dépannage Express", "Réseau Pro PME"],
+  },
+  {
+    label: "Sécurité",
+    options: ["Audit Flash Sécurité", "Protection Continue"],
+  },
+  {
+    label: "Maintenance",
+    options: ["Maintenance Essentielle", "Maintenance Avancée", "IT Externalisé"],
+  },
+  {
+    label: "Cloud",
+    options: ["Migration Cloud Start", "Administration Cloud"],
+  },
+  {
+    label: "Web",
+    options: ["Site Vitrine Business"],
+  },
 ];
 
 const contactMethods = [
@@ -45,37 +55,83 @@ const contactMethods = [
     label: "Appelez-nous",
     value: "+33 6 46 57 46 36",
     link: "tel:+33646574636",
-    description: "Réponse immédiate pour les urgences",
-    available: "Lun-Ven 9h-18h"
+    description: "Pour les urgences et blocages critiques",
+    available: "Lun-Ven 9h-18h",
   },
   {
     icon: EnvelopeIcon,
-    label: "Email professionnel",
+    label: "Email",
     value: "contact@unetratech.com",
     link: "mailto:contact@unetratech.com",
-    description: "Réponse garantie sous 24h",
-    available: "7j/7"
+    description: "Réponse sous 24h ouvrées",
+    available: "7j/7",
   },
   {
     icon: MapPinIcon,
     label: "Zone d'intervention",
-    value: "Paris & Île-de-France",
+    value: "Paris et Île-de-France",
     link: "#",
-    description: "Déplacements sur site possibles",
-    available: "Sur rendez-vous"
+    description: "Intervention sur site ou à distance",
+    available: "Sur rendez-vous",
   },
   {
     icon: CalendarDaysIcon,
-    label: "Consultation gratuite",
-    value: "Rendez-vous en ligne",
+    label: "Audit offert",
+    value: "Diagnostic de 30 min",
     link: "#",
-    description: "Analyse de vos besoins",
-    available: "30 min offertes"
-  }
+    description: "Sans engagement",
+    available: "En visio",
+  },
+];
+
+const trustItems = [
+  {
+    icon: ShieldCheckIcon,
+    text: "Sécurité et sauvegarde intégrées dès le démarrage",
+  },
+  {
+    icon: WrenchScrewdriverIcon,
+    text: "Support réactif avec suivi concret des incidents",
+  },
+  {
+    icon: CheckBadgeIcon,
+    text: "Tarifs transparents et proposition adaptée à votre budget",
+  },
+  {
+    icon: ChatBubbleLeftRightIcon,
+    text: "Accompagnement humain avec un interlocuteur unique",
+  },
+];
+
+const faqItems = [
+  {
+    q: "Sous quel délai recevons-nous une réponse ?",
+    a: "Nous répondons sous 24h ouvrées avec une première qualification et une proposition de créneau d'échange.",
+  },
+  {
+    q: "L'audit et le devis sont-ils gratuits ?",
+    a: "Oui. L'audit initial et le devis sont gratuits et sans engagement.",
+  },
+  {
+    q: "Intervenez-vous uniquement en Île-de-France ?",
+    a: "Nous intervenons sur site en Île-de-France et à distance partout en France.",
+  },
+  {
+    q: "Pouvez-vous reprendre une infrastructure déjà en place ?",
+    a: "Oui. Nous réalisons un diagnostic de l'existant puis un plan de transition progressif pour éviter les interruptions.",
+  },
+  {
+    q: "Proposez-vous des contrats mensuels ?",
+    a: "Oui. Nos offres de maintenance et d'administration cloud sont conçues pour un suivi mensuel récurrent.",
+  },
+  {
+    q: "Comment choisir entre dépannage ponctuel et contrat ?",
+    a: "Le dépannage résout l'urgence. Le contrat ajoute la prévention, la supervision et la continuité pour réduire les pannes futures.",
+  },
 ];
 
 export default function Contact() {
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<FormData>({
     name: "",
     email: "",
     phone: "",
@@ -88,15 +144,12 @@ export default function Contact() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [formStatus, setFormStatus] = useState("");
 
-  // ✅ ÉCOUTE L'ÉVÉNEMENT PLANSELECTED
   useEffect(() => {
-    // Récupère depuis localStorage au chargement
     const stored = localStorage.getItem("selectedPack");
     if (stored) {
       setFormData((f) => ({ ...f, selectedPack: stored }));
     }
 
-    // Écoute les nouveaux clics
     const onPlan = (e: Event) => {
       const pack = (e as CustomEvent).detail as string;
       setFormData((f) => ({ ...f, selectedPack: pack }));
@@ -112,17 +165,18 @@ export default function Contact() {
       setFormStatus("error");
       return;
     }
+
     setIsSubmitting(true);
     setFormStatus("");
 
     try {
-      const r = await fetch("/api/sendMessage", {
+      const response = await fetch("/api/sendMessage", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
       });
 
-      if (r.ok) {
+      if (response.ok) {
         setFormStatus("success");
         setFormData({
           name: "",
@@ -132,7 +186,7 @@ export default function Contact() {
           message: "",
           selectedPack: "",
           projectTimeline: "",
-          budget: ""
+          budget: "",
         });
         localStorage.removeItem("selectedPack");
       } else {
@@ -145,375 +199,303 @@ export default function Contact() {
     }
   };
 
-  const handleInputChange = (field: string, value: string) => {
-    setFormData({ ...formData, [field]: value });
-    if (formStatus) setFormStatus("");
+  const handleInputChange = (field: keyof FormData, value: string) => {
+    setFormData((prev) => ({ ...prev, [field]: value }));
+    if (formStatus) {
+      setFormStatus("");
+    }
   };
 
   return (
-      <section
-          id="contact"
-          className="py-20 bg-white relative overflow-hidden"
-      >
-        {/* Background decorative */}
-        <div className="absolute inset-0 bg-gradient-to-br from-blue-50 to-indigo-50" />
-        <div className="absolute top-20 left-10 w-72 h-72 bg-blue-200/30 rounded-full blur-3xl" />
-        <div className="absolute bottom-20 right-10 w-96 h-96 bg-indigo-200/30 rounded-full blur-3xl" />
+    <section id="contact" className="relative overflow-hidden bg-white py-20">
+      <div className="absolute inset-0 bg-gradient-to-br from-blue-50 to-indigo-50" />
+      <div className="absolute left-10 top-24 h-72 w-72 rounded-full bg-blue-200/30 blur-3xl" />
+      <div className="absolute bottom-10 right-10 h-80 w-80 rounded-full bg-indigo-200/30 blur-3xl" />
 
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
+      <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <motion.div
+          className="mb-16 text-center"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5 }}
+        >
+          <h2 className="text-3xl font-bold text-gray-900 sm:text-4xl">
+            Demandez votre
+            <span className="bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent"> audit gratuit</span>
+            {" "}à Paris et en Île-de-France
+          </h2>
+          <p className="mx-auto mt-5 max-w-3xl text-lg text-gray-600">
+            Transformons vos urgences IT en organisation fiable, sécurisée et prévisible pour votre entreprise.
+          </p>
+          <div className="mx-auto mt-7 h-1 w-24 rounded-full bg-gradient-to-r from-blue-600 to-indigo-600" />
+        </motion.div>
 
-          {/* Header */}
+        <div className="grid gap-10 lg:grid-cols-3">
           <motion.div
-              className="text-center mb-16"
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6 }}
+            className="space-y-7 lg:col-span-1"
+            initial={{ opacity: 0, x: -24 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.55 }}
           >
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">
-              Démarrons votre <span className="bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">projet ensemble</span>
-            </h2>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto mb-8">
-              Une question technique ? Un devis personnalisé ? Notre équipe d'experts vous accompagne à chaque étape
-            </p>
-            <div className="w-24 h-1 bg-gradient-to-r from-blue-600 to-indigo-600 mx-auto rounded-full" />
-          </motion.div>
-
-          <div className="grid lg:grid-cols-3 gap-12">
-
-            {/* Contact Methods */}
-            <motion.div
-                className="lg:col-span-1 space-y-8"
-                initial={{ opacity: 0, x: -50 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.7 }}
-            >
-              {/* Contact Cards */}
-              <div className="space-y-6">
-                {contactMethods.map((method, idx) => (
-                    <motion.a
-                        key={idx}
-                        href={method.link}
-                        className="group block p-6 bg-white rounded-2xl shadow-lg border border-gray-100 hover:border-blue-200 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1"
-                        initial={{ opacity: 0, y: 20 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
-                        transition={{ delay: idx * 0.1, duration: 0.5 }}
-                    >
-                      <div className="flex items-start gap-4">
-                        <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-indigo-500 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">
-                          <method.icon className="w-6 h-6 text-white" />
-                        </div>
-                        <div className="flex-1">
-                          <h3 className="font-semibold text-gray-900 mb-1">{method.label}</h3>
-                          <p className="text-blue-600 font-medium mb-2">{method.value}</p>
-                          <p className="text-sm text-gray-600 mb-1">{method.description}</p>
-                          <span className="inline-block px-3 py-1 bg-green-100 text-green-700 text-xs font-medium rounded-full">
+            <div className="space-y-4">
+              {contactMethods.map((method) => (
+                <a
+                  key={method.label}
+                  href={method.link}
+                  className="block rounded-2xl border border-slate-100 bg-white p-5 shadow-md transition hover:-translate-y-0.5 hover:border-blue-200 hover:shadow-lg"
+                >
+                  <div className="flex items-start gap-4">
+                    <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-br from-blue-500 to-indigo-600">
+                      <method.icon className="h-6 w-6 text-white" />
+                    </div>
+                    <div>
+                      <p className="font-semibold text-gray-900">{method.label}</p>
+                      <p className="font-medium text-blue-600">{method.value}</p>
+                      <p className="mt-1 text-sm text-gray-600">{method.description}</p>
+                      <span className="mt-2 inline-block rounded-full bg-emerald-100 px-3 py-1 text-xs font-semibold text-emerald-700">
                         {method.available}
                       </span>
-                        </div>
-                      </div>
-                    </motion.a>
-                ))}
-              </div>
-
-              {/* Trust Signals */}
-              <motion.div
-                  className="bg-gradient-to-r from-blue-500 to-indigo-500 rounded-2xl p-6 text-white"
-                  initial={{ opacity: 0, y: 30 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: 0.4, duration: 0.6 }}
-              >
-                <div className="flex items-center gap-3 mb-4">
-                  <ChatBubbleLeftRightIcon className="w-8 h-8" />
-                  <h3 className="text-xl font-bold">Pourquoi nous choisir ?</h3>
-                </div>
-                <div className="space-y-3">
-                  {[
-                    "💡 Conseils personnalisés et approche entrepreneuriale",
-                    "🛡️ Sécurité et audit intégrés dès le démarrage",
-                    "🤝 Suivi humain, équipe disponible et transparente",
-                    "🔎 Tarifs clairs et juste prix sans engagement caché",
-                    "⚡ Méthodes agiles, réponses rapides",
-                    "🌱 Partenaire engagé pour la croissance de votre activité",
-                    "✨ Qualité premium, même pour les premiers projets"
-                  ].map((benefit, idx) => (
-                      <p key={idx} className="text-blue-100 text-sm">{benefit}</p>
-                  ))}
-                </div>
-              </motion.div>
-            </motion.div>
-
-            {/* Contact Form */}
-            <motion.div
-                className="lg:col-span-2"
-                initial={{ opacity: 0, x: 50 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.7, delay: 0.2 }}
-            >
-              <div className="bg-white rounded-2xl shadow-xl border border-gray-100 p-8">
-                <h3 className="text-2xl font-bold text-gray-900 mb-2">Parlez-nous de votre projet</h3>
-                <p className="text-gray-600 mb-8">Remplissez ce formulaire et recevez une réponse personnalisée sous 24h</p>
-
-                <form onSubmit={handleSubmit} className="space-y-6">
-
-                  {/* Basic Info */}
-                  <div className="grid md:grid-cols-2 gap-6">
-                    <div className="space-y-2">
-                      <label className="text-gray-700 font-medium text-sm">Nom complet *</label>
-                      <input
-                          type="text"
-                          placeholder="Jean Dupont"
-                          value={formData.name}
-                          onChange={(e) => handleInputChange("name", e.target.value)}
-                          className="w-full border border-gray-300 rounded-lg px-4 py-3 text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
-                          required
-                      />
-                    </div>
-
-                    <div className="space-y-2">
-                      <label className="text-gray-700 font-medium text-sm">Email professionnel *</label>
-                      <input
-                          type="email"
-                          placeholder="jean@entreprise.com"
-                          value={formData.email}
-                          onChange={(e) => handleInputChange("email", e.target.value)}
-                          className="w-full border border-gray-300 rounded-lg px-4 py-3 text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
-                          required
-                      />
                     </div>
                   </div>
+                </a>
+              ))}
+            </div>
 
-                  <div className="grid md:grid-cols-2 gap-6">
-                    <div className="space-y-2">
-                      <label className="text-gray-700 font-medium text-sm">Téléphone *</label>
-                      <input
-                          type="tel"
-                          placeholder="01 23 45 67 89"
-                          value={formData.phone}
-                          onChange={(e) => handleInputChange("phone", e.target.value)}
-                          className="w-full border border-gray-300 rounded-lg px-4 py-3 text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
-                          required
-                      />
-                    </div>
-
-                    <div className="space-y-2">
-                      <label className="text-gray-700 font-medium text-sm">Entreprise</label>
-                      <input
-                          type="text"
-                          placeholder="Nom de votre entreprise"
-                          value={formData.company}
-                          onChange={(e) => handleInputChange("company", e.target.value)}
-                          className="w-full border border-gray-300 rounded-lg px-4 py-3 text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
-                      />
-                    </div>
+            <div className="rounded-2xl bg-gradient-to-r from-blue-600 to-indigo-600 p-6 text-white">
+              <h3 className="text-xl font-bold">Pourquoi nous confier votre IT ?</h3>
+              <div className="mt-4 space-y-3">
+                {trustItems.map((item) => (
+                  <div key={item.text} className="flex items-start gap-3 text-sm text-blue-100">
+                    <item.icon className="mt-0.5 h-5 w-5 flex-shrink-0 text-white" />
+                    <span>{item.text}</span>
                   </div>
-
-                  {/* Project Details - SERVICE SÉLECTIONNÉ AUTOMATIQUEMENT */}
-                  <div className="grid md:grid-cols-2 gap-6">
-                    <div className="space-y-2">
-                      <label className="text-gray-700 font-medium text-sm">Service souhaité</label>
-                      <select
-                          value={formData.selectedPack}
-                          onChange={(e) => handleInputChange("selectedPack", e.target.value)}
-                          className={`w-full border border-gray-300 rounded-lg px-4 py-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all ${
-                              formData.selectedPack ? 'bg-blue-50 border-blue-300' : ''
-                          }`}
-                      >
-                        <option value="">Sélectionnez un service</option>
-                        <optgroup label="☁️ Cloud">
-                          <option value="Cloud Start">Cloud Start</option>
-                          <option value="Cloud Pro">Cloud Pro</option>
-                          <option value="Cloud Enterprise">Cloud Enterprise</option>
-                        </optgroup>
-                        <optgroup label="🏢 Infrastructure">
-                          <option value="Réseau Start">Réseau Start</option>
-                          <option value="Réseau Pro">Réseau Pro</option>
-                          <option value="Infra Enterprise">Infra Enterprise</option>
-                        </optgroup>
-                        <optgroup label="💻 Développement">
-                          <option value="Site Vitrine">Site Vitrine</option>
-                          <option value="Application Mobile">Application Mobile</option>
-                          <option value="Application Web">Application Web</option>
-                          <option value="Solution Full-Stack">Solution Full-Stack</option>
-                        </optgroup>
-                        <optgroup label="🔧 Support">
-                          <option value="Pack 10h">Pack 10h</option>
-                          <option value="Pack 25h">Pack 25h</option>
-                          <option value="Pack 50h Premium">Pack 50h Premium</option>
-                          <option value="Support Sur Mesure">Support Sur Mesure</option>
-                        </optgroup>
-                        <optgroup label="🎯 Conseil">
-                          <option value="Audit Express">Audit Express</option>
-                          <option value="Audit Complet">Audit Complet</option>
-                          <option value="Mission Sur Mesure">Mission Sur Mesure</option>
-                        </optgroup>
-                      </select>
-                      {formData.selectedPack && (
-                          <p className="text-xs text-green-600 flex items-center gap-1 mt-1">
-                            <CheckCircleIcon className="w-4 h-4" />
-                            Pack sélectionné depuis la page tarifs
-                          </p>
-                      )}
-                    </div>
-
-                    <div className="space-y-2">
-                      <label className="text-gray-700 font-medium text-sm">Délai souhaité</label>
-                      <select
-                          value={formData.projectTimeline}
-                          onChange={(e) => handleInputChange("projectTimeline", e.target.value)}
-                          className="w-full border border-gray-300 rounded-lg px-4 py-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
-                      >
-                        <option value="">Quand souhaitez-vous commencer ?</option>
-                        <option value="Urgent (< 1 mois)">Urgent (moins d'1 mois)</option>
-                        <option value="Court terme (1-3 mois)">Court terme (1-3 mois)</option>
-                        <option value="Moyen terme (3-6 mois)">Moyen terme (3-6 mois)</option>
-                        <option value="Long terme (> 6 mois)">Long terme (plus de 6 mois)</option>
-                      </select>
-                    </div>
-                  </div>
-
-                  <div className="space-y-2">
-                    <label className="text-gray-700 font-medium text-sm">Budget approximatif</label>
-                    <select
-                        value={formData.budget}
-                        onChange={(e) => handleInputChange("budget", e.target.value)}
-                        className="w-full border border-gray-300 rounded-lg px-4 py-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
-                    >
-                      <option value="">Quel est votre budget approximatif ?</option>
-                      <option value="< 5k€">Moins de 5 000€</option>
-                      <option value="5k€ - 15k€">5 000€ - 15 000€</option>
-                      <option value="15k€ - 30k€">15 000€ - 30 000€</option>
-                      <option value="30k€ - 50k€">30 000€ - 50 000€</option>
-                      <option value="> 50k€">Plus de 50 000€</option>
-                    </select>
-                  </div>
-
-                  <div className="space-y-2">
-                    <label className="text-gray-700 font-medium text-sm">Décrivez votre projet *</label>
-                    <textarea
-                        rows={5}
-                        placeholder="Expliquez-nous votre contexte, vos besoins, vos contraintes techniques, objectifs..."
-                        value={formData.message}
-                        onChange={(e) => handleInputChange("message", e.target.value)}
-                        className="w-full border border-gray-300 rounded-lg px-4 py-3 text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all resize-none"
-                        required
-                    />
-                  </div>
-
-                  {/* Submit Button */}
-                  <motion.button
-                      type="submit"
-                      disabled={isSubmitting}
-                      className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 disabled:from-gray-400 disabled:to-gray-500 text-white font-semibold py-4 px-6 rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1 disabled:hover:translate-y-0 disabled:cursor-not-allowed"
-                      whileHover={!isSubmitting ? { scale: 1.02 } : {}}
-                      whileTap={!isSubmitting ? { scale: 0.98 } : {}}
-                  >
-                    {isSubmitting ? (
-                        <div className="flex items-center justify-center gap-3">
-                          <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                          Envoi en cours...
-                        </div>
-                    ) : (
-                        "Envoyer ma demande"
-                    )}
-                  </motion.button>
-
-                  <p className="text-sm text-gray-500 text-center">
-                    En soumettant ce formulaire, vous acceptez d'être recontacté par notre équipe.
-                    Nous respectons votre vie privée et ne partageons pas vos données.
-                  </p>
-                </form>
-
-                {/* Form Status */}
-                {formStatus && (
-                    <motion.div
-                        className={`mt-6 p-4 rounded-lg flex items-start gap-3 ${
-                            formStatus === "success"
-                                ? "bg-green-50 border border-green-200 text-green-800"
-                                : "bg-red-50 border border-red-200 text-red-800"
-                        }`}
-                        initial={{ opacity: 0, y: 10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.3 }}
-                    >
-                      {formStatus === "success" ? (
-                          <>
-                            <CheckCircleIcon className="w-6 h-6 text-green-600 flex-shrink-0 mt-0.5" />
-                            <div>
-                              <p className="font-semibold">Message envoyé avec succès !</p>
-                              <p className="text-sm mt-1">Merci pour votre confiance. Notre équipe vous recontacte sous 24h ouvrées avec une proposition personnalisée.</p>
-                            </div>
-                          </>
-                      ) : (
-                          <>
-                            <ExclamationCircleIcon className="w-6 h-6 text-red-600 flex-shrink-0 mt-0.5" />
-                            <div>
-                              <p className="font-semibold">Erreur lors de l'envoi</p>
-                              <p className="text-sm mt-1">Veuillez vérifier vos informations et réessayer. En cas de problème, appelez-nous directement.</p>
-                            </div>
-                          </>
-                      )}
-                    </motion.div>
-                )}
-              </div>
-            </motion.div>
-          </div>
-
-          {/* FAQ Section */}
-          <motion.div
-              className="mt-20"
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.5, duration: 0.6 }}
-          >
-            <div className="bg-white rounded-2xl shadow-lg border border-gray-100 p-8">
-              <h3 className="text-2xl font-bold text-gray-900 text-center mb-8">Questions fréquentes</h3>
-
-              <div className="grid md:grid-cols-2 gap-8">
-                {[
-                  {
-                    q: "Sous quel délai puis-je avoir une réponse ?",
-                    a: "Nous nous engageons à vous répondre sous 24h ouvrées avec une première analyse et un devis personnalisé."
-                  },
-                  {
-                    q: "Quel est votre délai de réponse ?",
-                    a: "Nous garantissons un premier retour sous 24h ouvrées, avec analyse personnalisée et premier échange pour bien comprendre votre besoin."
-                  },
-                  {
-                    q: "La consultation et le devis sont-ils vraiment gratuits ?",
-                    a: "Oui, 100% ! Notre audit préalable et notre proposition personnalisée sont sans engagement, quelle que soit la taille de votre projet."
-                  },
-                  {
-                    q: "Intervenez-vous partout en France ?",
-                    a: "Notre cœur d'intervention est en Île-de-France, mais nous accompagnons aussi des clients partout en France en télémaintenance ou déplacement sur demande spécifique."
-                  },
-                  {
-                    q: "Quels engagements de qualité proposez-vous ?",
-                    a: "Chaque prestation inclut : garantie sur livrable, support technique dédié, documentation complète et accompagnement post-projet pour assurer votre sérénité à long terme."
-                  },
-                  {
-                    q: "Est-il possible de cumuler plusieurs services ?",
-                    a: "Oui, nos solutions sont totalement modulaires : vous pouvez combiner conseil, création d'infrastructure, support à la demande ou développement, selon vos priorités."
-                  },
-                  {
-                    q: "Quels types d'organisations font appel à vous ?",
-                    a: "Nous travaillons avec des indépendants, PME, conciergeries, sociétés de services et groupes multi-sites, dans des secteurs variés (immobilier, services, tech, conseil...)."
-                  }
-                ].map((faq, idx) => (
-                    <div key={idx} className="space-y-3">
-                      <h4 className="font-semibold text-gray-900 text-lg">{faq.q}</h4>
-                      <p className="text-gray-600 leading-relaxed">{faq.a}</p>
-                    </div>
                 ))}
               </div>
             </div>
           </motion.div>
+
+          <motion.div
+            className="lg:col-span-2"
+            initial={{ opacity: 0, x: 24 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.55, delay: 0.1 }}
+          >
+            <div className="rounded-2xl border border-slate-100 bg-white p-6 shadow-xl sm:p-8">
+              <h3 className="text-2xl font-bold text-gray-900">Parlez-nous de votre besoin</h3>
+              <p className="mt-2 text-gray-600">Réponse personnalisée sous 24h ouvrées.</p>
+
+              <form onSubmit={handleSubmit} className="mt-8 space-y-6">
+                <div className="grid gap-5 md:grid-cols-2">
+                  <Field
+                    label="Nom complet *"
+                    type="text"
+                    value={formData.name}
+                    placeholder="Jean Dupont"
+                    onChange={(value) => handleInputChange("name", value)}
+                    required
+                  />
+                  <Field
+                    label="Email professionnel *"
+                    type="email"
+                    value={formData.email}
+                    placeholder="jean@entreprise.com"
+                    onChange={(value) => handleInputChange("email", value)}
+                    required
+                  />
+                </div>
+
+                <div className="grid gap-5 md:grid-cols-2">
+                  <Field
+                    label="Téléphone *"
+                    type="tel"
+                    value={formData.phone}
+                    placeholder="01 23 45 67 89"
+                    onChange={(value) => handleInputChange("phone", value)}
+                    required
+                  />
+                  <Field
+                    label="Entreprise"
+                    type="text"
+                    value={formData.company}
+                    placeholder="Nom de votre entreprise"
+                    onChange={(value) => handleInputChange("company", value)}
+                  />
+                </div>
+
+                <div className="grid gap-5 md:grid-cols-2">
+                  <div className="space-y-2">
+                    <label className="text-sm font-medium text-gray-700">Service souhaité</label>
+                    <select
+                      value={formData.selectedPack}
+                      onChange={(e) => handleInputChange("selectedPack", e.target.value)}
+                      className={`w-full rounded-lg border px-4 py-3 text-gray-900 transition focus:border-transparent focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+                        formData.selectedPack ? "border-blue-300 bg-blue-50" : "border-gray-300"
+                      }`}
+                    >
+                      <option value="">Sélectionnez un service</option>
+                      {planGroups.map((group) => (
+                        <optgroup key={group.label} label={group.label}>
+                          {group.options.map((option) => (
+                            <option key={option} value={option}>
+                              {option}
+                            </option>
+                          ))}
+                        </optgroup>
+                      ))}
+                    </select>
+                    {formData.selectedPack && (
+                      <p className="mt-1 flex items-center gap-1 text-xs text-emerald-700">
+                        <CheckCircleIcon className="h-4 w-4" />
+                        Offre préremplie depuis la section tarifs
+                      </p>
+                    )}
+                  </div>
+
+                  <div className="space-y-2">
+                    <label className="text-sm font-medium text-gray-700">Délai souhaité</label>
+                    <select
+                      value={formData.projectTimeline}
+                      onChange={(e) => handleInputChange("projectTimeline", e.target.value)}
+                      className="w-full rounded-lg border border-gray-300 px-4 py-3 text-gray-900 transition focus:border-transparent focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    >
+                      <option value="">Quand souhaitez-vous commencer ?</option>
+                      <option value="Urgent (moins d'1 mois)">Urgent (moins d'1 mois)</option>
+                      <option value="Court terme (1-3 mois)">Court terme (1-3 mois)</option>
+                      <option value="Moyen terme (3-6 mois)">Moyen terme (3-6 mois)</option>
+                      <option value="Long terme (plus de 6 mois)">Long terme (plus de 6 mois)</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div className="space-y-2">
+                  <label className="text-sm font-medium text-gray-700">Budget approximatif</label>
+                  <select
+                    value={formData.budget}
+                    onChange={(e) => handleInputChange("budget", e.target.value)}
+                    className="w-full rounded-lg border border-gray-300 px-4 py-3 text-gray-900 transition focus:border-transparent focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  >
+                    <option value="">Quel est votre budget approximatif ?</option>
+                    <option value="< 5 000€">Moins de 5 000€</option>
+                    <option value="5 000€ - 15 000€">5 000€ - 15 000€</option>
+                    <option value="15 000€ - 30 000€">15 000€ - 30 000€</option>
+                    <option value="30 000€ - 50 000€">30 000€ - 50 000€</option>
+                    <option value="> 50 000€">Plus de 50 000€</option>
+                  </select>
+                </div>
+
+                <div className="space-y-2">
+                  <label className="text-sm font-medium text-gray-700">Décrivez votre projet *</label>
+                  <textarea
+                    rows={5}
+                    placeholder="Contexte, problèmes rencontrés, objectifs, contraintes techniques..."
+                    value={formData.message}
+                    onChange={(e) => handleInputChange("message", e.target.value)}
+                    className="w-full resize-none rounded-lg border border-gray-300 px-4 py-3 text-gray-900 placeholder:text-gray-400 transition focus:border-transparent focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    required
+                  />
+                </div>
+
+                <motion.button
+                  type="submit"
+                  disabled={isSubmitting}
+                  className="w-full rounded-lg bg-gradient-to-r from-blue-600 to-indigo-600 px-6 py-4 font-semibold text-white shadow-lg transition hover:from-blue-700 hover:to-indigo-700 disabled:cursor-not-allowed disabled:from-gray-400 disabled:to-gray-500"
+                  whileHover={!isSubmitting ? { scale: 1.01 } : {}}
+                  whileTap={!isSubmitting ? { scale: 0.99 } : {}}
+                >
+                  {isSubmitting ? "Envoi en cours..." : "Envoyer ma demande"}
+                </motion.button>
+
+                <p className="text-center text-sm text-gray-500">
+                  En soumettant ce formulaire, vous acceptez d'être recontacté par notre équipe.
+                </p>
+              </form>
+
+              {formStatus && (
+                <motion.div
+                  className={`mt-6 flex items-start gap-3 rounded-lg border p-4 ${
+                    formStatus === "success"
+                      ? "border-emerald-200 bg-emerald-50 text-emerald-800"
+                      : "border-red-200 bg-red-50 text-red-800"
+                  }`}
+                  initial={{ opacity: 0, y: 8 }}
+                  animate={{ opacity: 1, y: 0 }}
+                >
+                  {formStatus === "success" ? (
+                    <>
+                      <CheckCircleIcon className="mt-0.5 h-6 w-6 flex-shrink-0" />
+                      <div>
+                        <p className="font-semibold">Message envoyé</p>
+                        <p className="mt-1 text-sm">Merci. Nous revenons vers vous sous 24h ouvrées.</p>
+                      </div>
+                    </>
+                  ) : (
+                    <>
+                      <ExclamationCircleIcon className="mt-0.5 h-6 w-6 flex-shrink-0" />
+                      <div>
+                        <p className="font-semibold">Erreur lors de l'envoi</p>
+                        <p className="mt-1 text-sm">Veuillez vérifier les informations saisies puis réessayer.</p>
+                      </div>
+                    </>
+                  )}
+                </motion.div>
+              )}
+            </div>
+          </motion.div>
         </div>
-      </section>
+
+        <motion.div
+          className="mt-20"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ delay: 0.2, duration: 0.5 }}
+        >
+          <div className="rounded-2xl border border-slate-100 bg-white p-8 shadow-lg sm:p-10">
+            <h3 className="text-center text-2xl font-bold text-gray-900">Questions fréquentes</h3>
+            <div className="mt-8 grid gap-7 md:grid-cols-2">
+              {faqItems.map((faq) => (
+                <div key={faq.q} className="rounded-xl border border-slate-100 bg-slate-50 p-5">
+                  <h4 className="text-lg font-semibold text-gray-900">{faq.q}</h4>
+                  <p className="mt-2 text-sm leading-relaxed text-gray-600">{faq.a}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </motion.div>
+      </div>
+    </section>
+  );
+}
+
+function Field({
+  label,
+  type,
+  value,
+  placeholder,
+  onChange,
+  required = false,
+}: {
+  label: string;
+  type: string;
+  value: string;
+  placeholder: string;
+  onChange: (value: string) => void;
+  required?: boolean;
+}) {
+  return (
+    <div className="space-y-2">
+      <label className="text-sm font-medium text-gray-700">{label}</label>
+      <input
+        type={type}
+        placeholder={placeholder}
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        className="w-full rounded-lg border border-gray-300 px-4 py-3 text-gray-900 placeholder:text-gray-400 transition focus:border-transparent focus:outline-none focus:ring-2 focus:ring-blue-500"
+        required={required}
+      />
+    </div>
   );
 }

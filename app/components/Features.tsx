@@ -1,483 +1,356 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import type { ComponentType, SVGProps } from "react";
 import { useKeenSlider } from "keen-slider/react";
 import "keen-slider/keen-slider.min.css";
-
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import {
-  LockClosedIcon,
-  WifiIcon,
-  WrenchScrewdriverIcon,
-  CodeBracketIcon,
+  ArrowLongRightIcon,
+  BoltIcon,
   CloudIcon,
-  ServerStackIcon,
-  CpuChipIcon,
-  DocumentMagnifyingGlassIcon,
-  DevicePhoneMobileIcon,
   ComputerDesktopIcon,
-  SquaresPlusIcon,
-  ChevronDownIcon,
-  SparklesIcon,
+  DocumentCheckIcon,
+  LifebuoyIcon,
+  LockClosedIcon,
   ShieldCheckIcon,
-  LightBulbIcon,
+  SignalIcon,
+  UserGroupIcon,
+  WrenchScrewdriverIcon,
 } from "@heroicons/react/24/outline";
 
-const container = {
-  hidden: {},
-  show: {
-    transition: { staggerChildren: 0.08, delayChildren: 0.2 },
-  },
+type Funnel = {
+  id: string;
+  title: string;
+  category: string;
+  need: string;
+  icon: ComponentType<SVGProps<SVGSVGElement>>;
+  steps: string[];
+  recurring: string;
 };
 
-const item = {
-  hidden: { opacity: 0, y: 30 },
-  show: { opacity: 1, y: 0, transition: { duration: 0.5, ease: "easeOut" } },
-};
-
-const services = [
-  // ===== 6 SERVICES PRIORITAIRES (affichés d'abord sur "Tous") =====
+const funnels: Funnel[] = [
   {
-    id: "service-developpement",
-    title: "Sites Vitrines Premium",
-    desc: "Sites web modernes, rapides et optimisés SEO. Responsive, performant et pensé pour convertir vos visiteurs en clients.",
-    icon: ComputerDesktopIcon,
-    category: "Développement",
-    highlight: "SEO optimisé",
-    badge: "Recommandé",
-    priority: true
-  },
-  {
-    id: "service-cloud",
-    title: "Solutions Cloud",
-    desc: "Migration, déploiement et gestion avancée d'infrastructure cloud : AWS, Azure, Google Cloud.",
-    icon: CloudIcon,
-    category: "Cloud",
-    highlight: "Multi-cloud",
-    badge: "Expertise",
-    priority: true
-  },
-  {
-    id: "service-reseaux",
-    title: "Réseaux Wi-Fi Pro",
-    desc: "Conception et déploiement de réseaux sans fil performants, sécurisés et évolutifs pour entreprises.",
-    icon: WifiIcon,
-    category: "Infrastructure",
-    highlight: "UniFi & Cisco",
-    priority: true
-  },
-  {
-    id: "service-securite",
-    title: "Audit de Sécurité",
-    desc: "Audits techniques approfondis, analyse de vulnérabilités et recommandations actionnables pour durcir votre SI.",
-    icon: DocumentMagnifyingGlassIcon,
-    category: "Sécurité",
-    badge: "Essentiel",
-    priority: true
-  },
-  {
-    id: "service-devops",
-    title: "DevOps & Automatisation",
-    desc: "CI/CD, Docker/K8s, Infrastructure as Code, pipelines et monitoring moderne.",
-    icon: CpuChipIcon,
-    category: "DevOps",
-    highlight: "Terraform & K8s",
-    priority: true
-  },
-  {
-    id: "service-support",
-    title: "Support Technique Premium",
-    desc: "Assistance réactive par tickets, hotline dédiée, maintenance préventive et SLA personnalisé adapté à vos besoins métiers.",
-    icon: WrenchScrewdriverIcon,
+    id: "depannage-maintenance",
+    title: "Dépannage -> Contrat de maintenance",
     category: "Support",
-    highlight: "SLA sur-mesure",
-    priority: true
-  },
-
-  // ===== SERVICES ADDITIONNELS =====
-  {
-    id: "service-developpement-web",
-    title: "Développement Web",
-    desc: "Applications web modernes, APIs sur mesure, intégrations connectées à tous vos outils métiers.",
-    icon: CodeBracketIcon,
-    category: "Développement",
-    highlight: "React, Node.js",
-    priority: false
+    need: "Le client a un problème urgent sur un poste ou un serveur.",
+    icon: WrenchScrewdriverIcon,
+    steps: [
+      "Intervention dépannage",
+      "Antivirus et sauvegarde",
+      "Plan de prévention",
+      "Maintenance mensuelle",
+    ],
+    recurring: "Contrat support récurrent",
   },
   {
-    id: "service-developpement-mobile",
-    title: "Applications Mobile",
-    desc: "Solutions cross-platform conçues pour votre métier.",
-    icon: DevicePhoneMobileIcon,
-    category: "Développement",
-    highlight: "Cross-platform",
-    priority: false
-  },
-  {
-    id: "service-developpement-desktop",
-    title: "Logiciels Desktop",
-    desc: "Applications Windows, macOS et Linux performantes pour automatiser vos processus.",
-    icon: SquaresPlusIcon,
-    category: "Développement",
-    highlight: "Multi-plateforme",
-    priority: false
-  },
-  {
-    id: "service-infrastructure",
-    title: "Administration Système",
-    desc: "Gestion de serveurs, Active Directory, sauvegardes, monitoring et performance.",
-    icon: ServerStackIcon,
-    category: "Infrastructure",
-    highlight: "Linux & Windows",
-    priority: false
-  },
-  {
-    id: "service-securite-protection",
-    title: "Protection Avancée",
-    desc: "Déploiement de firewall nouvelle génération, VPN sécurisés, monitoring 24/7 et réponse aux incidents pour protéger vos données critiques.",
+    id: "audit-gestion",
+    title: "Audit gratuit -> Gestion IT complète",
+    category: "Sécurité",
+    need: "L'entreprise veut identifier les risques sans engagement.",
     icon: ShieldCheckIcon,
+    steps: [
+      "Audit informatique offert",
+      "Rapport priorisé",
+      "Corrections sécurité / réseau / backup",
+      "Pilotage IT mensuel",
+    ],
+    recurring: "Gestion informatique externalisée",
+  },
+  {
+    id: "site-services-it",
+    title: "Site web -> Services IT",
+    category: "Développement",
+    need: "Le client veut un site qui génère des demandes.",
+    icon: ComputerDesktopIcon,
+    steps: [
+      "Création du site",
+      "Hébergement et maintenance",
+      "Email professionnel",
+      "Support informatique",
+    ],
+    recurring: "Maintenance web + support",
+  },
+  {
+    id: "securite-monitoring",
+    title: "Diagnostic sécurité -> Monitoring",
     category: "Sécurité",
-    highlight: "Monitoring 24/7",
-    priority: false
+    need: "Le client craint les cyberattaques et pertes de données.",
+    icon: LockClosedIcon,
+    steps: [
+      "Diagnostic sécurité",
+      "Correction des failles",
+      "Firewall et antivirus",
+      "Supervision continue",
+    ],
+    recurring: "Monitoring sécurité mensuel",
   },
   {
-    id: "service-support-surmesure",
-    title: "Support Sur Mesure",
-    desc: "Accompagnement IT personnalisé : astreinte weekend, support dédié 24/7, intervention on-site, contrat flexible selon vos contraintes.",
-    icon: WrenchScrewdriverIcon,
+    id: "cloud-gestion",
+    title: "Migration cloud -> Administration cloud",
+    category: "Cloud",
+    need: "L'équipe veut accéder aux fichiers partout en sécurité.",
+    icon: CloudIcon,
+    steps: [
+      "Migration vers le cloud",
+      "Sauvegardes et accès",
+      "Gestion utilisateurs",
+      "Administration continue",
+    ],
+    recurring: "Gestion cloud mensuelle",
+  },
+  {
+    id: "reseau-maintenance",
+    title: "Installation réseau -> Maintenance infra",
+    category: "Infrastructure",
+    need: "L'entreprise déménage ou restructure ses locaux.",
+    icon: SignalIcon,
+    steps: [
+      "Installation réseau et Wi-Fi",
+      "Configuration NAS / serveurs",
+      "Monitoring réseau",
+      "Maintenance infrastructure",
+    ],
+    recurring: "Contrat infrastructure",
+  },
+  {
+    id: "backup-pca",
+    title: "Sauvegarde -> Plan de continuité",
+    category: "Sécurité",
+    need: "Le client veut éviter toute interruption d'activité.",
+    icon: DocumentCheckIcon,
+    steps: [
+      "Mise en place sauvegardes",
+      "Tests de restauration",
+      "Plan de reprise d'activité",
+      "Gestion mensuelle des sauvegardes",
+    ],
+    recurring: "Continuité d'activité pilotée",
+  },
+  {
+    id: "materiel-parc",
+    title: "Achat matériel -> Gestion de parc",
+    category: "Infrastructure",
+    need: "Le client renouvelle ses ordinateurs et veut standardiser.",
+    icon: BoltIcon,
+    steps: [
+      "Installation et configuration",
+      "Gestion des utilisateurs",
+      "Standardisation des postes",
+      "Suivi du parc",
+    ],
+    recurring: "Contrat de gestion de parc IT",
+  },
+  {
+    id: "formation-support",
+    title: "Formation équipes -> Support utilisateurs",
     category: "Support",
-    highlight: "100% flexible",
-    priority: false
+    need: "L'entreprise veut réduire les erreurs et gagner du temps.",
+    icon: UserGroupIcon,
+    steps: [
+      "Formation outils numériques",
+      "Optimisation des postes",
+      "Support utilisateurs",
+      "Assistance mensuelle",
+    ],
+    recurring: "Support IT récurrent",
   },
   {
-    id: "service-conseil",
-    title: "Audit & Conseil",
-    desc: "Audits techniques globaux, sécurité, roadmap IT et recommandations précises – votre feuille de route numérique.",
-    icon: DocumentMagnifyingGlassIcon,
-    category: "Conseil",
-    highlight: "100% personnalisé",
-    priority: false
-  },
-  {
-    id: "service-conseil-mission",
-    title: "Missions Sur Mesure",
-    desc: "Accompagnement personnalisé : architecture, pilotage projet, solutions adaptées à vos défis spécifiques.",
-    icon: LightBulbIcon,
-    category: "Conseil",
-    highlight: "Sur-mesure",
-    priority: false
+    id: "urgence-externalisation",
+    title: "Urgence -> IT externalisé",
+    category: "Support",
+    need: "Une panne critique bloque la production.",
+    icon: LifebuoyIcon,
+    steps: [
+      "Intervention rapide",
+      "Diagnostic global",
+      "Plan d'amélioration",
+      "Externalisation du service IT",
+    ],
+    recurring: "Direction IT déléguée",
   },
 ];
 
 const categories = [
   "Tous",
-  "Développement",
+  "Support",
+  "Sécurité",
   "Cloud",
   "Infrastructure",
-  "Sécurité",
-  "DevOps",
-  "Support",
-  "Conseil"
+  "Développement",
 ];
 
 export default function Features() {
   const [isMobile, setIsMobile] = useState(false);
   const [activeCategory, setActiveCategory] = useState("Tous");
-  const [showAll, setShowAll] = useState(false);
 
-  // Configuration du slider mobile
   const [sliderRef] = useKeenSlider<HTMLDivElement>({
-    slides: { perView: 1.1, spacing: 20 },
+    slides: { perView: 1.05, spacing: 14 },
     loop: false,
     mode: "snap",
     rubberband: false,
     breakpoints: {
       "(min-width: 640px)": {
-        slides: { perView: 2.1, spacing: 20 },
+        slides: { perView: 1.8, spacing: 18 },
       },
     },
   });
 
   useEffect(() => {
-    const handleResize = () => {
-      setIsMobile(window.innerWidth < 1024);
-    };
+    const handleResize = () => setIsMobile(window.innerWidth < 1024);
     handleResize();
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  // Écouteur d'événement pour les clics du footer
   useEffect(() => {
     const handleCategoryFromFooter = (e: Event) => {
       const category = (e as CustomEvent).detail as string;
-      setActiveCategory(category);
-      setShowAll(false);
+      if (categories.includes(category)) {
+        setActiveCategory(category);
+      } else {
+        setActiveCategory("Tous");
+      }
     };
 
-    window.addEventListener('serviceCategorySelected', handleCategoryFromFooter);
-    return () => window.removeEventListener('serviceCategorySelected', handleCategoryFromFooter);
+    window.addEventListener("serviceCategorySelected", handleCategoryFromFooter);
+    return () => window.removeEventListener("serviceCategorySelected", handleCategoryFromFooter);
   }, []);
 
-  const filteredServices = activeCategory === "Tous"
-      ? services
-      : services.filter(service => service.category === activeCategory);
-
-  const displayedServices = isMobile
-      ? filteredServices
-      : (activeCategory === "Tous"
-          ? (showAll ? filteredServices : filteredServices.filter(s => s.priority))
-          : filteredServices);
-
-  const hasMoreServices = !isMobile && activeCategory === "Tous" && filteredServices.length > displayedServices.length;
-
-  const handleCategoryChange = (category: string) => {
-    setActiveCategory(category);
-    setShowAll(false);
-
-    setTimeout(() => {
-      const servicesGrid = document.getElementById('services-grid');
-      if (servicesGrid) {
-        servicesGrid.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      }
-    }, 100);
-  };
+  const filteredFunnels =
+    activeCategory === "Tous"
+      ? funnels
+      : funnels.filter((funnel) => funnel.category === activeCategory);
 
   return (
-      <section
-          id="services"
-          className="py-20 bg-white relative overflow-hidden"
-      >
-        {/* Background decorative */}
-        <div className="absolute inset-0 bg-gradient-to-br from-blue-50/50 to-indigo-50/50" />
-        <div className="absolute top-20 left-10 w-72 h-72 bg-blue-200/20 rounded-full blur-3xl" />
-        <div className="absolute bottom-20 right-10 w-96 h-96 bg-indigo-200/20 rounded-full blur-3xl" />
+    <section id="services" className="relative overflow-hidden bg-white py-20">
+      <div className="absolute inset-0 bg-gradient-to-br from-blue-50/60 to-indigo-50/60" />
+      <div className="absolute left-8 top-20 h-72 w-72 rounded-full bg-blue-200/30 blur-3xl" />
+      <div className="absolute bottom-20 right-8 h-80 w-80 rounded-full bg-indigo-200/30 blur-3xl" />
 
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
+      <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5 }}
+          className="mx-auto mb-14 max-w-3xl text-center"
+        >
+          <h2 className="text-3xl font-bold text-gray-900 sm:text-4xl">
+            Funnels de conversion orientés
+            <span className="bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent"> résultat</span>
+          </h2>
+          <p className="mt-5 text-lg text-gray-600">
+            Chaque parcours part d&apos;un problème concret et mène vers un service récurrent.
+            Dépannage informatique Paris, maintenance PME et support entreprise en Île-de-France.
+          </p>
+        </motion.div>
 
-          {/* Header */}
-          <motion.div
-              className="text-center mb-16"
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6 }}
-          >
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">
-              Nos <span className="bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">Services IT</span>
-            </h2>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              Solutions haut de gamme pour accélérer votre transformation digitale et sécuriser votre SI.
-            </p>
-            <div className="w-24 h-1 bg-gradient-to-r from-blue-600 to-indigo-600 mx-auto mt-6 rounded-full" />
-          </motion.div>
+        <motion.div
+          className="mb-10"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ delay: 0.1, duration: 0.5 }}
+        >
+          <div className="-mx-4 flex gap-3 overflow-x-auto px-4 pb-1 lg:mx-0 lg:justify-center lg:overflow-visible lg:px-0">
+            {categories.map((category) => (
+              <button
+                key={category}
+                onClick={() => setActiveCategory(category)}
+                className={`whitespace-nowrap rounded-full px-5 py-2.5 text-sm font-semibold transition ${
+                  activeCategory === category
+                    ? "bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow"
+                    : "border border-slate-200 bg-white text-slate-700 hover:border-blue-300 hover:text-blue-600"
+                }`}
+              >
+                {category}
+              </button>
+            ))}
+          </div>
+        </motion.div>
 
-          {/* Category Filter - SCROLLABLE HORIZONTAL SUR MOBILE */}
-          <motion.div
-              className={`mb-12 ${isMobile ? '-mx-4 px-4' : ''}`}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.2, duration: 0.6 }}
-          >
-            <div className={`${isMobile ? 'overflow-x-auto scrollbar-hide' : 'flex flex-wrap justify-center'} flex gap-3`}>
-              <div className={`flex gap-3 ${isMobile ? 'w-max' : ''}`}>
-                {categories.map((category) => (
-                    <motion.button
-                        key={category}
-                        onClick={() => handleCategoryChange(category)}
-                        whileHover={{ scale: 1.05 }}
-                        whileTap={{ scale: 0.95 }}
-                        className={`relative px-6 py-3 rounded-full font-medium transition-all duration-300 whitespace-nowrap ${
-                            activeCategory === category
-                                ? 'text-white shadow-lg shadow-blue-200'
-                                : 'bg-white/80 backdrop-blur-sm text-gray-600 hover:text-blue-600 border border-gray-200 hover:border-blue-300 hover:shadow-md'
-                        }`}
-                    >
-                      {activeCategory === category && (
-                          <>
-                            <motion.div
-                                layoutId="activeServiceTab"
-                                className="absolute inset-0 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-full"
-                                transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
-                            />
-                            <div className="absolute inset-0 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-full blur opacity-40" />
-                          </>
-                      )}
-                      <span className="relative z-10">{category}</span>
-                    </motion.button>
-                ))}
+        {isMobile ? (
+          <div ref={sliderRef} className="keen-slider">
+            {filteredFunnels.map((funnel) => (
+              <div key={funnel.id} className="keen-slider__slide">
+                <FunnelCard funnel={funnel} />
               </div>
-            </div>
-          </motion.div>
+            ))}
+          </div>
+        ) : (
+          <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+            {filteredFunnels.map((funnel, idx) => (
+              <motion.div
+                key={funnel.id}
+                initial={{ opacity: 0, y: 24 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.45, delay: idx * 0.05 }}
+              >
+                <FunnelCard funnel={funnel} />
+              </motion.div>
+            ))}
+          </div>
+        )}
 
-          {/* Services Grid/Slider */}
-          {isMobile ? (
-              // ✅ SLIDER MOBILE : Glissement tactile uniquement, sans flèches
-              <div className="relative" key={activeCategory}>
-                <div ref={sliderRef} className="keen-slider">
-                  {filteredServices.map((service, idx) => (
-                      <div key={`${service.id}-${idx}`} className="keen-slider__slide">
-                        <ServiceCard service={service} />
-                      </div>
-                  ))}
-                </div>
-
-                {/* ✅ INDICATEUR DE SLIDE (points) - OPTIONNEL */}
-                <div className="flex justify-center gap-2 mt-6">
-                  {filteredServices.map((_, idx) => (
-                      <div
-                          key={idx}
-                          className="w-2 h-2 rounded-full bg-gray-300"
-                      />
-                  ))}
-                </div>
-              </div>
-          ) : (
-              <>
-                <motion.div
-                    id="services-grid"
-                    className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 scroll-mt-32"
-                    variants={container}
-                    initial="hidden"
-                    whileInView="show"
-                    viewport={{ once: true }}
-                    key={`${activeCategory}-${showAll}`}
-                >
-                  <AnimatePresence mode="popLayout">
-                    {displayedServices.map((service, idx) => (
-                        <motion.div
-                            key={`${service.title}-${idx}`}
-                            variants={item}
-                            layout
-                            id={service.id}
-                            className="scroll-mt-24"
-                        >
-                          <ServiceCard service={service} />
-                        </motion.div>
-                    ))}
-                  </AnimatePresence>
-                </motion.div>
-
-                {hasMoreServices && (
-                    <motion.div
-                        className="flex justify-center mt-12"
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.4 }}
-                    >
-                      <button
-                          onClick={() => setShowAll(!showAll)}
-                          className="group relative inline-flex items-center gap-3 bg-white hover:bg-gradient-to-r hover:from-blue-50 hover:to-indigo-50 text-gray-700 hover:text-blue-600 px-8 py-4 rounded-xl font-semibold transition-all duration-300 border-2 border-gray-200 hover:border-blue-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1"
-                      >
-                        <SparklesIcon className="w-5 h-5 text-blue-500" />
-                        <span>{showAll ? 'Voir moins de services' : 'Découvrir tous nos services'}</span>
-                        <ChevronDownIcon className={`w-5 h-5 transform transition-transform ${showAll ? 'rotate-180' : 'group-hover:translate-y-1'}`} />
-                      </button>
-                    </motion.div>
-                )}
-              </>
-          )}
-
-          {/* CTA Section */}
-          <motion.div
-              className="text-center mt-20 p-10 bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-600 rounded-3xl text-white shadow-2xl relative overflow-hidden"
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.4, duration: 0.6 }}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ delay: 0.2, duration: 0.5 }}
+          className="mt-16 rounded-3xl bg-gradient-to-r from-blue-600 to-indigo-600 p-8 text-white md:p-10"
+        >
+          <h3 className="text-2xl font-bold">Objectif: transformer chaque intervention en revenu récurrent</h3>
+          <p className="mt-3 max-w-3xl text-blue-100">
+            Positionnement commercial conseillé: problème ponctuel, solution immédiate, amélioration, prévention, puis contrat mensuel.
+          </p>
+          <a
+            href="#contact"
+            className="mt-6 inline-flex items-center gap-2 rounded-xl bg-white px-6 py-3 font-semibold text-blue-600 transition hover:bg-blue-50"
           >
-            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -skew-x-12 animate-shine" />
-
-            <h3 className="text-3xl font-bold mb-4 relative z-10">Besoin d'une solution personnalisée&nbsp;?</h3>
-            <p className="text-blue-100 mb-8 text-lg max-w-2xl mx-auto relative z-10">
-              Notre équipe analyse vos besoins et conçoit une solution vraiment sur-mesure pour votre SI.
-            </p>
-            <a
-                href="#contact"
-                className="relative z-10 inline-flex items-center bg-white text-blue-600 hover:bg-gray-50 px-10 py-5 rounded-xl font-bold text-lg transition-all duration-300 hover:shadow-2xl transform hover:-translate-y-1 hover:scale-105"
-            >
-              Discuter de mon projet
-              <svg className="w-6 h-6 ml-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-              </svg>
-            </a>
-          </motion.div>
-        </div>
-
-        <style jsx>{`
-          @keyframes shine {
-            from {
-              transform: translateX(-100%) skewX(-12deg);
-            }
-            to {
-              transform: translateX(200%) skewX(-12deg);
-            }
-          }
-          .animate-shine {
-            animation: shine 3s infinite;
-          }
-          .scrollbar-hide::-webkit-scrollbar {
-            display: none;
-          }
-          .scrollbar-hide {
-            -ms-overflow-style: none;
-            scrollbar-width: none;
-          }
-        `}</style>
-      </section>
+            Demander un diagnostic gratuit
+            <ArrowLongRightIcon className="h-5 w-5" />
+          </a>
+        </motion.div>
+      </div>
+    </section>
   );
 }
 
-// Service Card Component
-function ServiceCard({ service }: { service: typeof services[0] }) {
-  const { title, desc, icon: Icon, category, highlight, badge } = service;
+function FunnelCard({ funnel }: { funnel: Funnel }) {
+  const Icon = funnel.icon;
 
   return (
-      <div className="group relative bg-white rounded-3xl p-8 shadow-lg border-2 border-gray-100 hover:shadow-2xl hover:border-blue-200 transition-all duration-500 hover:-translate-y-3 h-full flex flex-col overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-blue-50/0 to-indigo-50/0 group-hover:from-blue-50/50 group-hover:to-indigo-50/30 transition-all duration-500 rounded-3xl" />
-
-        {badge && (
-            <div className="relative z-10 mb-4">
-            <span className="inline-flex items-center gap-1.5 text-xs font-bold text-indigo-600 bg-indigo-50 px-3 py-1.5 rounded-full border border-indigo-100">
-              <SparklesIcon className="w-3.5 h-3.5" />
-              {badge}
-            </span>
-            </div>
-        )}
-
-        <div className="relative z-10 flex items-center justify-between mb-6">
-          <span className="text-xs font-semibold text-blue-600 bg-blue-50 px-3 py-1.5 rounded-full border border-blue-100">
-            {category}
-          </span>
-          <span className="text-xs font-semibold text-gray-600 bg-gray-50 px-3 py-1.5 rounded-full border border-gray-200">
-            {highlight}
-          </span>
+    <article className="h-full rounded-3xl border border-slate-200 bg-white p-6 shadow-lg transition hover:-translate-y-1 hover:border-blue-200 hover:shadow-xl sm:p-7">
+      <div className="mb-5 flex items-start justify-between gap-3">
+        <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-blue-500 to-indigo-600">
+          <Icon className="h-8 w-8 text-white" />
         </div>
-
-        <div className="relative z-10 w-16 h-16 mb-6">
-          <div className="absolute inset-0 bg-gradient-to-br from-blue-400 to-indigo-500 rounded-2xl blur-xl opacity-40 group-hover:opacity-70 group-hover:scale-125 transition-all duration-500" />
-          <div className="relative w-16 h-16 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-2xl flex items-center justify-center group-hover:scale-110 group-hover:rotate-3 transition-all duration-500 shadow-xl">
-            <Icon className="w-8 h-8 text-white" strokeWidth={2} />
-          </div>
-        </div>
-
-        <div className="relative z-10 flex-grow">
-          <h3 className="text-xl font-bold text-gray-900 mb-4 group-hover:bg-gradient-to-r group-hover:from-blue-600 group-hover:to-indigo-600 group-hover:bg-clip-text group-hover:text-transparent transition-all duration-300">
-            {title}
-          </h3>
-          <p className="text-gray-600 leading-relaxed text-[15px]">
-            {desc}
-          </p>
-        </div>
-
-        <div className="relative z-10 mt-8 flex justify-end">
-          <div className="w-11 h-11 bg-gradient-to-br from-gray-50 to-gray-100 group-hover:from-blue-500 group-hover:to-indigo-600 rounded-xl flex items-center justify-center transition-all duration-300 shadow-md group-hover:shadow-xl">
-            <svg className="w-5 h-5 text-gray-400 group-hover:text-white transform group-hover:translate-x-1 transition-all" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2.5}>
-              <path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
-            </svg>
-          </div>
-        </div>
+        <span className="rounded-full border border-blue-100 bg-blue-50 px-3 py-1 text-xs font-semibold text-blue-700">
+          {funnel.category}
+        </span>
       </div>
+
+      <h3 className="text-lg font-bold text-gray-900">{funnel.title}</h3>
+      <p className="mt-2 text-sm leading-relaxed text-gray-600">{funnel.need}</p>
+
+      <div className="mt-5 space-y-2.5">
+        {funnel.steps.map((step, index) => (
+          <div key={step} className="flex items-start gap-2.5 text-sm text-gray-700">
+            <span className="mt-0.5 inline-flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full bg-emerald-100 text-[11px] font-bold text-emerald-700">
+              {index + 1}
+            </span>
+            <span>{step}</span>
+          </div>
+        ))}
+      </div>
+
+      <div className="mt-6 flex items-center justify-between rounded-2xl bg-slate-50 px-4 py-3">
+        <span className="text-xs font-semibold text-slate-500">Offre récurrente</span>
+        <span className="text-sm font-semibold text-blue-700">{funnel.recurring}</span>
+      </div>
+    </article>
   );
 }
