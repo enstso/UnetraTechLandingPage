@@ -5,11 +5,13 @@ import type { ComponentType, SVGProps } from "react";
 import { useKeenSlider } from "keen-slider/react";
 import "keen-slider/keen-slider.min.css";
 import { motion } from "framer-motion";
+import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/solid";
 import {
   ArrowLongRightIcon,
   BoltIcon,
   CloudIcon,
   ComputerDesktopIcon,
+  CpuChipIcon,
   DocumentCheckIcon,
   LifebuoyIcon,
   LockClosedIcon,
@@ -170,6 +172,20 @@ const funnels: Funnel[] = [
     ],
     recurring: "Direction IT déléguée",
   },
+  {
+    id: "ia-automation-recurring",
+    title: "Besoin IA -> Optimisation continue",
+    category: "IA",
+    need: "L'entreprise veut automatiser les tâches répétitives et gagner du temps.",
+    icon: CpuChipIcon,
+    steps: [
+      "Audit des processus à automatiser",
+      "Déploiement d'un assistant IA métier",
+      "Automatisation FAQ, emails et documents",
+      "Optimisation IA mensuelle",
+    ],
+    recurring: "Abonnement IA & automatisation",
+  },
 ];
 
 const categories = [
@@ -177,28 +193,32 @@ const categories = [
   "Support",
   "Sécurité",
   "Cloud",
+  "IA",
   "Infrastructure",
   "Développement",
 ];
 
 export default function Features() {
-  const [isMobile, setIsMobile] = useState(false);
+  const [isCarousel, setIsCarousel] = useState(false);
   const [activeCategory, setActiveCategory] = useState("Tous");
+  const [currentSlide, setCurrentSlide] = useState(0);
+  const [isSliderReady, setIsSliderReady] = useState(false);
 
-  const [sliderRef] = useKeenSlider<HTMLDivElement>({
-    slides: { perView: 1.05, spacing: 14 },
+  const [sliderRef, sliderInstanceRef] = useKeenSlider<HTMLDivElement>({
+    slides: { perView: 1, spacing: 12 },
     loop: false,
     mode: "snap",
     rubberband: false,
-    breakpoints: {
-      "(min-width: 640px)": {
-        slides: { perView: 1.8, spacing: 18 },
-      },
+    created() {
+      setIsSliderReady(true);
+    },
+    slideChanged(slider) {
+      setCurrentSlide(slider.track.details.rel);
     },
   });
 
   useEffect(() => {
-    const handleResize = () => setIsMobile(window.innerWidth < 1024);
+    const handleResize = () => setIsCarousel(window.innerWidth < 1280);
     handleResize();
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
@@ -212,6 +232,8 @@ export default function Features() {
       } else {
         setActiveCategory("Tous");
       }
+      setCurrentSlide(0);
+      setIsSliderReady(false);
     };
 
     window.addEventListener("serviceCategorySelected", handleCategoryFromFooter);
@@ -222,6 +244,8 @@ export default function Features() {
     activeCategory === "Tous"
       ? funnels
       : funnels.filter((funnel) => funnel.category === activeCategory);
+  const maxSlideIndex = Math.max(0, filteredFunnels.length - 1);
+  const sliderKey = `${activeCategory}-${filteredFunnels.length}`;
 
   return (
     <section id="services" className="relative overflow-hidden bg-white py-20">
@@ -258,7 +282,11 @@ export default function Features() {
             {categories.map((category) => (
               <button
                 key={category}
-                onClick={() => setActiveCategory(category)}
+                onClick={() => {
+                  setActiveCategory(category);
+                  setCurrentSlide(0);
+                  setIsSliderReady(false);
+                }}
                 className={`whitespace-nowrap rounded-full px-5 py-2.5 text-sm font-semibold transition ${
                   activeCategory === category
                     ? "bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow"
@@ -271,13 +299,49 @@ export default function Features() {
           </div>
         </motion.div>
 
-        {isMobile ? (
-          <div ref={sliderRef} className="keen-slider">
-            {filteredFunnels.map((funnel) => (
-              <div key={funnel.id} className="keen-slider__slide">
-                <FunnelCard funnel={funnel} />
-              </div>
-            ))}
+        {isCarousel ? (
+          <div className="relative">
+            <div key={sliderKey} ref={sliderRef} className="keen-slider single-slide-carousel">
+              {filteredFunnels.map((funnel) => (
+                <div key={funnel.id} className="keen-slider__slide single-slide-item">
+                  <FunnelCard funnel={funnel} />
+                </div>
+              ))}
+            </div>
+
+            {isSliderReady && filteredFunnels.length > 1 && (
+              <>
+                <button
+                  onClick={() => sliderInstanceRef.current?.prev()}
+                  disabled={currentSlide <= 0}
+                  className="absolute left-2 top-1/2 z-10 -translate-y-1/2 rounded-full border border-slate-200 bg-white/95 p-2 text-slate-700 shadow transition hover:border-blue-300 hover:text-blue-600 disabled:cursor-not-allowed disabled:opacity-40"
+                  aria-label="Slide précédent"
+                >
+                  <ChevronLeftIcon className="h-5 w-5" />
+                </button>
+                <button
+                  onClick={() => sliderInstanceRef.current?.next()}
+                  disabled={currentSlide >= maxSlideIndex}
+                  className="absolute right-2 top-1/2 z-10 -translate-y-1/2 rounded-full border border-slate-200 bg-white/95 p-2 text-slate-700 shadow transition hover:border-blue-300 hover:text-blue-600 disabled:cursor-not-allowed disabled:opacity-40"
+                  aria-label="Slide suivant"
+                >
+                  <ChevronRightIcon className="h-5 w-5" />
+                </button>
+
+                <div className="mt-5 flex flex-wrap justify-center gap-2">
+                  {filteredFunnels.map((funnel, idx) => (
+                    <button
+                      key={`dot-${funnel.id}`}
+                      onClick={() => sliderInstanceRef.current?.moveToIdx(idx)}
+                      className={`h-2.5 w-2.5 rounded-full transition ${
+                        currentSlide === idx ? "w-6 bg-blue-600" : "bg-slate-300 hover:bg-slate-400"
+                      }`}
+                      aria-label={`Aller au slide ${idx + 1}`}
+                    />
+                  ))}
+                </div>
+              </>
+            )}
           </div>
         ) : (
           <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
@@ -315,6 +379,16 @@ export default function Features() {
           </a>
         </motion.div>
       </div>
+
+      <style jsx>{`
+        .single-slide-carousel {
+          overflow: hidden;
+        }
+        .single-slide-carousel :global(.single-slide-item) {
+          min-width: 100% !important;
+          max-width: 100% !important;
+        }
+      `}</style>
     </section>
   );
 }

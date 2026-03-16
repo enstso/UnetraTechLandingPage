@@ -32,6 +32,10 @@ const planGroups = [
     options: ["Dépannage Express", "Réseau Pro PME"],
   },
   {
+    label: "Support",
+    options: ["Support Ponctuel", "Pack Support 10h", "Pack Support 25h"],
+  },
+  {
     label: "Sécurité",
     options: ["Audit Flash Sécurité", "Protection Continue"],
   },
@@ -42,6 +46,10 @@ const planGroups = [
   {
     label: "Cloud",
     options: ["Migration Cloud Start", "Administration Cloud"],
+  },
+  {
+    label: "IA",
+    options: ["Pack IA Business"],
   },
   {
     label: "Web",
@@ -61,8 +69,8 @@ const contactMethods = [
   {
     icon: EnvelopeIcon,
     label: "Email",
-    value: "contact@unetratech.com",
-    link: "mailto:contact@unetratech.com",
+    value: "contact-unetratech@gmail.com",
+    link: "mailto:contact-unetratech@gmail.com",
     description: "Réponse sous 24h ouvrées",
     available: "7j/7",
   },
