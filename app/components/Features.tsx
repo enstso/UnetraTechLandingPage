@@ -397,7 +397,7 @@ function FunnelCard({ funnel }: { funnel: Funnel }) {
   const Icon = funnel.icon;
 
   return (
-    <article className="h-full rounded-3xl border border-slate-200 bg-white p-6 shadow-lg transition hover:-translate-y-1 hover:border-blue-200 hover:shadow-xl sm:p-7">
+    <article className="flex h-full flex-col rounded-3xl border border-slate-200 bg-white p-6 shadow-lg transition hover:-translate-y-1 hover:border-blue-200 hover:shadow-xl sm:p-7">
       <div className="mb-5 flex items-start justify-between gap-3">
         <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-blue-500 to-indigo-600">
           <Icon className="h-8 w-8 text-white" />
@@ -407,18 +407,20 @@ function FunnelCard({ funnel }: { funnel: Funnel }) {
         </span>
       </div>
 
-      <h3 className="text-lg font-bold text-gray-900">{funnel.title}</h3>
-      <p className="mt-2 text-sm leading-relaxed text-gray-600">{funnel.need}</p>
+      <div className="flex-grow">
+        <h3 className="text-lg font-bold text-gray-900">{funnel.title}</h3>
+        <p className="mt-2 text-sm leading-relaxed text-gray-600">{funnel.need}</p>
 
-      <div className="mt-5 space-y-2.5">
-        {funnel.steps.map((step, index) => (
-          <div key={step} className="flex items-start gap-2.5 text-sm text-gray-700">
-            <span className="mt-0.5 inline-flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full bg-emerald-100 text-[11px] font-bold text-emerald-700">
-              {index + 1}
-            </span>
-            <span>{step}</span>
-          </div>
-        ))}
+        <div className="mt-5 space-y-2.5">
+          {funnel.steps.map((step, index) => (
+            <div key={step} className="flex items-start gap-2.5 text-sm text-gray-700">
+              <span className="mt-0.5 inline-flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full bg-emerald-100 text-[11px] font-bold text-emerald-700">
+                {index + 1}
+              </span>
+              <span>{step}</span>
+            </div>
+          ))}
+        </div>
       </div>
 
       <div className="mt-6 flex items-center justify-between rounded-2xl bg-slate-50 px-4 py-3">

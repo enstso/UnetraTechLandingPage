@@ -16,7 +16,7 @@ export default function Confidentialite() {
                     </div>
                     <div>
                         <span className="font-semibold">Droits des utilisateurs :</span><br />
-                        Conformément à la réglementation RGPD, vous pouvez exercer votre droit d'accès, de modification ou de suppression en nous écrivant à <a href="mailto:contact@unetratech.com" className="text-blue-600 underline">contact@unetratech.com</a>.
+                        Conformément à la réglementation RGPD, vous pouvez exercer votre droit d'accès, de modification ou de suppression en nous écrivant à <a href="mailto:contact-unetratech@gmail.com" className="text-blue-600 underline">contact-unetratech@gmail.com</a>.
                     </div>
                     <div>
                         <span className="font-semibold">Conservation des données :</span><br />

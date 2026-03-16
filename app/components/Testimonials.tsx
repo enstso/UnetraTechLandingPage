@@ -204,24 +204,24 @@ function TestimonialCard({ testimonial }: { testimonial: typeof testimonials[0] 
   const { name, role, company, quote, rating, project, avatar, result } = testimonial;
 
   return (
-      <div className="bg-white rounded-2xl p-8 shadow-lg border border-gray-100 hover:shadow-xl hover:border-blue-200 transition-all duration-300 hover:-translate-y-2 h-full flex flex-col relative">
+      <div className="relative flex h-full flex-col rounded-2xl border border-gray-100 bg-white p-6 shadow-lg transition-all duration-300 hover:-translate-y-2 hover:border-blue-200 hover:shadow-xl sm:p-8">
 
         {/* Quote Icon avec ChatBubbleLeftRightIcon */}
-        <div className="absolute -top-4 -left-4 w-8 h-8 bg-gradient-to-br from-blue-500 to-indigo-500 rounded-full flex items-center justify-center">
+        <div className="absolute left-3 top-3 flex h-7 w-7 items-center justify-center rounded-full bg-gradient-to-br from-blue-500 to-indigo-500 sm:-left-4 sm:-top-4 sm:h-8 sm:w-8">
           <ChatBubbleLeftRightIcon className="w-4 h-4 text-white" />
         </div>
 
         {/* Header */}
-        <div className="flex items-center gap-4 mb-6">
-          <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-indigo-500 rounded-full flex items-center justify-center text-white font-bold">
+        <div className="mb-6 mt-8 grid grid-cols-[auto,1fr,auto] items-start gap-3 sm:mt-0 sm:gap-4">
+          <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-blue-500 to-indigo-500 text-white font-bold">
             {avatar}
           </div>
-          <div className="flex-1">
+          <div className="min-w-0">
             <h3 className="font-bold text-gray-900">{name}</h3>
             <p className="text-sm text-gray-600">{role}</p>
             <p className="text-xs text-blue-600 font-medium">{company}</p>
           </div>
-          <div className="flex">
+          <div className="flex flex-shrink-0 pt-1">
             {[...Array(rating)].map((_, i) => (
                 <StarIcon key={i} className="h-4 w-4 text-yellow-400" />
             ))}
@@ -235,14 +235,14 @@ function TestimonialCard({ testimonial }: { testimonial: typeof testimonials[0] 
 
         {/* Footer */}
         <div className="pt-6 border-t border-gray-100 space-y-3">
-          <div className="flex items-center justify-between text-sm">
+          <div className="flex flex-col gap-1 text-sm sm:flex-row sm:items-center sm:justify-between">
             <span className="text-gray-500">Projet:</span>
-            <span className="font-medium text-gray-700">{project}</span>
+            <span className="font-medium text-gray-700 sm:text-right">{project}</span>
           </div>
 
-          <div className="flex items-center justify-between">
+          <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
             <span className="text-sm text-gray-500">Résultat:</span>
-            <span className="bg-green-50 text-green-700 px-3 py-1 rounded-full text-sm font-medium">
+            <span className="inline-flex w-fit bg-green-50 text-green-700 px-3 py-1 rounded-full text-sm font-medium">
             {result}
           </span>
           </div>

@@ -527,7 +527,7 @@ function PricingCard({
   const Icon = plan.icon;
 
   return (
-    <div className="group relative h-full rounded-2xl border-2 border-slate-100 bg-white p-5 shadow-lg transition hover:-translate-y-1 hover:border-blue-200 hover:shadow-2xl sm:rounded-3xl sm:p-7">
+    <div className="group relative flex h-full flex-col rounded-2xl border-2 border-slate-100 bg-white p-5 shadow-lg transition hover:-translate-y-1 hover:border-blue-200 hover:shadow-2xl sm:rounded-3xl sm:p-7">
       {plan.popular && (
         <div className="mb-3 inline-flex items-center gap-1.5 rounded-full border border-amber-200 bg-amber-50 px-3 py-1 text-[11px] font-bold text-amber-700 sm:mb-4 sm:text-xs">
           <SparklesIcon className="h-3.5 w-3.5" />
@@ -579,7 +579,7 @@ function PricingCard({
 
       <button
         onClick={() => handleClick(plan.name)}
-        className={`w-full rounded-xl px-4 py-3 text-sm font-semibold transition sm:px-5 sm:py-3.5 sm:text-base ${
+        className={`mt-auto w-full rounded-xl px-4 py-3 text-sm font-semibold transition sm:px-5 sm:py-3.5 sm:text-base ${
           isRecommended
             ? "bg-gradient-to-r from-blue-600 to-indigo-600 text-white hover:from-blue-700 hover:to-indigo-700"
             : "border border-slate-300 bg-white text-slate-800 hover:border-blue-300 hover:text-blue-600"
