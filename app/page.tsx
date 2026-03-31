@@ -31,7 +31,7 @@ const localBusinessSchema = {
   image: "https://unetratech.com/images/logo2.png",
   url: "https://unetratech.com",
   telephone: "+33 6 46 57 46 36",
-  email: "contact-unetratech@gmail.com",
+  email: "contact.unetratech@gmail.com",
   address: {
     "@type": "PostalAddress",
     addressLocality: "Paris",

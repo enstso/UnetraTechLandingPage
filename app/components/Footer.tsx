@@ -128,11 +128,7 @@ export default function Footer() {
                   </div>
                   <div className="flex items-center gap-3 text-gray-600">
                     <EnvelopeIcon className="h-5 w-5 text-blue-500" />
-                    <a href="mailto:contact-unetratech@gmail.com" className="hover:text-blue-600">contact-unetratech@gmail.com</a>
-                  </div>
-                  <div className="flex items-center gap-3 text-gray-600">
-                    <ClockIcon className="h-5 w-5 text-blue-500" />
-                    <span>Lun-Ven: 9h-18h</span>
+                    <a href="mailto:contact.unetratech@gmail.com" className="hover:text-blue-600">contact.unetratech@gmail.com</a>
                   </div>
                 </div>
               </motion.div>
